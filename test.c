@@ -1,55 +1,48 @@
-#include <gpiod.h>
+/*
+ * blink.c:
+ *	Standard "blink" program in wiringPi. Blinks an LED connected
+ *	to the first GPIO pin.
+ *
+ * Copyright (c) 2012-2013 Gordon Henderson.
+ ***********************************************************************
+ * This file is part of wiringPi:
+ *      https://github.com/WiringPi/WiringPi
+ *
+ *    wiringPi is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU Lesser General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    wiringPi is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public License
+ *    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
+ ***********************************************************************
+ */
+
 #include <stdio.h>
-#include <unistd.h>
+#include <wiringPi.h>
 
-#ifndef	CONSUMER
-#define	CONSUMER	"Consumer"
-#endif
+// LED Pin - wiringPi pin 0 is BCM_GPIO 17.
 
-int main(int argc, char **argv)
+#define	LED	0
+
+int main (void)
 {
-	char *chipname = "gpiochip0";
-	unsigned int line_num = 23;	// GPIO Pin #23
-	unsigned int val;
-	struct gpiod_chip *chip;
-	struct gpiod_line *line;
-	int i, ret;
+  printf ("Raspberry Pi blink\n") ;
 
-	chip = gpiod_chip_open_by_name(chipname);
-	if (!chip) {
-		perror("Open chip failed\n");
-		goto end;
-	}
+  wiringPiSetup () ;
+  pinMode (LED, OUTPUT) ;
 
-	line = gpiod_chip_get_line(chip, line_num);
-	if (!line) {
-		perror("Get line failed\n");
-		goto close_chip;
-	}
-
-	ret = gpiod_line_request_output(line, CONSUMER, 0);
-	if (ret < 0) {
-		perror("Request line as output failed\n");
-		goto release_line;
-	}
-
-	/* Blink 20 times */
-	val = 0;
-	for (i = 20; i > 0; i--) {
-		ret = gpiod_line_set_value(line, val);
-		if (ret < 0) {
-			perror("Set line output failed\n");
-			goto release_line;
-		}
-		printf("Output %u on line #%u\n", val, line_num);
-		sleep(1);
-		val = !val;
-	}
-
-release_line:
-	gpiod_line_release(line);
-close_chip:
-	gpiod_chip_close(chip);
-end:
-	return 0;
+  for (;;)
+  {
+    digitalWrite (LED, HIGH) ;	// On
+    delay (500) ;		// mS
+    digitalWrite (LED, LOW) ;	// Off
+    delay (500) ;
+  }
+  return 0 ;
 }
