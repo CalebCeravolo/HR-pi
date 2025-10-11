@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <wiringPi.h>
 
-// LED Pin - wiringPi pin 0 is BCM_GPIO 17.
+// LED Pin - wiringPi pin 0 is BCM_GPIO 17.sf
 
 #define	LED	0
 
@@ -37,12 +37,12 @@ int main (void)
   wiringPiSetup () ;
   pinMode (LED, OUTPUT) ;
 
-  for (;;)
+  while(1)
   {
-    digitalWrite (LED, HIGH) ;	// On
-    delay (500) ;		// mS
-    digitalWrite (LED, LOW) ;	// Off
-    delay (500) ;
+    digitalWrite(LED, HIGH);	// On
+    delay(500);		// mS
+    digitalWrite(LED, LOW);	// Off
+    delay(500);
   }
   return 0 ;
 }
