@@ -42,10 +42,10 @@ int main (void)
     uint32_t time = millis();
     //printf("Time is %d\n", time);
     if ((time-last_blink)>=1000){
-	printf("Current time is %d\n", time);
-	uint8_t current_status = digitalRead(LED);
-	printf("Current status is %d the inverse is %d\n" , current_status, !current_status);
-	digitalWrite(LED, !current_status);	// On
+        printf("Current time is %d\n", time);
+        uint8_t current_status = digitalRead(LED);
+        printf("Current status is %d the inverse is %d\n" , current_status, !current_status);
+        digitalWrite(LED, !current_status);	// On
         last_blink = time;
    }
   }
