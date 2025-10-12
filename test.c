@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <wiringPi.h>
-
+#include <stdint.h>
 // LED Pin - wiringPi pin 0 is BCM_GPIO 17.sf
 
 #define	LED	0
@@ -36,13 +36,18 @@ int main (void)
 
   wiringPiSetup () ;
   pinMode (LED, OUTPUT) ;
-
+  uint32_t last_blink = 0;
   while(1)
   {
-    digitalWrite(LED, HIGH);	// On
-    delay(500);		// mS
-    digitalWrite(LED, LOW);	// Off
-    delay(500);
+    uint32_t time = millis();
+    //printf("Time is %d\n", time);
+    if ((time-last_blink)>=1000){
+	printf("Current time is %d\n", time);
+	uint8_t current_status = digitalRead(LED);
+	printf("Current status is %d the inverse is %d\n" , current_status, !current_status);
+	digitalWrite(LED, !current_status);	// On
+        last_blink = time;
+   }
   }
   return 0 ;
 }

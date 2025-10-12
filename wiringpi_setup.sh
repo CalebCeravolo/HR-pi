@@ -5,7 +5,7 @@ cd WiringPi
 
 # build the package
 ./build debian
-mv debian-template/wiringpi-3.*.deb .
+mv debian-template/wiringpi_3.*.deb .
 
 # install it
-sudo apt install ./wiringpi-3.*.deb
+sudo apt install ./wiringpi_3.*.deb
