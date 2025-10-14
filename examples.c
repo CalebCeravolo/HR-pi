@@ -13,7 +13,8 @@
 // This is a global variable since it was defined outside of a function. Any function can read it or write to it
 uint8_t led_status;
 // This is the main function. C compiled code always runs the main function
-int main(void){
+// Argc and argv allow you to accept command line parameters
+int main(int argc, char *argv[]){
 
     // This is a signed int that takes up 32 bits in memory. It cannot be accessed outside of main
     int32_t example_var = 0;
@@ -51,7 +52,7 @@ int main(void){
             last_toggle = time;
         }
     }
-    
+
     // A return statement from main is used to communicate successes or errors. A 0 means no error.
     return 0;
 }
