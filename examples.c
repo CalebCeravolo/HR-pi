@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <wiringPi.h>
 #include <stdint.h>
-
+#include <stdbool.h>
 // This is a define statement, aka a macro. Macros can also be basic functions. 
 // It is set on compiling and doesn't change after that
 // I use these defines to define which pins my Led and button are connected to

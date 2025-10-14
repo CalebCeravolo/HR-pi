@@ -49,6 +49,7 @@ int main (void)
         last_blink = time;
    }
   }
+  digitalWrite(LED, 0);
   return 0 ;
 }
 
