@@ -28,13 +28,14 @@
 #include <stdint.h>
 // LED Pin - wiringPi pin 0 is BCM_GPIO 17.sf
 
-#define	LED	0
+#define	LED	7
 
 int main (void)
 {
   printf ("Raspberry Pi blink\n") ;
 
-  wiringPiSetup () ;
+  // Using physical pin numbering
+  wiringPiSetupPinType(WPI_PIN_PHYS);
   pinMode (LED, OUTPUT) ;
   uint32_t last_blink = 0;
   while(1)

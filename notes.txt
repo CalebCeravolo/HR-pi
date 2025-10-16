@@ -1,0 +1,94 @@
+gpio: Usage: gpio -v
+       gpio -h
+       gpio [-g|-1] ...
+         where -g: pin numbering according to readall BCM column
+         where -1: pin numbering according to readall Physical column
+         when omitted: pin numbering according to readall wPi column
+       gpio [-d] ...
+       [-x extension:params] [[ -x ...]] ...
+       gpio [-p] <read/write/wb> ...
+       gpio <mode/read/write/aread/awritewb/pwm/pwmTone/clock> ...
+       gpio <toggle/blink> <pin>
+       gpio readall
+       gpio wfi <pin> <mode>
+         where <mode> can be: rising, falling, both
+       gpio drive <group> <value>
+       gpio pwm-bal/pwm-ms 
+       gpio pwmr <range> 
+       gpio pwmc <divider> 
+       gpio i2cd/i2cdetect
+       gpio rbx/rbd
+       gpio wb <value>
+       gpio usbp high/low
+       gpio gbr <channel>
+       gpio gbw <channel> <value>
+
+If you have control code that needs high precision, use 
+sudo chrt {-r or -f} {1-99} ./your_program
+
+-r shares with same priority tasks, -f doesn't
+the higher the number the higher priority it is
+
+Pinout Diagram
++---------+---Pi 4B--+---------+
+|   Name  | Physical | Name    |
++---------+----++----+---------+
+|    3.3v |  1 || 2  | 5v      |
+|   SDA.1 |  3 || 4  | 5v      |
+|   SCL.1 |  5 || 6  | 0v      |
+| GPIO. 7 |  7 || 8  | TxD     |
+|      0v |  9 || 10 | RxD     |
+| GPIO. 0 | 11 || 12 | GPIO. 1 |
+| GPIO. 2 | 13 || 14 | 0v      |
+| GPIO. 3 | 15 || 16 | GPIO. 4 |
+|    3.3v | 17 || 18 | GPIO. 5 |
+|    MOSI | 19 || 20 | 0v      |
+|    MISO | 21 || 22 | GPIO. 6 |
+|    SCLK | 23 || 24 | CE0     |
+|      0v | 25 || 26 | CE1     |
+|   SDA.0 | 27 || 28 | SCL.0   |
+| GPIO.21 | 29 || 30 | 0v      |
+| GPIO.22 | 31 || 32 | GPIO.26 |
+| GPIO.23 | 33 || 34 | 0v      |
+| GPIO.24 | 35 || 36 | GPIO.27 |
+| GPIO.25 | 37 || 38 | GPIO.28 |
+|      0v | 39 || 40 | GPIO.29 |
++---------+----++----+---------+
+
+
+
+For setting up:
+
+int wiringPiSetupPinType(enum WPIPinType pinType)
+
+Initializes WiringPi with specified pin numbering scheme
+pinType: WPI_PIN_BCM, WPI_PIN_WPI, or WPI_PIN_PHYS
+Returns: 0 on success, -1 on error
+
+Notice BCM, WPI, and PHYS columns. Phys is easiest as it maps directly to the pins while WPI is standard and doesn't map to any pins that you cannot write to
+ +-----+-----+---------+---Pi 4B--+---------+-----+-----+
+ | BCM | wPi |   Name  | Physical | Name    | wPi | BCM |
+ +-----+-----+---------+----++----+---------+-----+-----+
+ |     |     |    3.3v |  1 || 2  | 5v      |     |     |
+ |   2 |   8 |   SDA.1 |  3 || 4  | 5v      |     |     |
+ |   3 |   9 |   SCL.1 |  5 || 6  | 0v      |     |     |
+ |   4 |   7 | GPIO. 7 |  7 || 8  | TxD     | 15  | 14  |
+ |     |     |      0v |  9 || 10 | RxD     | 16  | 15  |
+ |  17 |   0 | GPIO. 0 | 11 || 12 | GPIO. 1 | 1   | 18  |
+ |  27 |   2 | GPIO. 2 | 13 || 14 | 0v      |     |     |
+ |  22 |   3 | GPIO. 3 | 15 || 16 | GPIO. 4 | 4   | 23  |
+ |     |     |    3.3v | 17 || 18 | GPIO. 5 | 5   | 24  |
+ |  10 |  12 |    MOSI | 19 || 20 | 0v      |     |     |
+ |   9 |  13 |    MISO | 21 || 22 | GPIO. 6 | 6   | 25  |
+ |  11 |  14 |    SCLK | 23 || 24 | CE0     | 10  | 8   |
+ |     |     |      0v | 25 || 26 | CE1     | 11  | 7   |
+ |   0 |  30 |   SDA.0 | 27 || 28 | SCL.0   | 31  | 1   |
+ |   5 |  21 | GPIO.21 | 29 || 30 | 0v      |     |     |
+ |   6 |  22 | GPIO.22 | 31 || 32 | GPIO.26 | 26  | 12  |
+ |  13 |  23 | GPIO.23 | 33 || 34 | 0v      |     |     |
+ |  19 |  24 | GPIO.24 | 35 || 36 | GPIO.27 | 27  | 16  |
+ |  26 |  25 | GPIO.25 | 37 || 38 | GPIO.28 | 28  | 20  |
+ |     |     |      0v | 39 || 40 | GPIO.29 | 29  | 21  |
+ +-----+-----+---------+----++----+---------+-----+-----+
+ | BCM | wPi |   Name  | Physical | Name    | wPi | BCM |
+ +-----+-----+---------+---Pi 4B--+---------+-----+-----+

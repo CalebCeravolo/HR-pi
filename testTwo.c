@@ -1,7 +1,7 @@
 /*
- * blink.c:
- *	Standard "blink" program in wiringPi. Blinks an LED connected
- *	to the first GPIO pin.
+ * blink8-drcn.c:
+ *	Simple sequence over the first 8 GPIO pins - LEDs
+ *	Aimed at the Ladder board, but it's fairly generic.
  *
  * Copyright (c) 2012-2013 Gordon Henderson.
  ***********************************************************************
@@ -25,24 +25,37 @@
 
 #include <stdio.h>
 #include <wiringPi.h>
-
-// LED Pin - wiringPi pin 0 is BCM_GPIO 17.
-
-#define	LED	0
+#include <drcNet.h>
 
 int main (void)
 {
-  printf ("Raspberry Pi blink\n") ;
+  int i, led ;
 
-  wiringPiSetup () ;
-  pinMode (LED, OUTPUT) ;
+  printf ("Raspberry Pi - 8-LED Sequencer\n") ;
+  printf ("==============================\n") ;
+  printf ("\n") ;
+  printf ("Connect LEDs to the first 8 GPIO pins and watch ...\n") ;
+
+  int pinBase = 0 ;
+
+  wiringPiSetupPinType(WPI_PIN_PHYS);
+  //drcSetupNet (pinBase, 100, "192.168.254.21", "6124", "123456") ;
+
+  for (i = 0 ; i < 8 ; ++i)
+    pinMode (i + pinBase, OUTPUT) ;
 
   for (;;)
   {
-    digitalWrite (LED, HIGH) ;	// On
-    delay (500) ;		// mS
-    digitalWrite (LED, LOW) ;	// Off
-    delay (500) ;
+    for (led = 0 ; led < 8 ; ++led)
+    {
+      digitalWrite (led + pinBase, 1) ;
+      delay (10) ;
+    }
+
+    for (led = 0 ; led < 8 ; ++led)
+    {
+      digitalWrite (led + pinBase, 0) ;
+      delay (10) ;
+    }
   }
-  return 0 ;
 }
