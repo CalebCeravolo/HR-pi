@@ -8,6 +8,7 @@ int main(int argc, char *argv[]){
     for (int i=0; i<32; i++){
         pinMode(i, OUTPUT);
         digitalWrite(i, (int)(**(argv+1))-(int)'0');
+        //digitalWrite(i, PWM_OUTPUT);
     }
     return 0;
 }
