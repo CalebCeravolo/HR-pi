@@ -8,7 +8,6 @@ module top_level(Button1, Button2, CLK_50, led,
     logic deb1, deb2;
     debounce deb1d (.in(Button1), .out(deb1), .clk(clk_div[4]));
     debounce deb2d (.in(Button2), .out(deb2), .clk(clk_div[4]));
-    logic deb1, deb2;
     button_press b1_cont (.in(~deb1), .out(button1_ps), .clk(CLK_50), .reset(0));
     button_press b2_cont (.in(~deb2), .out(button2_ps), .clk(CLK_50), .reset(0));
     logic [3:0] debug_out;
@@ -31,11 +30,11 @@ module top_level(Button1, Button2, CLK_50, led,
     logic [spi_width-1:0] SPI_data_out;
     logic [spi_width-1:0] d_out [1:0];
     assign d_out[0] = {4{2{debug_out}}};
-    assign d_out[1] = {8'd5,8'd6,8'd7,8'd8};
+    assign d_out[1] = {{8'd5},{8'd6},{8'd7},{8'd8}};
     
     logic count;
     assign SPI_data_out = d_out[count];
-    always_ff @(posedge data_ready) begin
+    always_ff @(negedge data_ready) begin
         count<=count+1'b1;
     end
     
@@ -48,7 +47,7 @@ module top_level(Button1, Button2, CLK_50, led,
 
     pwm led_sig (.clk(CLK_50), .sig(led[0]), .period(period));
     assign led[2:1]=~debug_out;
-    assign led[3] = SPI_outgoing;
+    assign led[3] = ~CS;
     always_ff @(posedge CLK_50) begin
         clk_div<=clk_div+1'b1;
         //led[1] <= |debug_out;
@@ -119,7 +118,7 @@ module SPI #(parameter data_length = 64) (data_out, data_in, incoming, outgoing,
     logic [data_length-1:0] data_in_buffer, new_data;
     
     logic [data_length-1:0] data_loaded, data_inv;
-    logic [$clog2(data_length)-1:0] addr, next_addr;
+    logic [$clog2(data_length)-1:0] addr, next_addr, addr_eff;
     initial begin
         addr=0;
     end
@@ -128,34 +127,52 @@ module SPI #(parameter data_length = 64) (data_out, data_in, incoming, outgoing,
         for (int i = 0; i < data_length; i++)
             data_inv[i]=data_loaded[data_length-1-i];
         //next_state = state;
-        next_addr = addr+1'b1;
+        addr_eff = |restart ? 0 : addr;
+        next_addr = addr_eff+1'b1;
         new_data = {data_in_buffer[data_length-2:0], incoming};
-        // If the address has reached the end of the string and there's no
-        // new info, go to the start and idle
-        // if (fin&&(!load)) begin
+        outgoing=data_inv[addr_eff];
+        // if (CS) 
         //     next_addr = 0;
-        // end c:\Users\caleb\Scripts\Robotics\HR-pi
-        outgoing=data_inv[addr];
-        if (CS) 
-            next_addr = 0;
-    end
+    end 
     logic done;
-    logic gen_clk;
-    assign gen_clk = CS ? clk2 : clk;
-    always_ff @(posedge clk) begin
-        addr<=next_addr;
-        if (!CS) begin
-            data_in_buffer<=new_data;
-        end
+    logic [1:0] restart;
+    always_ff @(posedge clk, CS) begin
+        if (CS)
+            restart<=2'b10;
+        else if (clk)
+            restart<=(restart!=0 ? restart-1'b1 : 0);
+    end
+
+
+    always_ff @(negedge clk) begin
+        data_in_buffer<=new_data;
         if (addr==data_length-1) begin
             data_in<=new_data;
-            data_loaded<=data_out;
             data_ready<=1'b1;
         end
         else begin
             data_ready<=1'b0;
         end
     end
+    always_ff @(posedge clk) begin
+        addr<=next_addr;
+        if (addr==data_length-1) begin
+            data_loaded<=data_out;
+        end
+    end
+    // always_ff @(posedge clk) begin
+
+    //     addr<=next_addr;
+    //     data_in_buffer<=new_data;
+    //     if (addr==data_length-1) begin
+    //         data_in<=new_data;
+    //         data_loaded<=data_out;
+    //         data_ready<=1'b1;
+    //     end
+    //     else begin
+    //         data_ready<=1'b0;
+    //     end
+    // end
 endmodule
 
 
