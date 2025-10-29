@@ -1,0 +1,205 @@
+
+Efinity Interface Designer Report
+Version: 2025.1.110
+Date: 2025-10-28 20:07
+
+Copyright (C) 2013 - 2025 Efinix Inc. All rights reserved.
+
+Device: T8F81
+Project: test_project
+
+Package: 81-ball FBGA (final)
+Timing Model: C2 (final)
+Configuration Mode: active (x1)
+
+---------- Table of Contents (begin) ----------
+   1. Periphery Usage Summary
+   2. Generated Output Files
+   3. I/O Banks Summary
+   4. Global Connection Summary
+   5. Clock Region Usage Summary
+   6. Dual-Function Configuration Pin Usage
+   7. GPIO Usage Summary
+   8. PLL Usage Summary
+   9. Oscillator Usage Summary
+   10. JTAG Usage Summary
+---------- Table of Contents (end) ------------
+
+---------- 1. Periphery Usage Summary (begin) ----------
+gpio: 11 / 55 (20.0%)
+jtag: 0 / 2 (0.0%)
+osc: 1 / 1 (100.0%)
+pll: 1 / 1 (100.0%)
+---------- Periphery Usage Summary (end) ----------
+
+---------- 2. Generated Output Files (begin) ----------
+Interface Configuration: test_project.interface.csv
+Peripheral Block Configuration: test_project.lpf
+Pinout Report: test_project.pinout.rpt
+Pinout CSV: test_project.pinout.csv
+Timing Report: test_project.pt_timing.rpt
+Timing SDC Template: test_project.pt.sdc
+Verilog Template: test_project_template.v
+---------- Generated Output Files (end) ----------
+
+---------- 3. I/O Banks Summary (begin) ----------
+
++----------+-------------+
+| I/O Bank | I/O Voltage |
++----------+-------------+
+|    1A    |    3.3 V    |
+|    1B    |    3.3 V    |
+|    1C    |    1.1 V    |
+|    2A    |    3.3 V    |
+|    2B    |    3.3 V    |
++----------+-------------+
+
+---------- I/O Banks Summary (end) ----------
+
+---------- 4. Global Connection Summary (begin) ----------
+
++--------------+---------------+-------+
+|   Pin Name   |    Resource   |  Type |
++--------------+---------------+-------+
+|    CLK_50    | PLL_0.CLKOUT0 |  GCLK |
+|      CS      |  GPIOR_20.ALT |  GCLK |
+|  osc_inst1   |  OSC_0.CLKOUT |  GCLK |
+|   SPI_CLK    |  GPIOR_21.ALT |  GCLK |
+| SPI_incoming |  GPIOR_22.ALT | GCTRL |
++--------------+---------------+-------+
+
+---------- Global Connection Summary (end) ----------
+
+---------- 5. Clock Region Usage Summary (begin) ----------
+
++--------------+----------------+
+| Clock Region | Used/Available |
++--------------+----------------+
+|      L0      |      0/4       |
+|      L1      |      0/4       |
+|      R0      |      0/4       |
+|      R1      |      0/4       |
++--------------+----------------+
+
+---------- Clock Region Usage Summary (end) ----------
+
+---------- 6. Dual-Function Configuration Pin Usage (begin) ----------
+
++---------------+----------+
+| Instance Name | Function |
++---------------+----------+
+|    Button2    |  CBUS0   |
+|     led[0]    | NSTATUS  |
+|     led[1]    |  TEST_N  |
+|     led[2]    |  CBUS1   |
+|     led[3]    |  CBUS2   |
+|    SPI_CLK    |  CBSEL1  |
++---------------+----------+
+
+---------- Dual-Function Configuration Pin Usage (end) ----------
+
+---------- 7. GPIO Usage Summary (begin) ----------
+
+Global Unused Setting: input with weak pullup
+
++---------------+----------+--------+----------+--------------+----------+----------------------+-----------------------+-------------+
+| Instance Name | Resource |  Mode  | Register | Clock Region | I/O Bank |     I/O Standard     |        Pad Name       | Package Pin |
++---------------+----------+--------+----------+--------------+----------+----------------------+-----------------------+-------------+
+|    Button1    | GPIOR_02 | input  |          |              |    2A    | 3.3 V LVTTL / LVCMOS | GPIOR_02_RESERVED_OUT |      C5     |
+|    Button2    | GPIOR_15 | input  |          |              |    2A    | 3.3 V LVTTL / LVCMOS |     GPIOR_15_CBUS0    |      C9     |
+|       CS      | GPIOR_20 | input  |          |              |    2B    | 3.3 V LVTTL / LVCMOS |     GPIOR_20_CLK5     |      F8     |
+|     led[0]    | GPIOL_21 | output |          |              |    1B    | 3.3 V LVTTL / LVCMOS |    GPIOL_21_NSTATUS   |      B3     |
+|     led[1]    | GPIOR_37 | output |          |              |    2B    | 3.3 V LVTTL / LVCMOS |    GPIOR_37_TEST_N    |      J6     |
+|     led[2]    | GPIOR_16 | output |          |              |    2A    | 3.3 V LVTTL / LVCMOS |  GPIOR_16_CTRL7_CBUS1 |      D7     |
+|     led[3]    | GPIOR_17 | output |          |              |    2A    | 3.3 V LVTTL / LVCMOS |  GPIOR_17_CTRL6_CBUS2 |      D8     |
+|   pllREF_CLK  | GPIOL_20 | input  |          |              |    1B    | 3.3 V LVTTL / LVCMOS |     GPIOL_20_PLLIN    |      C3     |
+|    SPI_CLK    | GPIOR_21 | input  |          |              |    2B    | 3.3 V LVTTL / LVCMOS |  GPIOR_21_CLK4_CBSEL1 |      E7     |
+|  SPI_incoming | GPIOR_22 | input  |          |              |    2B    | 3.3 V LVTTL / LVCMOS |     GPIOR_22_CTRL5    |      F7     |
+|  SPI_outgoing | GPIOR_23 | output |          |              |    2B    | 3.3 V LVTTL / LVCMOS |     GPIOR_23_CTRL4    |      E6     |
++---------------+----------+--------+----------+--------------+----------+----------------------+-----------------------+-------------+
+
+
+Input GPIO Configuration:
+=========================
+
++---------------+--------------+---------------------+-----------------+--------------+-----------------+
+| Instance Name |  Input Pin   | Alternate Input Pin | Input Clock Pin | Pull Up/Down | Schmitt Trigger |
++---------------+--------------+---------------------+-----------------+--------------+-----------------+
+|    Button1    |   Button1    |                     |                 | weak pullup  |     Disable     |
+|    Button2    |   Button2    |                     |                 | weak pullup  |     Disable     |
+|       CS      |      CS      |                     |                 |     none     |     Disable     |
+|   pllREF_CLK  |              |      pllREF_CLK     |                 |     none     |     Disable     |
+|    SPI_CLK    |   SPI_CLK    |                     |                 |     none     |     Disable     |
+|  SPI_incoming | SPI_incoming |                     |                 |     none     |     Disable     |
++---------------+--------------+---------------------+-----------------+--------------+-----------------+
+
+Output GPIO Configuration:
+==========================
+
++---------------+--------------+------------------+----------------+-----------+
+| Instance Name |  Output Pin  | Output Clock Pin | Drive Strength | Slew Rate |
++---------------+--------------+------------------+----------------+-----------+
+|     led[0]    |    led[0]    |                  |       1        |  Disable  |
+|     led[1]    |    led[1]    |                  |       1        |  Disable  |
+|     led[2]    |    led[2]    |                  |       1        |  Disable  |
+|     led[3]    |    led[3]    |                  |       1        |  Disable  |
+|  SPI_outgoing | SPI_outgoing |                  |       3        |   Enable  |
++---------------+--------------+------------------+----------------+-----------+
+
+---------- GPIO Usage Summary (end) ----------
+
+---------- 8. PLL Usage Summary (begin) ----------
+
+Instance Name                 : CLK_50
+Resource                      : PLL_0
+Reference Clock Resource      : GPIOL_20
+Reference Clock Frequency     : 33.3333 MHz
+Reference Clock Period        : 30.0000 ns
+Multiplier (M)                : 24
+Pre-Divider (N)               : 1
+VCO Frequency                 : 799.9992 MHz
+Post-Divider (O)              : 1
+PLL Frequency                 : 799.9992 MHz
+
+Output Clock 0
+Clock Pin Name                : CLK_50
+Output Divider                : 16
+Output Frequency              : 50.0000 MHz
+Output Period                 : 20.000 ns
+
+Frequency calculations:
+	VCO = REFCLK * (M/N)
+	    = 33.3333 MHz * (24/1)
+	    = 799.9992 MHz
+	PLL = VCO / O
+	    = 799.9992 MHz / 1
+	    = 799.9992 MHz
+
+	CLKOUT0 = PLL / CLKOUT0_DIV
+	        = 799.9992 MHz / 16
+	        = 50.0000 MHz
+
+SDC Constraints:
+	create_clock -period 20.000 -name CLK_50 [get_ports {CLK_50}]
+
+---------- PLL Usage Summary (end) ----------
+
+---------- 9. Oscillator Usage Summary (begin) ----------
+
++---------------+----------+-----------+-----------+--------+
+| Instance Name | Resource | Clock Pin | Frequency | Period |
++---------------+----------+-----------+-----------+--------+
+|   osc_inst1   |  OSC_0   | osc_inst1 |   10 KHz  | 100us  |
++---------------+----------+-----------+-----------+--------+
+
+SDC Constraints:
+	create_clock -period 100000 -name osc_inst1 [get_ports {osc_inst1}]
+
+
+---------- Oscillator Usage Summary (end) ----------
+
+---------- 10. JTAG Usage Summary (begin) ----------
+
+No JTAG was configured
+
+---------- JTAG Usage Summary (end) ----------

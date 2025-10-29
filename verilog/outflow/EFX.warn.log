@@ -1,0 +1,48 @@
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:06:27
+///////////////////////////////////
+
+[EFX-0011 VERI-WARNING] port 'probe1' remains unconnected for this instance (VERI-1927) (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:106)
+[EFX-0011 VERI-WARNING] input port 'probe1[0]' remains unconnected for this instance (VDB-1053) (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0200 WARNING] Removing redundant signal : compared_in[0]. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:5499)
+[EFX-0200 WARNING] Removing redundant signal : mask_in[0]. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:5500)
+[EFX-0200 WARNING] Removing redundant signal : trigger_in. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:5710)
+[EFX-0200 WARNING] Removing redundant signal : din[1]. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:4594)
+[EFX-0200 WARNING] Removing redundant signal : shift_i. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:4859)
+[EFX-0200 WARNING] Removing redundant signal : trig_out. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:4876)
+[EFX-0200 WARNING] Removing redundant signal : trig_out_ack. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:4877)
+[EFX-0200 WARNING] Removing redundant signal : bscan_DRCK. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:1025)
+[EFX-0200 WARNING] Removing redundant signal : bscan_RESET. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:1026)
+[EFX-0200 WARNING] Removing redundant signal : bscan_RUNTEST. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:1027)
+[EFX-0200 WARNING] Removing redundant signal : bscan_SEL. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:1028)
+[EFX-0200 WARNING] Removing redundant signal : bscan_TMS. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:1032)
+[EFX-0200 WARNING] Removing redundant signal : trig_in_ack. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:1044)
+[EFX-0200 WARNING] Removing redundant signal : mux_capture_cmp[0]. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:3458)
+[EFX-0200 WARNING] Removing redundant signal : bscan_CAPTURE. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:264)
+[EFX-0200 WARNING] Removing redundant signal : bscan_DRCK. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:265)
+[EFX-0200 WARNING] Removing redundant signal : bscan_RUNTEST. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:267)
+[EFX-0200 WARNING] Removing redundant signal : bscan_TMS. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:272)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe1[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe2[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe3[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe4[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe5[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe6[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe7[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe8[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe9[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0201 WARNING] Re-wiring to GND non-driven net 'la0.probe10[0]'. (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:84)
+[EFX-0011 VERI-WARNING] Input/inout port bscan_DRCK is unconnected and will be removed. (VDB-8003) (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:13)
+[EFX-0011 VERI-WARNING] Input/inout port bscan_RUNTEST is unconnected and will be removed. (VDB-8003) (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:15)
+[EFX-0011 VERI-WARNING] Input/inout port bscan_TMS is unconnected and will be removed. (VDB-8003) (C:/Users/caleb/.efinity/project/test_project/work_dbg/debug_top.v:20)
+[EFX-0011 VERI-WARNING] Found 3 warnings in the post-synthesis netlist. 
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:06:47
+///////////////////////////////////
+
+[EFX-0200 WARNING] Removing redundant signal : la0_clk~O. 
+[EFX-0200 WARNING] Removing redundant signal : bscan_TCK~O. 

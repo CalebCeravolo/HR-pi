@@ -1,0 +1,649 @@
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:17:51
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'begin' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:1)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'begin' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:1)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:18:19
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'output' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'output' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] 'Button1' is not a task (VERI-1126) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:11)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:18:56
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'output' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'output' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] 'Button1' is not a task (VERI-1126) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:11)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:19:42
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'output' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'output' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] 'Button1' is not a task (VERI-1126) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:8)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:11)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:22:52
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'output' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:7)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'output' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:7)
+[EFX-0010 VERI-ERROR] 'Button1' is not a task (VERI-1126) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:7)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:10)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:25:35
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 15:33:20
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:51:08
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] no definition could be found for port 'Button2' (VERI-1125) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:1)
+[EFX-0010 VERI-ERROR] 'led_out' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:12)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:18)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:36)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:52:42
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] no definition could be found for port 'Button2' (VERI-1125) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:1)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:18)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:36)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:53:51
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] net 'led[0]' is constantly driven from multiple places (VDB-1000) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:10)
+[EFX-0010 VERI-ERROR] found another driver here (VDB-1001) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:17)
+[EFX-0021 ERROR] Elaboration of module 'top_level' failed. Please check previous error messages.
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:54:06
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 16:57:21
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:01:17
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:05:04
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:06:40
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:12:57
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:16:36
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'debug_out' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:11)
+[EFX-0010 VERI-ERROR] 'debug_out' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:18)
+[EFX-0010 VERI-ERROR] 'debug_out' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:22)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:25)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:43)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:16:55
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:18:16
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:19:51
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:20:34
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:23:30
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:24:44
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:25:56
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:27:06
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:27:57
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:32:55
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'clk' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:30)
+[EFX-0010 VERI-ERROR] 'clk' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:34)
+[EFX-0010 VERI-ERROR] procedural assignment to a non-register 'out' is not permitted (VERI-1100) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:36)
+[EFX-0010 VERI-ERROR] module 'debouce' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:38)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:60)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:34:01
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'clk' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:31)
+[EFX-0010 VERI-ERROR] 'clk' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:35)
+[EFX-0010 VERI-ERROR] procedural assignment to a non-register 'out' is not permitted (VERI-1100) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:37)
+[EFX-0010 VERI-ERROR] module 'debouce' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:39)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:61)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:34:18
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] instantiating unknown module 'debounce' (VERI-1063) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:12)
+[EFX-0021 ERROR] Elaboration of module 'top_level' failed. Please check previous error messages.
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:35:01
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:37:44
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:40:52
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 25, 2025 17:43:07
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 11:29:01
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] an enum variable may only be assigned the same enum typed variable or one of its values (VERI-1348) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:85)
+[EFX-0010 VERI-ERROR] 'addr' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:107)
+[EFX-0010 VERI-ERROR] module 'SDA' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:120)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:165)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 11:30:39
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'addr' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:107)
+[EFX-0010 VERI-ERROR] module 'SDA' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:120)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:165)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 11:31:01
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'current_addr' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:75)
+[EFX-0010 VERI-ERROR] module 'SDA' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:120)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:165)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 11:31:16
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 11:50:04
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 12:03:05
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 12:07:18
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 14:41:55
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 14:58:02
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:30:22
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:33:28
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:46:58
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:48:29
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:52:39
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'if' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:49)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'if' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:49)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:58)
+[EFX-0010 VERI-ERROR] module 'debounce' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:67)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:89)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:145)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:188)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:52:55
+///////////////////////////////////
+
+[EFX-0202 ERROR] Net 'led[3]' has multiple drivers. (C:\Users\caleb\.efinity\project\test_project\top_level.sv:5)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 15:53:07
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:00:18
+///////////////////////////////////
+
+[EFX-0202 ERROR] Net 'led[3]' has multiple drivers. (C:\Users\caleb\.efinity\project\test_project\top_level.sv:5)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:00:41
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:04:29
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:08:28
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:10:54
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:17:26
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'state' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:111)
+[EFX-0010 VERI-ERROR] 'next_state' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:118)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:155)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:198)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:18:08
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'next_state' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:118)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:155)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:198)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:18:24
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:25:23
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:32:16
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:34:55
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:36:38
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] assignment under multiple clock edges is not supported for synthesis (VERI-1466) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:147)
+[EFX-0021 ERROR] Elaboration of module 'top_level' failed. Please check previous error messages.
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:38:58
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:41:14
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:43:21
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 16:53:47
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:02:12
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:04:11
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:08:41
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:11:12
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:25:03
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:27:36
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:33:19
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:38:29
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'int' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:117)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'int' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:117)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:159)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:202)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:39:04
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 17:45:32
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 18:01:09
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] no definition could be found for port 'clk2' (VERI-1125) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:94)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:173)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:216)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 18:03:01
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 18:13:56
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near 'else' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:166)
+[EFX-0010 VERI-ERROR] SystemVerilog 2009 keyword 'else' used in incorrect context (VERI-2344) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:166)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:173)
+[EFX-0010 VERI-ERROR] module 'i2c' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:216)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 18:14:15
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 18:20:36
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 27, 2025 22:12:48
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 18:59:53
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'load' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:21)
+[EFX-0010 VERI-ERROR] module 'top_level' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:70)
+[EFX-0010 VERI-ERROR] module 'debounce' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:79)
+[EFX-0010 VERI-ERROR] module 'pwm' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:101)
+[EFX-0010 VERI-ERROR] 'new_data' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:133)
+[EFX-0010 VERI-ERROR] 'new_data' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:150)
+[EFX-0010 VERI-ERROR] 'new_data' is not declared (VERI-1128) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:153)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:161)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 19:00:54
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] 'load' is not found for implicit .name port connection (VERI-2367) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:44)
+[EFX-0021 ERROR] Elaboration of module 'top_level' failed. Please check previous error messages.
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 19:01:36
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] port 'load' is not defined (VERI-1171) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:106)
+[EFX-0010 VERI-ERROR] module 'SPI' is ignored due to previous errors (VERI-1072) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:160)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 19:02:32
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 19:29:46
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 19:34:07
+///////////////////////////////////
+
+[EFX-0010 VERI-ERROR] syntax error near '#' (VERI-1137) (C:\Users\caleb\.efinity\project\test_project\top_level.sv:103)
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 19:35:38
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 20:00:06
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 20:02:24
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 20:04:50
+///////////////////////////////////
+
+
+///////////////////////////////////
+// Efinity Synthesis Started 
+// Oct 28, 2025 20:07:25
+///////////////////////////////////
+

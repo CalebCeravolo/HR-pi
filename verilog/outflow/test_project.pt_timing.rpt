@@ -1,0 +1,53 @@
+
+Efinity Interface Designer Timing Report
+Version: 2025.1.110
+Date: 2025-10-28 20:07
+
+Copyright (C) 2013 - 2025 Efinix Inc. All rights reserved.
+
+Device: T8F81
+Project: test_project
+Timing Model: C2 (final)
+
+---------- 1. Oscillator Timing Report (begin) ----------
+
++-----------+-------------+
+|   Clock   | Period (ns) |
++-----------+-------------+
+| osc_inst1 |    100000   |
++-----------+-------------+
+
+---------- Oscillator Timing Report (end) ----------
+
+---------- 2. PLL Timing Report (begin) ----------
+
++--------+-------------+
+| Clock  | Period (ns) |
++--------+-------------+
+| CLK_50 |    20.000   |
++--------+-------------+
+
+---------- PLL Timing Report (end) ----------
+
+---------- 3. GPIO Timing Report (begin) ----------
+
+Non-registered GPIO Configuration:
+===================================
+
++---------------+--------------+-----------+----------+----------+
+| Instance Name |   Pin Name   | Parameter | Max (ns) | Min (ns) |
++---------------+--------------+-----------+----------+----------+
+|    Button1    |   Button1    |  GPIO_IN  |  1.954   |  0.698   |
+|    Button2    |   Button2    |  GPIO_IN  |  1.954   |  0.698   |
+|       CS      |      CS      |  GPIO_IN  |  1.954   |  0.698   |
+|   pllREF_CLK  |  pllREF_CLK  |  GPIO_IN  |  1.954   |  0.698   |
+|    SPI_CLK    |   SPI_CLK    |  GPIO_IN  |  1.954   |  0.698   |
+|  SPI_incoming | SPI_incoming |  GPIO_IN  |  1.954   |  0.698   |
+|     led[0]    |    led[0]    |  GPIO_OUT |  5.361   |  1.915   |
+|     led[1]    |    led[1]    |  GPIO_OUT |  5.361   |  1.915   |
+|     led[2]    |    led[2]    |  GPIO_OUT |  5.361   |  1.915   |
+|     led[3]    |    led[3]    |  GPIO_OUT |  5.361   |  1.915   |
+|  SPI_outgoing | SPI_outgoing |  GPIO_OUT |  4.992   |  1.783   |
++---------------+--------------+-----------+----------+----------+
+
+---------- GPIO Timing Report (end) ----------

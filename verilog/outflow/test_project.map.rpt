@@ -1,0 +1,444 @@
+Efinity Synthesis report for project test_project
+Version: 2025.1.110
+Generated at: Oct 28, 2025 20:07:25
+Copyright (C) 2013 - 2025  All rights reserved.
+
+Top-level Entity Name : top_level
+
+family : Trion
+device : T8F81
+project : test_project
+project-xml : C:\Users\caleb\.efinity\project/test_project/test_project.xml
+root : top_level
+I,include : C:/Users/caleb/.efinity/project/test_project
+output-dir : C:/Users/caleb/.efinity/project/test_project/outflow
+work-dir : C:/Users/caleb/.efinity/project/test_project/work_syn
+write-efx-verilog : C:/Users/caleb/.efinity/project/test_project/outflow/test_project.map.v
+binary-db : C:/Users/caleb/.efinity/project/test_project/outflow/test_project.vdb
+insert-ios : 0
+max-carry-cascade : 160
+max_mult : -1
+max_ram : -1
+mode : speed
+veri_options : verilog_mode=verilog_2k,vhdl_mode=vhdl_2008
+
+File List:
+
+C:\Users\caleb\.efinity\project\test_project\top_level.sv
+C:\Users\caleb\.efinity\project\test_project\button_press.sv
+
+### ### Report Section Start ### ###
+
+"MOD|OPT-0673" : Instance 'neg_cs' is equivalent to 'pos_cs', it will be optimized. (C:\Users\caleb\.efinity\project\test_project\top_level.sv:114)
+
+### ### EFX_FF CE enables (begin) ### ### ###
+Total number of enable signals: 2
+Total number of FFs with enable signals: 18
+CE signal <ceg_net2>, number of controlling flip flops: 10
+CE signal <comms/equal_5/n9>, number of controlling flip flops: 8
+### ### EFX_FF CE enables (end) ### ### ###
+
+### ### EFX_FF SR set/reset (begin) ### ### ###
+Total number of set/reset signals: 2
+Total number of FFs with set/reset signals: 16
+SR signal <CS>, number of controlling flip flops: 5
+SR signal <led_sig/n27>, number of controlling flip flops: 11
+### ### EFX_FF SR set/reset (end) ### ### ###
+
+### ### Sequential Elements Trimming Report (begin) ### ### ### 
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i5
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i1
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i6
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i2
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i7
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i3
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i12
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i8
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i13
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i1
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i14
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i2
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i15
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i3
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i16
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i8
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i17
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i1
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i18
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i10
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i19
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i11
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i20
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i8
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i21
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i1
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i22
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i2
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i23
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i3
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i24
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i8
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i25
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i9
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i26
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i2
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i27
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i11
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i28
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i8
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i29
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i1
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i30
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i2
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i31
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i3
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" removed instance : comms/dff_23/i32
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (158)" representative instance : comms/dff_23/i8
+FF|OPT : Flip-flop optimization by equivalence checking
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (94)" removed instance : led_sig/dff_5/i9
+@ "C:\Users\caleb\.efinity\project\test_project\top_level.sv (70)" representative instance : dff_39/i9
+FF Output: deb1d/deb[6](=0)
+FF Output: deb1d/deb[7](=0)
+FF Output: deb1d/deb[8](=0)
+FF Output: deb1d/deb[9](=0)
+FF Output: deb1d/deb[10](=0)
+FF Output: deb1d/deb[11](=0)
+FF Output: deb1d/deb[12](=0)
+FF Output: deb1d/deb[13](=0)
+FF Output: deb1d/deb[14](=0)
+FF Output: deb1d/deb[15](=0)
+FF Output: deb1d/deb[16](=0)
+FF Output: deb1d/deb[17](=0)
+FF Output: deb1d/deb[18](=0)
+FF Output: deb1d/deb[19](=0)
+FF Output: deb1d/deb[20](=0)
+FF Output: deb1d/deb[21](=0)
+FF Output: deb1d/deb[22](=0)
+FF Output: deb1d/deb[23](=0)
+FF Output: deb1d/deb[24](=0)
+FF Output: deb1d/deb[25](=0)
+FF Output: deb1d/deb[26](=0)
+FF Output: deb1d/deb[27](=0)
+FF Output: deb1d/deb[28](=0)
+FF Output: deb1d/deb[29](=0)
+FF Output: deb1d/deb[30](=0)
+FF Output: deb1d/deb[31](=0)
+FF Output: deb1d/deb[32](=0)
+FF Output: deb1d/deb[33](=0)
+FF Output: deb1d/deb[34](=0)
+FF Output: deb1d/deb[35](=0)
+FF Output: deb1d/deb[36](=0)
+FF Output: deb1d/deb[37](=0)
+FF Output: deb1d/deb[38](=0)
+FF Output: deb1d/deb[39](=0)
+FF Output: deb1d/deb[40](=0)
+FF Output: deb1d/deb[41](=0)
+FF Output: deb1d/deb[42](=0)
+FF Output: deb1d/deb[43](=0)
+FF Output: deb1d/deb[44](=0)
+FF Output: deb1d/deb[45](=0)
+FF Output: deb1d/deb[46](=0)
+FF Output: deb1d/deb[47](=0)
+FF Output: deb1d/deb[48](=0)
+FF Output: deb1d/deb[49](=0)
+FF Output: deb1d/deb[50](=0)
+FF Output: deb1d/deb[51](=0)
+FF Output: deb1d/deb[52](=0)
+FF Output: deb1d/deb[53](=0)
+FF Output: deb1d/deb[54](=0)
+FF Output: deb1d/deb[55](=0)
+FF Output: deb1d/deb[56](=0)
+FF Output: deb1d/deb[57](=0)
+FF Output: deb1d/deb[58](=0)
+FF Output: deb1d/deb[59](=0)
+FF Output: deb1d/deb[60](=0)
+FF Output: deb1d/deb[61](=0)
+FF Output: deb1d/deb[62](=0)
+FF Output: deb1d/deb[63](=0)
+FF Output: deb1d/deb[64](=0)
+FF Output: deb1d/deb[65](=0)
+FF Output: deb1d/deb[66](=0)
+FF Output: deb1d/deb[67](=0)
+FF Output: deb1d/deb[68](=0)
+FF Output: deb1d/deb[69](=0)
+FF Output: deb1d/deb[70](=0)
+FF Output: deb1d/deb[71](=0)
+FF Output: deb1d/deb[72](=0)
+FF Output: deb1d/deb[73](=0)
+FF Output: deb1d/deb[74](=0)
+FF Output: deb1d/deb[75](=0)
+FF Output: deb1d/deb[76](=0)
+FF Output: deb1d/deb[77](=0)
+FF Output: deb1d/deb[78](=0)
+FF Output: deb1d/deb[79](=0)
+FF Output: deb1d/deb[80](=0)
+FF Output: deb1d/deb[81](=0)
+FF Output: deb1d/deb[82](=0)
+FF Output: deb1d/deb[83](=0)
+FF Output: deb1d/deb[84](=0)
+FF Output: deb1d/deb[85](=0)
+FF Output: deb1d/deb[86](=0)
+FF Output: deb1d/deb[87](=0)
+FF Output: deb1d/deb[88](=0)
+FF Output: deb1d/deb[89](=0)
+FF Output: deb1d/deb[90](=0)
+FF Output: deb1d/deb[91](=0)
+FF Output: deb1d/deb[92](=0)
+FF Output: deb1d/deb[93](=0)
+FF Output: deb1d/deb[94](=0)
+FF Output: deb1d/deb[95](=0)
+FF Output: deb1d/deb[96](=0)
+FF Output: deb1d/deb[97](=0)
+FF Output: deb1d/deb[98](=0)
+FF Output: deb1d/deb[99](=0)
+FF Output: deb1d/deb[100](=0)
+FF Output: deb2d/deb[6](=0)
+FF Output: deb2d/deb[7](=0)
+FF Output: deb2d/deb[8](=0)
+FF Output: deb2d/deb[9](=0)
+FF Output: deb2d/deb[10](=0)
+FF Output: deb2d/deb[11](=0)
+FF Output: deb2d/deb[12](=0)
+FF Output: deb2d/deb[13](=0)
+FF Output: deb2d/deb[14](=0)
+FF Output: deb2d/deb[15](=0)
+FF Output: deb2d/deb[16](=0)
+FF Output: deb2d/deb[17](=0)
+FF Output: deb2d/deb[18](=0)
+FF Output: deb2d/deb[19](=0)
+FF Output: deb2d/deb[20](=0)
+FF Output: deb2d/deb[21](=0)
+FF Output: deb2d/deb[22](=0)
+FF Output: deb2d/deb[23](=0)
+FF Output: deb2d/deb[24](=0)
+FF Output: deb2d/deb[25](=0)
+FF Output: deb2d/deb[26](=0)
+FF Output: deb2d/deb[27](=0)
+FF Output: deb2d/deb[28](=0)
+FF Output: deb2d/deb[29](=0)
+FF Output: deb2d/deb[30](=0)
+FF Output: deb2d/deb[31](=0)
+FF Output: deb2d/deb[32](=0)
+FF Output: deb2d/deb[33](=0)
+FF Output: deb2d/deb[34](=0)
+FF Output: deb2d/deb[35](=0)
+FF Output: deb2d/deb[36](=0)
+FF Output: deb2d/deb[37](=0)
+FF Output: deb2d/deb[38](=0)
+FF Output: deb2d/deb[39](=0)
+FF Output: deb2d/deb[40](=0)
+FF Output: deb2d/deb[41](=0)
+FF Output: deb2d/deb[42](=0)
+FF Output: deb2d/deb[43](=0)
+FF Output: deb2d/deb[44](=0)
+FF Output: deb2d/deb[45](=0)
+FF Output: deb2d/deb[46](=0)
+FF Output: deb2d/deb[47](=0)
+FF Output: deb2d/deb[48](=0)
+FF Output: deb2d/deb[49](=0)
+FF Output: deb2d/deb[50](=0)
+FF Output: deb2d/deb[51](=0)
+FF Output: deb2d/deb[52](=0)
+FF Output: deb2d/deb[53](=0)
+FF Output: deb2d/deb[54](=0)
+FF Output: deb2d/deb[55](=0)
+FF Output: deb2d/deb[56](=0)
+FF Output: deb2d/deb[57](=0)
+FF Output: deb2d/deb[58](=0)
+FF Output: deb2d/deb[59](=0)
+FF Output: deb2d/deb[60](=0)
+FF Output: deb2d/deb[61](=0)
+FF Output: deb2d/deb[62](=0)
+FF Output: deb2d/deb[63](=0)
+FF Output: deb2d/deb[64](=0)
+FF Output: deb2d/deb[65](=0)
+FF Output: deb2d/deb[66](=0)
+FF Output: deb2d/deb[67](=0)
+FF Output: deb2d/deb[68](=0)
+FF Output: deb2d/deb[69](=0)
+FF Output: deb2d/deb[70](=0)
+FF Output: deb2d/deb[71](=0)
+FF Output: deb2d/deb[72](=0)
+FF Output: deb2d/deb[73](=0)
+FF Output: deb2d/deb[74](=0)
+FF Output: deb2d/deb[75](=0)
+FF Output: deb2d/deb[76](=0)
+FF Output: deb2d/deb[77](=0)
+FF Output: deb2d/deb[78](=0)
+FF Output: deb2d/deb[79](=0)
+FF Output: deb2d/deb[80](=0)
+FF Output: deb2d/deb[81](=0)
+FF Output: deb2d/deb[82](=0)
+FF Output: deb2d/deb[83](=0)
+FF Output: deb2d/deb[84](=0)
+FF Output: deb2d/deb[85](=0)
+FF Output: deb2d/deb[86](=0)
+FF Output: deb2d/deb[87](=0)
+FF Output: deb2d/deb[88](=0)
+FF Output: deb2d/deb[89](=0)
+FF Output: deb2d/deb[90](=0)
+FF Output: deb2d/deb[91](=0)
+FF Output: deb2d/deb[92](=0)
+FF Output: deb2d/deb[93](=0)
+FF Output: deb2d/deb[94](=0)
+FF Output: deb2d/deb[95](=0)
+FF Output: deb2d/deb[96](=0)
+FF Output: deb2d/deb[97](=0)
+FF Output: deb2d/deb[98](=0)
+FF Output: deb2d/deb[99](=0)
+FF Output: deb2d/deb[100](=0)
+FF Output: b1_cont/state[1](=0)
+FF Output: b1_cont/state[2](=0)
+FF Output: b1_cont/state[3](=0)
+FF Output: b1_cont/state[4](=0)
+FF Output: b1_cont/state[5](=0)
+FF Output: b1_cont/state[6](=0)
+FF Output: b1_cont/state[7](=0)
+FF Output: b1_cont/state[8](=0)
+FF Output: b1_cont/state[9](=0)
+FF Output: b1_cont/state[10](=0)
+FF Output: b1_cont/state[11](=0)
+FF Output: b1_cont/state[12](=0)
+FF Output: b1_cont/state[13](=0)
+FF Output: b1_cont/state[14](=0)
+FF Output: b1_cont/state[15](=0)
+FF Output: b1_cont/state[16](=0)
+FF Output: b1_cont/state[17](=0)
+FF Output: b1_cont/state[18](=0)
+FF Output: b1_cont/state[19](=0)
+FF Output: b1_cont/state[20](=0)
+FF Output: b1_cont/state[21](=0)
+FF Output: b1_cont/state[22](=0)
+FF Output: b1_cont/state[23](=0)
+FF Output: b1_cont/state[24](=0)
+FF Output: b1_cont/state[25](=0)
+FF Output: b1_cont/state[26](=0)
+FF Output: b1_cont/state[27](=0)
+FF Output: b1_cont/state[28](=0)
+FF Output: b1_cont/state[29](=0)
+FF Output: b1_cont/state[30](=0)
+FF Output: b1_cont/state[31](=0)
+FF Output: b2_cont/state[1](=0)
+FF Output: b2_cont/state[2](=0)
+FF Output: b2_cont/state[3](=0)
+FF Output: b2_cont/state[4](=0)
+FF Output: b2_cont/state[5](=0)
+FF Output: b2_cont/state[6](=0)
+FF Output: b2_cont/state[7](=0)
+FF Output: b2_cont/state[8](=0)
+FF Output: b2_cont/state[9](=0)
+FF Output: b2_cont/state[10](=0)
+FF Output: b2_cont/state[11](=0)
+FF Output: b2_cont/state[12](=0)
+FF Output: b2_cont/state[13](=0)
+FF Output: b2_cont/state[14](=0)
+FF Output: b2_cont/state[15](=0)
+FF Output: b2_cont/state[16](=0)
+FF Output: b2_cont/state[17](=0)
+FF Output: b2_cont/state[18](=0)
+FF Output: b2_cont/state[19](=0)
+FF Output: b2_cont/state[20](=0)
+FF Output: b2_cont/state[21](=0)
+FF Output: b2_cont/state[22](=0)
+FF Output: b2_cont/state[23](=0)
+FF Output: b2_cont/state[24](=0)
+FF Output: b2_cont/state[25](=0)
+FF Output: b2_cont/state[26](=0)
+FF Output: b2_cont/state[27](=0)
+FF Output: b2_cont/state[28](=0)
+FF Output: b2_cont/state[29](=0)
+FF Output: b2_cont/state[30](=0)
+FF Output: b2_cont/state[31](=0)
+FF instance: clk_div[9]~FF(unreachable)
+FF instance: clk_div[10]~FF(unreachable)
+FF instance: clk_div[11]~FF(unreachable)
+FF instance: clk_div[12]~FF(unreachable)
+FF instance: clk_div[13]~FF(unreachable)
+FF instance: clk_div[14]~FF(unreachable)
+FF instance: clk_div[15]~FF(unreachable)
+FF instance: clk_div[16]~FF(unreachable)
+FF instance: clk_div[17]~FF(unreachable)
+FF instance: clk_div[18]~FF(unreachable)
+FF instance: clk_div[19]~FF(unreachable)
+FF instance: clk_div[20]~FF(unreachable)
+FF instance: clk_div[21]~FF(unreachable)
+FF instance: clk_div[22]~FF(unreachable)
+FF instance: clk_div[23]~FF(unreachable)
+FF instance: clk_div[24]~FF(unreachable)
+FF instance: clk_div[25]~FF(unreachable)
+FF instance: clk_div[26]~FF(unreachable)
+FF instance: clk_div[27]~FF(unreachable)
+FF instance: clk_div[28]~FF(unreachable)
+FF instance: clk_div[29]~FF(unreachable)
+FF instance: clk_div[30]~FF(unreachable)
+FF instance: clk_div[31]~FF(unreachable)
+### ### Sequential Elements Trimming Report (end) ### ### ### 
+
+### ### Module Resource Usage Distribution Estimates (begin) ### ###
+
+**Note: some resources maybe grouped under different hierarchy due to optimization and LUT mapping
+
+Module                               FFs        ADDs        LUTs      RAMs DSP/MULTs
+----------------------------         ---        ----        ----      ---- ---------
+top_level:top_level               65(20)      36(26)      61(24)      0(0)      0(0)
+ +deb1d:debounce                    7(7)        0(0)        2(2)      0(0)      0(0)
+ +deb2d:debounce                    7(7)        0(0)        2(2)      0(0)      0(0)
+ +b1_cont:button_press              3(3)        0(0)        1(1)      0(0)      0(0)
+ +b2_cont:button_press              3(3)        0(0)        1(1)      0(0)      0(0)
+ +comms:SPI(data_length=32)       14(14)        0(0)      21(21)      0(0)      0(0)
+ +led_sig:pwm                     11(11)      10(10)      10(10)      0(0)      0(0)
+
+### ### Module Resource Usage Distribution Estimates (end) ### ###
+
+
+### ### Clock Load Distribution Report (begin) ### ###
+
+         Clock     Flip-Flops   Memory Ports    Multipliers
+         -----     ----------   ------------    -----------
+        CLK_50             25              0              0
+    clk_div[4]             14              0              0
+    data_ready              1              0              0
+ comms/gen_clk             14              0              0
+    clk_div[8]             11              0              0
+
+### ### Clock Load Distribution Report (end) ### ###
+
+### ### Resource Summary (begin) ### ### ### 
+INPUT  PORTS    : 	6
+OUTPUT PORTS    : 	5
+
+EFX_ADD         : 	36
+EFX_LUT4        : 	61
+   1-2  Inputs  : 	21
+   3    Inputs  : 	13
+   4    Inputs  : 	27
+EFX_FF          : 	65
+EFX_GBUFCE      : 	5
+### ### Resource Summary (end) ### ### ###
+
+Plain synthesis (without verilog dump and post-map checks) time : 14s
+Elapsed synthesis time : 14s

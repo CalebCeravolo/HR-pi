@@ -1,0 +1,198 @@
+           
+           Efinix FPGA Placement and Routing.
+           Version: 2025.1.110 
+           Compiled: May  7 2025.
+           
+           Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+           
+           The Tool Is Based on VPR of University of Toronto,
+           a free open source code under MIT license.
+           
+           
+INFO     : Running Placement and Routing for Family "Trion", Device "T8F81" ...
+           
+           ***** Beginning stage netlist pre-processing ... *****
+INFO     : Successfully Read in Verific binary Netlist dump file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.vdb".
+INFO     : ***** Beginning VDB Netlist Checker ... *****
+WARNING  : C:\Users\caleb\.efinity\project\test_project\top_level.sv(26): Input/inout port SPI_incoming is unconnected and will be removed. [VDB-8003]
+WARNING  : Found 1 warnings in the post-synthesis netlist.
+INFO     : VDB Netlist Checker took 0.0041707 seconds.
+INFO     : 	VDB Netlist Checker took 0 seconds (approximately) in total CPU time.
+INFO     : VDB Netlist Checker virtual memory usage: begin = 119.268 MB, end = 119.328 MB, delta = 0.06 MB
+INFO     : 	VDB Netlist Checker peak virtual memory usage = 119.336 MB
+INFO     : VDB Netlist Checker resident set memory usage: begin = 126.176 MB, end = 126.628 MB, delta = 0.452 MB
+INFO     : 	VDB Netlist Checker peak resident set memory usage = 126.628 MB
+INFO     : ***** Ending VDB Netlist Checker ... *****
+INFO     : Reading core interface constraints file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.interface.csv"
+INFO     : Successfully read core interface constraints file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.interface.csv"
+INFO     : Found 0 constant generator nets.
+INFO     : Pass 0: Swept away 0 nets with no fanout.
+INFO     : logical_block #8(SPI_incoming) has no fanout.
+INFO     : Removing input.
+INFO     : Pass 0: Swept away 1 blocks with no fanout.
+INFO     : Pass 1: Swept away 0 nets with no fanout.
+INFO     : Pass 1: Swept away 0 blocks with no fanout.
+INFO     : Swept away 0 nets and 1 blocks in total.
+INFO     : Removed 0 LUT buffers
+INFO     : Sweept away 1 nodes
+INFO     : Successfully created VPR logical netlist from Verific binary DataBase file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.vdb".
+INFO     : Netlist pre-processing took 0.0118319 seconds.
+INFO     : 	Netlist pre-processing took 0 seconds (approximately) in total CPU time.
+INFO     : Netlist pre-processing virtual memory usage: begin = 119.268 MB, end = 119.476 MB, delta = 0.208 MB
+INFO     : 	Netlist pre-processing peak virtual memory usage = 119.484 MB
+INFO     : Netlist pre-processing resident set memory usage: begin = 125.924 MB, end = 127.156 MB, delta = 1.232 MB
+INFO     : 	Netlist pre-processing peak resident set memory usage = 127.156 MB
+           ***** Ending stage netlist pre-processing *****
+           
+           ***** Beginning stage pre-packing ... *****
+           ***** Ending stage pre-packing *****
+           
+           ***** Beginning stage packing ... *****
+INFO     : Generate proto netlist for file "C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.net_proto" took 0.002 seconds
+INFO     : Creating IO constraints file 'C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.io_place'
+INFO     : Packing took 0.0027498 seconds.
+INFO     : 	Packing took 0 seconds (approximately) in total CPU time.
+INFO     : Packing virtual memory usage: begin = 119.476 MB, end = 119.476 MB, delta = 0 MB
+INFO     : 	Packing peak virtual memory usage = 119.484 MB
+INFO     : Packing resident set memory usage: begin = 127.756 MB, end = 128.068 MB, delta = 0.312 MB
+INFO     : 	Packing peak resident set memory usage = 128.068 MB
+           ***** Ending stage packing *****
+           
+INFO     : Read proto netlist file C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.net_proto
+INFO     : Read proto netlist for file "C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.net_proto" took 0.017 seconds
+INFO     : Setup net and block data structure took 0.001 seconds
+WARNING  : Found 1 warnings in the post-synthesis netlist.
+INFO     : Reading core interface constraints file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.interface.csv"
+INFO     : Successfully read core interface constraints file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.interface.csv"
+           ***** Beginning stage packed netlist loading ... *****
+INFO     : Read proto netlist file C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.net_proto
+INFO     : Read proto netlist for file "C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.net_proto" took 0 seconds
+INFO     : Setup net and block data structure took 0.002 seconds
+INFO     : Packed netlist loading took 0.0029307 seconds.
+INFO     : 	Packed netlist loading took 0 seconds (approximately) in total CPU time.
+INFO     : Packed netlist loading virtual memory usage: begin = 119.616 MB, end = 119.616 MB, delta = 0 MB
+INFO     : 	Packed netlist loading peak virtual memory usage = 119.624 MB
+INFO     : Packed netlist loading resident set memory usage: begin = 129.564 MB, end = 129.588 MB, delta = 0.024 MB
+INFO     : 	Packed netlist loading peak resident set memory usage = 129.588 MB
+           ***** Ending stage packed netlist loading *****
+           
+           ***** Beginning stage pre-placement ... *****
+           
+           ***** Ending stage pre-placement *****
+           
+WARNING  : No ports matched 'osc_inst1'
+WARNING  : [SDC C:/Users/caleb/.efinity/project/test_project/test_project.sdc:18] No valid pin(s) found for clock
+WARNING  : [SDC C:/Users/caleb/.efinity/project/test_project/test_project.sdc:18] Unable to run 'create_clock' constraint due to warnings found
+INFO     : SDC file 'C:/Users/caleb/.efinity/project/test_project/test_project.sdc' parsed successfully.
+INFO     : 2 clocks (including virtual clocks), 0 inputs and 0 outputs were constrained.
+           ***** Beginning stage initial placement ... *****
+INFO     : Reading core interface constraints file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.interface.csv"
+INFO     : Successfully read core interface constraints file "C:/Users/caleb/.efinity/project/test_project/outflow/test_project.interface.csv"
+INFO     : Writing IO placement constraints to "C:/Users/caleb/.efinity/project/test_project/outflow\test_project.interface.io"
+INFO     : Reading placement constraints from 'C:/Users/caleb/.efinity/project/test_project/outflow\test_project.interface.io'.
+INFO     : Reading placement constraints from 'C:/Users/caleb/.efinity/project/test_project/work_pnr\test_project.io_place'.
+WARNING  : Clock input pad, CLK_50, of net, CLK_50, drives both clock buffer and logic. Expect extra clock skew.
+           ***** Ending stage initial placement *****
+           
+           ***** Beginning stage placement ... *****
+INFO     : Starting Global Placer with 14 threads ...
+            ----------     -------  --------------     -------
+             Iteration       WHPWL Worst Slack (ps) Convergence
+            ----------     -------  --------------     -------
+INFO     :           1        1227           -2381        49.5%
+INFO     :           2        1205           -2381        53.5%
+INFO     :           3        1192           -2381        53.7%
+INFO     :           4        1174           -2381        55.2%
+INFO     :           5        1198           -2381        57.6%
+INFO     :           6        1116           -2381        59.5%
+INFO     :           7        1099           -3148        60.4%
+INFO     :           8        1032           -3148        64.9%
+INFO     :           9        1039           -3148        68.4%
+INFO     :          10        1030           -3148        71.4%
+INFO     :          11        1044           -4351        75.4%
+INFO     :          12         954           -5381        79.7%
+INFO     :          13         915           -5381        88.4%
+INFO     :          14         917           -6324        88.4%
+INFO     :          15         912           -6182        91.4%
+INFO     :          16         899           -6167        93.8%
+INFO     :          17         900           -7395        94.0%
+INFO     :          18         903           -7498        95.0%
+INFO     :          19         900           -8815        95.5%
+INFO     :          20         906           -8815        95.5%
+INFO     :          21         891           -8815        95.5%
+INFO     :          22         865           -8815        95.5%
+INFO     :          23         856           -8815        98.8%
+INFO     :          24         861           -8815        99.1%
+INFO     :          25         856           -8815        99.2%
+INFO     :          26         861           -8815       100.2%
+INFO     : Starting Annealer
+            ----------     -------  --------------     -------
+             Iteration       WHPWL  Delay Max (ps)     R Limit
+            ----------     -------  --------------     -------
+INFO     :           0          83            9223        30.0
+INFO     :           1          34           10464        30.0
+INFO     :           2          61            7745        30.0
+INFO     :           3          56            7328        30.0
+INFO     :           4          50            8401        30.0
+INFO     :           5          47            8935        30.0
+INFO     :           6          46            8454        30.0
+INFO     :           7          47            8387        30.0
+INFO     :           8          46            6892        30.0
+INFO     :           9          46            7846        29.7
+INFO     :          10          43            7253        29.7
+INFO     :          11          47            7519        29.5
+INFO     :          12          47            8250        28.9
+INFO     :          13          44            6810        28.5
+INFO     :          14          45            7959        28.4
+INFO     :          15          42            8174        27.8
+INFO     :          16          45            7350        27.4
+INFO     :          17          45            8165        26.9
+INFO     :          18          43            7971        26.5
+INFO     :          19          45            8190        25.8
+INFO     :          20          43            7936        25.3
+INFO     :          21          43            8130        24.3
+INFO     :          22          43            9067        23.5
+INFO     :          23          42            9338        22.5
+INFO     :          24          41            7787        21.6
+INFO     :          25          42            9338        20.7
+INFO     :          26          43            8093        19.8
+INFO     :          27          43            7096        18.7
+INFO     :          28          40            8998        17.9
+INFO     :          29          38            8767        16.9
+INFO     :          30          38            7868        16.1
+INFO     :          31          36            8758        15.3
+INFO     :          32          34            8758        14.5
+INFO     :          33          35            8758        13.7
+INFO     :          34          34            8758        12.9
+INFO     :          35          35            7874        12.2
+INFO     :          36          36            7827        11.5
+INFO     :          37          35            8705        10.7
+INFO     :          38          34            8758        10.2
+INFO     :          39          34            8795         9.5
+INFO     :          40          34            7908         9.0
+INFO     :          41          34            8092         8.5
+INFO     :          42          33            7874         8.0
+INFO     :          43          33            7874         7.4
+INFO     :          44          33            7874         7.0
+INFO     :          45          33            7874         6.6
+INFO     :          46          33            7874         6.0
+INFO     :          47          32            7874         5.5
+INFO     : Counted delay computer calls: 19456
+Placement successful: 121 cells are placed
+INFO     : Peak congestion smeared over 1/4 of the chip is 0.0232719 at 72,84
+INFO     : Congestion-weighted HPWL per net: 4.35263
+INFO     : Post-placement cluster-level checks is successful
+INFO     : Checks is successful
+INFO     : Reading placement constraints from 'C:/Users/caleb/.efinity/project/test_project/outflow/test_project.qplace'.
+INFO     : Finished Realigning Types (15 blocks needed type change)
+INFO     : Completed placement consistency check successfully.
+INFO     : Successfully created FPGA place file 'C:/Users/caleb/.efinity/project/test_project/outflow/test_project.place'
+INFO     : Placement took 1.01215 seconds.
+INFO     : 	Placement took 1.1875 seconds (approximately) in total CPU time.
+INFO     : Placement virtual memory usage: begin = 119.616 MB, end = 162.096 MB, delta = 42.48 MB
+INFO     : 	Placement peak virtual memory usage = 162.096 MB
+INFO     : Placement resident set memory usage: begin = 130.216 MB, end = 174.864 MB, delta = 44.648 MB
+INFO     : 	Placement peak resident set memory usage = 174.864 MB
+           ***** Ending stage placement *****
+           
