@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         angle+=dec*argument;
         dec*=10;
     }
-    angle%=180;
+    angle%=181;
     val = 50 + angle*(10/9);
     //uint8_t val = argument;
     // if (argument==0){
