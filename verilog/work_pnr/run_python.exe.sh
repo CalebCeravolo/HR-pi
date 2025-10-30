@@ -1,1 +1,0 @@
-"C:/Efinity/2025.1/bin/python.exe"  "C:/Efinity/2025.1/scripts/efx_run_pt_unified.py"  "test_project"  "Trion"  "T8F81"

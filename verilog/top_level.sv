@@ -33,21 +33,30 @@ module top_level(Button1, Button2, CLK_50, led,
     assign d_out[1] = {{8'd5},{8'd6},{8'd7},{8'd8}};
     
     logic count;
-    assign SPI_data_out = d_out[count];
+    assign SPI_data_out = SPI_data_in;
     always_ff @(negedge data_ready) begin
         count<=count+1'b1;
     end
     
     //assign SPI_outgoing = 1'b1;
-
     SPI #(.data_length(spi_width)) comms (.data_out(SPI_data_out), .data_in(SPI_data_in), 
                 .incoming(SPI_incoming), .outgoing(SPI_outgoing),
                 .clk(SPI_CLK),.clk2(CLK_50), .CS, .data_ready);
 
 
     pwm led_sig (.clk(CLK_50), .sig(led[0]), .period(period));
-    assign led[2:1]=~debug_out;
-    assign led[3] = ~CS;
+    assign led[3:1]=period;
+
+    // Control for the motors. Signal decoding
+    /*
+    Pattern for signal decoding:
+    |  Motor select         |  pwm signal                    |           TBD            |
+    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|
+    */
+    always_ff @(posedge data_ready) begin
+        if (SPI_data_in[spi_data_width-1])
+            period<=SPI_data_in[spi_width-9 -:10];
+    end
     always_ff @(posedge CLK_50) begin
         clk_div<=clk_div+1'b1;
         //led[1] <= |debug_out;
@@ -58,12 +67,13 @@ module top_level(Button1, Button2, CLK_50, led,
         // else
         //     if (debug_2_out>0)
         //         debug_2_out<=debug_2_out-1'b1;
+        
         if (button1_ps) begin
-            period<=period+100;
+            //period<=period+100;
             debug_out<=debug_out+1'b1;
         end
         if (button2_ps) begin
-            period<=period-100;
+            //period<=period-100;
             debug_out<=debug_out-1'b1;
         end
     end
@@ -97,25 +107,32 @@ module pwm(clk, sig, period);
         else 
             counter<=counter+1'b1;
     end
-    assign sig = (counter>=period);
+    assign sig = (counter<period);
 endmodule
 
-module SPI #(parameter data_length = 64) (data_out, data_in, incoming, outgoing, clk, clk2, CS, data_ready);
-    output logic outgoing, data_ready;
-    output logic [data_length-1:0] data_in;
-    input logic clk, clk2, CS, incoming;
-    input logic [data_length-1:0] data_out;
+module SPI #(parameter data_length = 64) (
+    input logic [data_length-1:0] data_out, // Input data to send out on interface
+    output logic [data_length-1:0] data_in, // Input data, when valid data_ready goes high
+    input incoming, // Incoming bit of information
+    output outgoing, // Outgoing bit of information
+    input clk, // Serial clock from raspberry pi
+    input CS,  // Chip select signal
+    output logic data_ready // Signal for telling when input data reg is valid
+    );
+    // Outgoing
+    // output logic outgoing, data_ready;
+    // output logic [data_length-1:0] data_in;
+    logic [data_length-1:0] data_in_buffer, new_data;
+    // input logic clk, clk2, CS, incoming;
+    // input logic [data_length-1:0] data_out;
     logic fin;
     logic posedge_clk;
-    logic negedge_CS, posedge_CS;
-    button_press pos_clk (.in(clk), .out(posedge_clk), .clk(clk2), .reset(0));
-    button_press pos_cs (.in(!CS), .out(posedge_CS), .clk(clk2), .reset(0));
-    button_press neg_cs (.in(!CS), .out(negedge_CS), .clk(clk2), .reset(0));
+    //button_press pos_clk (.in(clk), .out(posedge_clk), .clk(clk2), .reset(0));
     // Signifying the final address has been reached
     assign fin = (addr==(data_length-1));
 
     //enum {waiting, communicating} state, next_state;
-    logic [data_length-1:0] data_in_buffer, new_data;
+    
     
     logic [data_length-1:0] data_loaded, data_inv;
     logic [$clog2(data_length)-1:0] addr, next_addr, addr_eff;
@@ -160,58 +177,4 @@ module SPI #(parameter data_length = 64) (data_out, data_in, incoming, outgoing,
             data_loaded<=data_out;
         end
     end
-    // always_ff @(posedge clk) begin
-
-    //     addr<=next_addr;
-    //     data_in_buffer<=new_data;
-    //     if (addr==data_length-1) begin
-    //         data_in<=new_data;
-    //         data_loaded<=data_out;
-    //         data_ready<=1'b1;
-    //     end
-    //     else begin
-    //         data_ready<=1'b0;
-    //     end
-    // end
 endmodule
-
-
-// module i2c(outgoing, incoming, SDA, SCL, done);
-//     inout SDA;
-//     input SCL;
-//     input logic [7:0] outgoing;
-//     output logic [7:0] incoming;
-//     output logic done;
-//     assign SDA = (state==transmitting) ? outgoing_bit : 1'bz;
-//     enum {receiving, transmitting, ending} state, next_state;
-//     logic [2:0] current_addr;
-//     logic outgoing_bit, incoming_bit;
-//     assign outgoing_bit = outgoing[current_addr];
-//     logic [7:0] end_message;
-//     assign end_message = 8'hFF;
-//     initial begin
-//         current_addr=0;
-//         done = 0;
-//     end
-
-//     always_ff @(posedge SCL) begin
-        
-//         if (current_addr==3'd7)
-//             case (state)
-//                 transmitting: begin
-//                     state<=ending;
-//                     outgoing_bit<=1'b1;
-//                 end
-
-//             endcase
-//         else
-//             current_addr<=current_addr+1'b1;
-
-//         case (state)
-//             receiving: begin
-//                 incoming <={incoming[6:0], SDA};
-//             end
-//         endcase
-//     end
-
-// endmodule
