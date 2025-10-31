@@ -17,6 +17,8 @@ void main() {
   pinMode(L_EN, LOW);
   spinOneWay();
   delay(2000);
+  pinMode(R_EN, LOW);
+  pinMode(L_EN, HIGH);
   spinOtherWay();
   delay(2000);
   return 0;
