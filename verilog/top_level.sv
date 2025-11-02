@@ -1,6 +1,7 @@
 module top_level(Button1, Button2, CLK_50, led, 
-                SPI_outgoing, SPI_incoming, SPI_CLK, CS);
+                SPI_outgoing, SPI_incoming, SPI_CLK, CS, GPIO_OUT);
     input wire Button1, Button2;
+    output [23:0] GPIO_OUT;
     input wire CLK_50;
     output logic [3:0] led;
     logic [10:0] period;
@@ -18,44 +19,45 @@ module top_level(Button1, Button2, CLK_50, led,
         clk_div=0;
         period=0;
         debug_out=0;
-        count<=0;
+        //count<=0;
     end
     
     output logic SPI_outgoing;
     input logic SPI_incoming;
     input logic SPI_CLK, CS;
     logic data_ready;
-    localparam spi_width = 32;
-    logic [spi_width-1:0] SPI_data_in;
-    logic [spi_width-1:0] SPI_data_out;
-    logic [spi_width-1:0] d_out [1:0];
-    assign d_out[0] = {4{2{debug_out}}};
-    assign d_out[1] = {{8'd5},{8'd6},{8'd7},{8'd8}};
+    localparam spi_data_width = 32;
+    logic [spi_data_width-1:0] SPI_data_in;
+    logic [spi_data_width-1:0] SPI_data_out;
+    logic [spi_data_width-1:0] d_out [1:0];
+    // assign d_out[0] = {4{2{debug_out}}};
+    // assign d_out[1] = {{8'd5},{8'd6},{8'd7},{8'd8}};
     
-    logic count;
+    //logic count;
     assign SPI_data_out = SPI_data_in;
-    always_ff @(negedge data_ready) begin
-        count<=count+1'b1;
-    end
+    // always_ff @(negedge data_ready) begin
+    //     count<=count+1'b1;
+    // end
     
     //assign SPI_outgoing = 1'b1;
-    SPI #(.data_length(spi_width)) comms (.data_out(SPI_data_out), .data_in(SPI_data_in), 
+    SPI #(.data_length(spi_data_width)) comms (.data_out(SPI_data_out), .data_in(SPI_data_in), 
                 .incoming(SPI_incoming), .outgoing(SPI_outgoing),
-                .clk(SPI_CLK),.clk2(CLK_50), .CS, .data_ready);
+                .clk(SPI_CLK), .CS, .data_ready);
 
 
     pwm led_sig (.clk(CLK_50), .sig(led[0]), .period(period));
-    assign led[3:1]=period;
+    //assign led[3:1]=period;
 
     // Control for the motors. Signal decoding
     /*
     Pattern for signal decoding:
-    |  Motor select         |  pwm signal                    |           TBD            |
-    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|
+    |  Motor select         |     pwm signal                 |              TBD           |
+    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
     */
+    assign led[1] = 1'b1;
     always_ff @(posedge data_ready) begin
-        if (SPI_data_in[spi_data_width-1])
-            period<=SPI_data_in[spi_width-9 -:10];
+        if (SPI_data_in[31:24]==1)
+            period<=SPI_data_in[23:13];
     end
     always_ff @(posedge CLK_50) begin
         clk_div<=clk_div+1'b1;
@@ -114,7 +116,7 @@ module SPI #(parameter data_length = 64) (
     input logic [data_length-1:0] data_out, // Input data to send out on interface
     output logic [data_length-1:0] data_in, // Input data, when valid data_ready goes high
     input incoming, // Incoming bit of information
-    output outgoing, // Outgoing bit of information
+    output logic outgoing, // Outgoing bit of information
     input clk, // Serial clock from raspberry pi
     input CS,  // Chip select signal
     output logic data_ready // Signal for telling when input data reg is valid
