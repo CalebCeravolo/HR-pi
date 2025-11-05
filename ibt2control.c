@@ -12,26 +12,32 @@
 
 
 void main() {
-  wiringPiSetup();
-  pinMode(R_EN, HIGH);
-  pinMode(L_EN, LOW);
+  wiringPiSetupPinType(WPI_PIN_WPI);
+  pinMode(R_EN, OUTPUT);
+  pinMode(L_EN, OUTPUT);
+  pinMode(RPWM, PWM_OUTPUT);
+  pinMode(LPWM, PWM_OUTPUT);
+
+  digitalWrite(R_EN, HIGH);
+  digitalWrite(L_EN, LOW);
   spinOneWay();
   delay(2000);
-  pinMode(R_EN, LOW);
-  pinMode(L_EN, HIGH);
+  
+  digitalWrite(R_EN, LOW);
+  digitalWrite(L_EN, HIGH);
   spinOtherWay();
   delay(2000);
   return 0;
 }
 
 void spinOneWay(){
-  pinMode(RPWM, 500);
-  pinMode(LPWM, 0);
+  pwmWrite(RPWM, 500);
+  pwmWrite(LPWM, 0);
 }
 
 void spinOtherWay(){
-  pinMode(LPWM, 500);
-  pinMode(RPWM, 0);
+  pwmWrite(LPWM, 500);
+  pwmWrite(RPWM, 0);
 }
 
 
