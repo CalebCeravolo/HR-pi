@@ -11,7 +11,7 @@
 #define L_EN 37
 
 
-void main() {
+int main (void) {
   wiringPiSetupPinType(WPI_PIN_WPI);
   pinMode(R_EN, OUTPUT);
   pinMode(L_EN, OUTPUT);
