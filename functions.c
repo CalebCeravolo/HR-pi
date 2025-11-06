@@ -18,16 +18,19 @@
         printf("\n");
     }
 #endif
+
+void print_arr(void * input, int len){
+    char* ch=(char *)input;
+    for (int i=0; i<len; i++){
+        printf("%X ", *(ch+i));
+    }
+    printf("\n");
+}
 void print_bin(int len, int in){
     for (int i=0; i<len; i++){
         printf("%d", ((1<<(len-1-i))&in)&&1);
     }
     printf("\n");
-}
-void copy(char* arr1, char*arr2, int length){
-    for (int i=0; i<length; i++){
-        *(arr2+i)=*(arr1+i);
-    }
 }
 
 // Converts uint32_t to character array
@@ -65,6 +68,7 @@ uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period){
     base|=(motor<<24);
     print_bin(32, base);
     to_char_array(base, output);
+    print_arr(output, 4);
     wiringPiSPIDataRW(0, output, 4);
     uint32_t result = to_uint_value(output);
     wiringPiSPIClose(0);
