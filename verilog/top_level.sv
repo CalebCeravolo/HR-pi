@@ -1,7 +1,7 @@
 module top_level(Button1, Button2, CLK_50, led, 
-                SPI_outgoing, SPI_incoming, SPI_CLK, CS, GPIO_OUT);
+                SPI_outgoing, SPI_incoming, SPI_CLK, CS, GPIO);
     input wire Button1, Button2;
-    output [23:0] GPIO_OUT;
+    output [23:0] GPIO;
     input wire CLK_50;
     output logic [3:0] led;
     logic [10:0] period;
@@ -17,11 +17,12 @@ module top_level(Button1, Button2, CLK_50, led,
     logic [31:0] clk_div;
     initial begin
         clk_div=0;
-        period=0;
+        period=1001;
         debug_out=0;
+        motor_periods='{24{0}};
         //count<=0;
     end
-    
+    //assign GPIO='1;
     output logic SPI_outgoing;
     input logic SPI_incoming;
     input logic SPI_CLK, CS;
@@ -43,8 +44,13 @@ module top_level(Button1, Button2, CLK_50, led,
     SPI #(.data_length(spi_data_width)) comms (.data_out(SPI_data_out), .data_in(SPI_data_in), 
                 .incoming(SPI_incoming), .outgoing(SPI_outgoing),
                 .clk(SPI_CLK), .CS, .data_ready);
-
-
+    logic [10:0] motor_periods [23:0];
+    genvar i;
+    generate;
+        for (i=0; i<6; i++) begin : pwm_signals
+            pwm motor_sig (.clk(CLK_50), .sig(GPIO[i]), .period(motor_periods[i]));
+        end
+    endgenerate
     pwm led_sig (.clk(CLK_50), .sig(led[0]), .period(period));
     //assign led[3:1]=period;
 
@@ -55,10 +61,22 @@ module top_level(Button1, Button2, CLK_50, led,
     |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
     */
     assign led[1] = 1'b1;
-    always_ff @(posedge data_ready) begin
-        if (SPI_data_in[31:24]==1)
-            period<=SPI_data_in[23:13];
+    logic [7:0] motor_addr;
+    logic [10:0] new_pwm_period;
+    assign motor_addr = SPI_data_in[31:24];
+    assign new_pwm_period = SPI_data_in[23:13];
+    logic load_period;
+    button_press load_logic (.in(data_ready), .out(load_period), .clk(CLK_50), .reset(0));
+    always_ff @(posedge CLK_50) begin
+        if (load_period) begin
+            period<=new_pwm_period;
+            motor_periods[motor_addr]<=new_pwm_period;
+        end
     end
+    // always_ff @(posedge data_ready) begin
+    //     period<=new_pwm_period;
+    //     motor_periods[motor_addr]<=new_pwm_period;
+    // end
     always_ff @(posedge CLK_50) begin
         clk_div<=clk_div+1'b1;
         //led[1] <= |debug_out;
@@ -164,8 +182,9 @@ module SPI #(parameter data_length = 64) (
 
 
     always_ff @(negedge clk) begin
+        //done<=(next_addr==data_length-1);
         data_in_buffer<=new_data;
-        if (addr==data_length-1) begin
+        if ((addr==data_length-1)) begin
             data_in<=new_data;
             data_ready<=1'b1;
         end
