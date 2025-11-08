@@ -41,7 +41,7 @@ void to_char_array(uint32_t base, char * output);
 /*
 Creates a pwm signal on the fpga
 motor: motor pin to interface with
-pwm_period: 0-2000 value represnting duty cycle
+pwm_period: 0-2000 value representing duty cycle
 */
 extern uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period);
 /*

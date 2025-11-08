@@ -5,12 +5,13 @@
 #include <wiringPiSPI.h>
 #include "functions.h"
 
-//#define TESTING 1
+#define TESTING 1
 #ifdef TESTING
     int main(int argc, char** argv){
         int *output = malloc((argc-1) * sizeof(int));
         argparse(argc-1, argv+1, output);
-        print_bin(8, (*output)<<*(output+1));
+        //print_bin(8, (*output)<<*(output+1));
+        printf("%d", (int)'\0');
         //printf("%X", print);
         // for (int i=0; i<argc-1; i++){
         //     printf("%d ", *(output+i));
@@ -66,9 +67,9 @@ uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period){
     unsigned char output[4];
     base|=(pwm_period<<13);
     base|=(motor<<24);
-    print_bin(32, base);
+    //print_bin(32, base);
     to_char_array(base, output);
-    print_arr(output, 4);
+    //print_arr(output, 4);
     wiringPiSPIDataRW(0, output, 4);
     uint32_t result = to_uint_value(output);
     wiringPiSPIClose(0);
