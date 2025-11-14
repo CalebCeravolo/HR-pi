@@ -5,7 +5,7 @@
 #include <wiringPiSPI.h>
 #include "functions.h"
 
-#define TESTING 1
+//#define TESTING 1
 #ifdef TESTING
     int main(int argc, char** argv){
         int *output = malloc((argc-1) * sizeof(int));

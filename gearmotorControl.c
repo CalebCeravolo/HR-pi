@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
+#include "functions.h"
 
-#define RPWM 32
-#define LPWM 33
-#define R_EN 36
-#define L_EN 37
+#define RPWM 32 // connect to pin 1 on ibt2
+#define LPWM 33 // connect to pin 2 on ibt2
+#define R_EN 36 // connect to pin 3 on ibt2
+#define L_EN 37 // connect to pin 4 on ibt2
 
 #define ENC_A 29
 #define ENC_B 31
@@ -30,11 +31,12 @@ int main(int argc, char *argv[]) {
     return 1;
   };
 
-  pinMode(RPWM, PWM_OUTPUT);
+  /*  pinMode(RPWM, PWM_OUTPUT);
   pinMode(LPWM, PWM_OUTPUT);
   pwmSetMode(PWM_MODE_MS);     // mark-space mode
-  pwmSetClock(192);            // 19.2 MHz / 192 = 100 kHz
-  pwmSetRange(2000);  
+  pwmSetClock(2);            // 19.2 MHz / 192 = 100 kHz // 192
+  pwmSetRange(1024);                                       // 2000
+*/
 
   pinMode(R_EN, OUTPUT);
   pinMode(L_EN, OUTPUT);
@@ -42,8 +44,8 @@ int main(int argc, char *argv[]) {
   pinMode(ENC_A, INPUT);
   pinMode(ENC_B, INPUT);
 
-  //pullUpDnControl(ENC_A, PUD_UP);  // Enable pull-up
-  //pullUpDnControl(ENC_B, PUD_UP); // optional I think
+  pullUpDnControl(ENC_A, PUD_UP);  // Enable pull-up
+  pullUpDnControl(ENC_B, PUD_UP); // optional I think
 
   // Attach interrupt to encoder channel A
   wiringPiISR(ENC_A, INT_EDGE_BOTH, &encoderA_ISR); 
@@ -57,18 +59,21 @@ int main(int argc, char *argv[]) {
 
   digitalWrite(R_EN, HIGH);
   digitalWrite(L_EN, HIGH);
-  //spinOneWay();
-  pwmWrite(RPWM, 1000);
-  pwmWrite(LPWM, 0);
+
+  //pwmWrite(RPWM, 1000);
+  //pwmWrite(LPWM, 0);
+  fpga_pwm(0, 1000);
+  fpga_pwm(1,0);
   delay(2000);
 
-  digitalWrite(R_EN, LOW);
-  digitalWrite(L_EN, HIGH);
-  //spinOtherWay();
-  pwmWrite(LPWM, 1000);
-  pwmWrite(RPWM, 0);
+  fpga_pwm(0,0);
+  fpga_pwm(1, 1000);
+  
+  // pwmWrite(LPWM, 1000);
+  // pwmWrite(RPWM, 0);
   delay(2000);
-
+  fpga_pwm(0, 0);
+  fpga_pwm(1,0);
   printf("Final position count: %d\n", position);
 
   return 0;
