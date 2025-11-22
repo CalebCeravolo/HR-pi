@@ -58,42 +58,33 @@ int main(int argc, char *argv[]) {
   pinMode(hallPin, INPUT);
   pullUpDnControl(hallPin, PUD_UP);
 
-  int state;
-  int last_state = 0;
   while (1){
-        state = digitalRead(hallPin);
-        if (state!=last_state){
-            if (state==0){
-                printf("MAGNET!!!\n");
-                printf("stop\n");
-                pwmWrite(RPWM, 0);
-                pwmWrite(LPWM, 0);
-                digitalWrite(R_EN, LOW);
-                digitalWrite(L_EN, LOW);
-                //delay(3000);
-
-            }
-            else if (state==1){
-                printf("No more magnet\n");
-                digitalWrite(R_EN, HIGH);
-                digitalWrite(L_EN, HIGH);
-                pwmWrite(RPWM, 1000);
-                pwmWrite(LPWM, 0);
-                /*delay(3000);
-                pwmWrite(RPWM, 0);
-                pwmWrite(LPWM, 0);
-                digitalWrite(R_EN, LOW);
-                digitalWrite(L_EN, LOW);
-                delay(3000);*/
+        if (hallTriggered(hallPin)){
+            printf("MAGNET!!!\n");
+            printf("stop\n");
+            pwmWrite(RPWM, 0);
+            pwmWrite(LPWM, 0);
+            digitalWrite(R_EN, LOW);
+            digitalWrite(L_EN, LOW);
+            return 0;
+            //delay(3000);
+        } else {
+            printf("No more magnet\n");
+            digitalWrite(R_EN, HIGH);
+            digitalWrite(L_EN, HIGH);
+            pwmWrite(RPWM, 1000);
+            pwmWrite(LPWM, 0);
+            /*delay(3000);
+            pwmWrite(RPWM, 0);
+            pwmWrite(LPWM, 0);
+            digitalWrite(R_EN, LOW);
+            digitalWrite(L_EN, LOW);
+            delay(3000);*/
                 
-            }
-            last_state=state;
         }
-
-        delay(100);
     }
-
-return 0;
+    return 0;
+}
 
   //pinMode(ENC_A, INPUT);
   //pinMode(ENC_B, INPUT);
@@ -150,7 +141,4 @@ return 0;
   digitalWrite(R_EN, LOW);
   digitalWrite(L_EN, LOW);
 
-    */ // remove this 
-        
-  
-}
+    */ // remove this
