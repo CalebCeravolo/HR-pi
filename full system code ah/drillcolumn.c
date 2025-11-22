@@ -9,12 +9,14 @@
 #include <stdint.h>
 #include <unistd.h>
 
-int hallTriggered(int pin);
+#include "Hall.h"
 
 #define RPWM 32
 #define LPWM 33
 #define R_EN 36
 #define L_EN 37
+
+#define hallPin 29            // pin 29 = GPIO5
 
 int main(int argc, char *argv[]) {
 

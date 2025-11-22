@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <wiringPi.h>
 #include <stdint.h>
+#include "Hall.h"
 #define hallPin 0
 // General code file I use to generate all set all commands
 int main(int argc, char *argv[]){
@@ -28,6 +29,6 @@ int main(int argc, char *argv[]){
 
 // magnet near sensor = return value of 1
 // no more magnet = return value of 0
-int hallTriggered(int pin) {
+int hallTriggered() {
     return (digitalRead(hallPin) == LOW) ? 1 : 0;
 }
