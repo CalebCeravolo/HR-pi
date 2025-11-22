@@ -65,8 +65,26 @@ uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period){
     }
     uint32_t base = 0;
     unsigned char output[4];
-    base|=(pwm_period<<13);
-    base|=(motor<<24);
+    base|=(pwm_period);
+    base|=(motor<<11);
+    //print_bin(32, base);
+    to_char_array(base, output);
+    //print_arr(output, 4);
+    wiringPiSPIDataRW(0, output, 4);
+    uint32_t result = to_uint_value(output);
+    wiringPiSPIClose(0);
+    return result;
+}
+uint32_t fpga_datatran(uint8_t data_addr){
+    if (wiringPiSPISetup(0, 1000000)<0){
+        perror("Setup failed\n");
+        return -1;
+    }
+    uint8_t command = 0b00000001;
+    uint32_t base = 0;
+    unsigned char output[4];
+    base|=data_addr;
+    base|=(command<<24);
     //print_bin(32, base);
     to_char_array(base, output);
     //print_arr(output, 4);

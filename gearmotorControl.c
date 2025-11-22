@@ -9,11 +9,16 @@
 #define R_EN 36 // connect to pin 3 on ibt2
 #define L_EN 37 // connect to pin 4 on ibt2
 
-#define ENC_A 29
+#define ENC_A 29 
 #define ENC_B 31
 
 volatile int position = 0; 
+volatile int direction = 0; 
 
+// https://andymark.com/products/neverest-classic-60-gearmotor
+// It is a 7 pulses per revolution (ppr), hall effect encoder. 
+// Since the motor's gearbox has a 60:1 reduction, then the NeverRest 60 output shaft provides 420 ppr.
+ 
 void encoderA_ISR(void) {
     // Quadrature decoding: check B to determine direction
     if (digitalRead(ENC_B) == HIGH) {
@@ -31,12 +36,12 @@ int main(int argc, char *argv[]) {
     return 1;
   };
 
-  /*  pinMode(RPWM, PWM_OUTPUT);
+  pinMode(RPWM, PWM_OUTPUT);
   pinMode(LPWM, PWM_OUTPUT);
   pwmSetMode(PWM_MODE_MS);     // mark-space mode
   pwmSetClock(2);            // 19.2 MHz / 192 = 100 kHz // 192
   pwmSetRange(1024);                                       // 2000
-*/
+
 
   pinMode(R_EN, OUTPUT);
   pinMode(L_EN, OUTPUT);
@@ -60,20 +65,20 @@ int main(int argc, char *argv[]) {
   digitalWrite(R_EN, HIGH);
   digitalWrite(L_EN, HIGH);
 
-  //pwmWrite(RPWM, 1000);
-  //pwmWrite(LPWM, 0);
-  fpga_pwm(0, 1000);
-  fpga_pwm(1,0);
+  pwmWrite(RPWM, 1000);
+  pwmWrite(LPWM, 0);
+  //fpga_pwm(0, 1000);
+  //fpga_pwm(1,0);
   delay(2000);
 
-  fpga_pwm(0,0);
-  fpga_pwm(1, 1000);
+  //fpga_pwm(0,0);
+  //fpga_pwm(1, 1000);
   
-  // pwmWrite(LPWM, 1000);
-  // pwmWrite(RPWM, 0);
+  pwmWrite(LPWM, 1000);
+  pwmWrite(RPWM, 0);
   delay(2000);
-  fpga_pwm(0, 0);
-  fpga_pwm(1,0);
+  //fpga_pwm(0, 0);
+  //fpga_pwm(1,0);
   printf("Final position count: %d\n", position);
 
   return 0;

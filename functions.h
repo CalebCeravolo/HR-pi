@@ -44,6 +44,11 @@ motor: motor pin to interface with
 pwm_period: 0-2000 value representing duty cycle
 */
 extern uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period);
+
+
+extern uint32_t fpga_datatran(uint8_t data_addr);
+
+
 /*
 Converts a character array to a uint32 value
 */
