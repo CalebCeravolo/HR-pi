@@ -5,7 +5,7 @@
 #include "functions.h"
 
 #define RPWM 32 // connect to pin 1 on ibt2
-#define LPWM 33 // connect to pin 2 on ibt2
+#define LPWM 35 // connect to pin 2 on ibt2
 #define R_EN 36 // connect to pin 3 on ibt2
 #define L_EN 37 // connect to pin 4 on ibt2
 
@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
     printf("failed setup");
     return 1;
   };
+
+  //wiringPiSetupPhys();
 
   pinMode(RPWM, PWM_OUTPUT);
   pinMode(LPWM, PWM_OUTPUT);
@@ -82,6 +84,34 @@ int main(int argc, char *argv[]) {
   //fpga_pwm(0, 0);
   //fpga_pwm(1,0);
   //printf("Final position count: %d\n", position);
+
+  pwmWrite(RPWM, 0);
+  pwmWrite(LPWM, 0);
+  digitalWrite(R_EN, LOW);
+  digitalWrite(L_EN, LOW);
+
+  printf("R_EN HIGH, L_EN HIGH\n");
+  digitalWrite(R_EN, HIGH);
+  digitalWrite(L_EN, HIGH);
+
+  printf("RPWM 1000, LPWM 0\n");
+  pwmWrite(RPWM, 1000);
+  pwmWrite(LPWM, 0);
+  delay(2000);
+
+  printf("RPWM 0, LPWM 1000\n");
+  pwmWrite(RPWM, 0);
+  pwmWrite(LPWM, 1000);
+  delay(2000);
+
+  printf("Stopping motor\n");
+  pwmWrite(RPWM, 0);
+  pwmWrite(LPWM, 0);
+
+  pwmWrite(RPWM, 0);
+  pwmWrite(LPWM, 0);
+  digitalWrite(R_EN, LOW);
+  digitalWrite(L_EN, LOW);
 
   return 0;
   
