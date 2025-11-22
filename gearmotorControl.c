@@ -48,11 +48,11 @@ int main(int argc, char *argv[]) {
   pinMode(R_EN, OUTPUT);
   pinMode(L_EN, OUTPUT);
 
-  pinMode(ENC_A, INPUT);
-  pinMode(ENC_B, INPUT);
+  //pinMode(ENC_A, INPUT);
+  //pinMode(ENC_B, INPUT);
 
-  pullUpDnControl(ENC_A, PUD_UP);  // Enable pull-up
-  pullUpDnControl(ENC_B, PUD_UP); // optional I think
+  //pullUpDnControl(ENC_A, PUD_UP);  // Enable pull-up
+  //pullUpDnControl(ENC_B, PUD_UP); // optional I think
 
   // Attach interrupt to encoder channel A
   //wiringPiISR(ENC_A, INT_EDGE_BOTH, &encoderA_ISR); 
