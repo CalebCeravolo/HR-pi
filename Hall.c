@@ -25,3 +25,9 @@ int main(int argc, char *argv[]){
     }
     return 0;
 }
+
+// magnet near sensor = return value of 1
+// no more magnet = return value of 0
+int hallTriggered(int pin) {
+    return (digitalRead(hallPin) == LOW) ? 1 : 0;
+}

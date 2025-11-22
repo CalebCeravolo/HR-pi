@@ -9,8 +9,8 @@
 #define R_EN 36 // connect to pin 3 on ibt2
 #define L_EN 37 // connect to pin 4 on ibt2
 
-#define ENC_A 29 
-#define ENC_B 31
+//#define ENC_A 29 
+//#define ENC_B 31
 
 volatile int position = 0; 
 volatile int direction = 0; 
@@ -19,6 +19,7 @@ volatile int direction = 0;
 // It is a 7 pulses per revolution (ppr), hall effect encoder. 
 // Since the motor's gearbox has a 60:1 reduction, then the NeverRest 60 output shaft provides 420 ppr.
  
+/*
 void encoderA_ISR(void) {
     // Quadrature decoding: check B to determine direction
     if (digitalRead(ENC_B) == HIGH) {
@@ -26,7 +27,8 @@ void encoderA_ISR(void) {
     } else {
         position--;
     }
-}
+}*/
+
 
 int main(int argc, char *argv[]) {
 
@@ -53,7 +55,7 @@ int main(int argc, char *argv[]) {
   pullUpDnControl(ENC_B, PUD_UP); // optional I think
 
   // Attach interrupt to encoder channel A
-  wiringPiISR(ENC_A, INT_EDGE_BOTH, &encoderA_ISR); 
+  //wiringPiISR(ENC_A, INT_EDGE_BOTH, &encoderA_ISR); 
   
   
 
@@ -74,12 +76,12 @@ int main(int argc, char *argv[]) {
   //fpga_pwm(0,0);
   //fpga_pwm(1, 1000);
   
-  pwmWrite(LPWM, 1000);
   pwmWrite(RPWM, 0);
+  pwmWrite(LPWM, 1000);
   delay(2000);
   //fpga_pwm(0, 0);
   //fpga_pwm(1,0);
-  printf("Final position count: %d\n", position);
+  //printf("Final position count: %d\n", position);
 
   return 0;
   
