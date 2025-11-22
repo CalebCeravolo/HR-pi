@@ -12,7 +12,7 @@ int hallTriggered(int hallPin);
 #define R_EN 36 // connect to pin 3 on ibt2
 #define L_EN 37 // connect to pin 4 on ibt2
 
-#define hallPin 29
+#define hallPin 3
 
 //#define ENC_A 29 
 //#define ENC_B 31
@@ -65,14 +65,35 @@ int main(int argc, char *argv[]) {
         if (state!=last_state){
             if (state==0){
                 printf("MAGNET!!!\n");
+                printf("stop\n");
+                pwmWrite(RPWM, 0);
+                pwmWrite(LPWM, 0);
+                digitalWrite(R_EN, LOW);
+                digitalWrite(L_EN, LOW);
+                //delay(3000);
+
             }
             else if (state==1){
                 printf("No more magnet\n");
+                digitalWrite(R_EN, HIGH);
+                digitalWrite(L_EN, HIGH);
+                pwmWrite(RPWM, 1000);
+                pwmWrite(LPWM, 0);
+                /*delay(3000);
+                pwmWrite(RPWM, 0);
+                pwmWrite(LPWM, 0);
+                digitalWrite(R_EN, LOW);
+                digitalWrite(L_EN, LOW);
+                delay(3000);*/
+                
             }
             last_state=state;
         }
+
         delay(100);
     }
+
+return 0;
 
   //pinMode(ENC_A, INPUT);
   //pinMode(ENC_B, INPUT);
@@ -90,7 +111,8 @@ int main(int argc, char *argv[]) {
   //pwmSetRange(2000);           // 100 kHz / 2000 = 50 Hz
           // 150/2000 = 7.5% = 1.5 ms pulse (neutral servo)
 
-  digitalWrite(R_EN, HIGH);
+  // remove this too to revive
+  /*digitalWrite(R_EN, HIGH);
   digitalWrite(L_EN, HIGH);
 
   printf("Turning one way...\n");
@@ -128,8 +150,7 @@ int main(int argc, char *argv[]) {
   digitalWrite(R_EN, LOW);
   digitalWrite(L_EN, LOW);
 
-
-
-  return 0;
+    */ // remove this 
+        
   
 }
