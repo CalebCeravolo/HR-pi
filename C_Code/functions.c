@@ -58,6 +58,22 @@ void argparse(int argc, char** args, int * output){
         *(output+i)=char_to_int(*(args+i));
     }
 }
+uint32_t fpga_raw(uint32_t outgoing){
+    if (wiringPiSPISetup(0, 1000000)<0){
+        perror("Setup failed\n");
+        return -1;
+    }
+    uint32_t base = 0;
+    unsigned char output[4];
+    base=outgoing;
+    //print_bin(32, base);
+    to_char_array(base, output);
+    //print_arr(output, 4);
+    wiringPiSPIDataRW(0, output, 4);
+    uint32_t result = to_uint_value(output);
+    wiringPiSPIClose(0);
+    return result;
+}
 uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period){
     if (wiringPiSPISetup(0, 1000000)<0){
         perror("Setup failed\n");
@@ -87,7 +103,7 @@ uint32_t fpga_datatran(uint8_t data_addr){
     base|=(command<<24);
     //print_bin(32, base);
     to_char_array(base, output);
-    //print_arr(output, 4);
+    // print_arr(output, 4);
     wiringPiSPIDataRW(0, output, 4);
     uint32_t result = to_uint_value(output);
     wiringPiSPIClose(0);
