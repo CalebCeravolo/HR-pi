@@ -1,3 +1,10 @@
+/*
+SPI data transmission module set up for Raspberry pi 5, but likely works for others
+Latches incoming data on the positive edge of the clock, then changes the outgoing bit on
+the negative edge. 
+*/
+
+
 module SPI #(parameter data_length = 64) (
     input logic [data_length-1:0] data_out, // Input data to send out on interface
     output logic [data_length-1:0] data_in, // Input data, when valid data_ready goes high
@@ -24,35 +31,34 @@ module SPI #(parameter data_length = 64) (
     always_comb begin
         for (int i = 0; i < data_length; i++)
             data_inv[i]=data_loaded[data_length-1-i];
-        addr_eff = |restart ? 0 : addr;
-        next_addr = addr_eff+1'b1;
+        // addr_eff = |restart ? 0 : addr;
+        next_addr = addr+1'b1;
 
         new_data = {data_in_buffer[data_length-2:0], incoming};
-        outgoing=data_inv[addr_eff];
+        outgoing = data_inv[addr];
     end 
     logic done;
     logic [1:0] restart;
-    always_ff @(posedge clk, CS) begin
-        if (CS)
-            restart<=2'b10;
-        else if (clk)
-            restart<=(restart!=0 ? restart-1'b1 : 0);
+    always_ff @(negedge clk or posedge CS) begin
+        if (CS) begin
+            addr<=0;
+        end
+        else begin
+            addr<=next_addr;
+            if (next_addr==0) begin
+                data_loaded<=data_out;
+            end
+        end
     end
-    always_ff @(negedge clk) begin
-        done<=(next_addr==data_length-1);
+    always_ff @(posedge clk) begin
+        // done<=(next_addr==data_length-1);
         data_in_buffer<=new_data;
-        if (done) begin
+        if (addr==data_length-1) begin
             data_in<=new_data;
             data_ready<=1'b1;
         end
         else begin
             data_ready<=1'b0;
-        end
-    end
-    always_ff @(posedge clk) begin
-        addr<=next_addr;
-        if (addr==data_length-1) begin
-            data_loaded<=data_out;
         end
     end
 endmodule
