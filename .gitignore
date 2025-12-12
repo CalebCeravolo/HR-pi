@@ -1,4 +1,4 @@
 env
 .vscode/*
 verilog/*/*
-verilog/*.xml
+.lock

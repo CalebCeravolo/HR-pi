@@ -1,13 +1,18 @@
 
-module top_level(Button1, Button2, CLK_50, led, 
-                SPI_outgoing, SPI_incoming, SPI_CLK, CS, GPIO,Enc1inA,Enc1inB,Enc1inZ);
-    input wire Button1, Button2;
-    input Enc1inA,Enc1inB,Enc1inZ;
-    output [23:0] GPIO;
-    input wire CLK_50;
-    output logic [3:0] led;
+module top_level(
+                input CLK_50, 
+                output logic [2:0] RGB_1, 
+                output logic [2:0] RGB_2, 
+                output [spi_data_width-1:0] SPI_outgoing, 
+                input [spi_data_width-1:0] SPI_incoming, 
+                input SPI_CLK, 
+                input CS, 
+                output [9:0] GPIO, 
+                input Enc1inA, 
+                input Enc1inB, 
+                input Enc1inZ
+                );
     logic [10:0] period;
-
     // Button Inputs
     logic button1_ps, button2_ps;
     logic deb1, deb2;
@@ -18,7 +23,8 @@ module top_level(Button1, Button2, CLK_50, led,
 
     // Debug signals
     logic [3:0] debug_out;
-    assign led[3:1]=0;
+    assign RGB_1[2:1]=0;
+    assign RGB_2=3'b001;
     logic [25:0] debug_2_out;
 
     //Clock Division
@@ -34,9 +40,6 @@ module top_level(Button1, Button2, CLK_50, led,
     end
 
     // SPI Control
-    output logic SPI_outgoing;
-    input logic SPI_incoming;
-    input logic SPI_CLK, CS;
     logic data_ready;
     localparam spi_data_width = 32;
     logic [spi_data_width-1:0] SPI_data_in;
@@ -138,7 +141,7 @@ module top_level(Button1, Button2, CLK_50, led,
     endgenerate
 
     // Test LED
-    pwm led_sig (.clk(CLK_50), .sig(led[0]), .period(period));
+    pwm led_sig (.clk(CLK_50), .sig(RGB_1[0]), .period(period));
 endmodule
 
 

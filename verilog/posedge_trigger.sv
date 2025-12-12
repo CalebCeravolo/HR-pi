@@ -1,5 +1,6 @@
-module #(parameter stabilize = 0) posedge_trigger (in, out, clk, reset);
+module posedge_trigger #(parameter stabilize = 0) (in, out, clk, reset);
 	input logic in, clk, reset;
+	output logic out;
 	logic prev_state;
 	logic pre_out;
 	logic stable_out;
@@ -9,7 +10,7 @@ module #(parameter stabilize = 0) posedge_trigger (in, out, clk, reset);
 		end
 		else begin
 			prev_state <= in;
-			pre_out        <= data_ready & ~prev_state;  // generate 1-cycle pulse on rising edge
+			pre_out        <= in & ~prev_state;  // generate 1-cycle pulse on rising edge
 			stable_out<=pre_out;
 		end 
     end 
