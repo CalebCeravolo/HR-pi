@@ -1,6 +1,6 @@
 
 module top_level(
-                input CLK_50, 
+                input GCLK, 
                 output logic [2:0] RGB_1, 
                 output logic [2:0] RGB_2, 
                 output SPI_outgoing, 
@@ -10,26 +10,36 @@ module top_level(
                 output [9:0] GPIO, 
                 input Enc1inA, 
                 input Enc1inB, 
-                input Enc1inZ
+                input Enc1inZ,
+                input [9:0] spectroChannel0_DATA,
+                input [9:0] spectroChannel1_DATA,
+                input [9:0] spectroChannel2_DATA,
+                input [9:0] spectroChannel3_DATA,
+                output spectroChannel0_ENA,
+                output spectroChannel1_ENA,
+                output spectroChannel2_ENA,
+                output spectroChannel3_ENA,
+                output spectroSlave
                 );
     logic [10:0] period;
+    
     // Button Inputs
     logic button1_ps, button2_ps;
     logic deb1, deb2;
     debounce deb1d (.in(Button1), .out(deb1), .clk(clk_div[4]));
     debounce deb2d (.in(Button2), .out(deb2), .clk(clk_div[4]));
-    posedge_trigger #(.stabilize(1)) b1_cont (.in(~deb1), .out(button1_ps), .clk(CLK_50), .reset(0));
-    posedge_trigger #(.stabilize(1)) b2_cont (.in(~deb2), .out(button2_ps), .clk(CLK_50), .reset(0));
+    posedge_trigger #(.stabilize(1)) b1_cont (.in(~deb1), .out(button1_ps), .clk(GCLK), .reset(0));
+    posedge_trigger #(.stabilize(1)) b2_cont (.in(~deb2), .out(button2_ps), .clk(GCLK), .reset(0));
 
     // Debug signals
     logic [3:0] debug_out;
     assign RGB_1[2:1]=0;
-    assign RGB_2=3'b001;
+    // assign RGB_2=3'b001;
     logic [25:0] debug_2_out;
 
     //Clock Division
     logic [31:0] clk_div;
-    always_ff @(posedge CLK_50)
+    always_ff @(posedge GCLK)
         clk_div<=clk_div+1'b1;
     initial begin
         clk_div=0;
@@ -46,11 +56,6 @@ module top_level(
     logic [spi_data_width-1:0] SPI_data_out;
 
     /* Control for the motors. Signal decoding
-        ****OLD**** Pattern for signal decoding:
-        |  Motor select         |     pwm signal                 |              TBD           |
-        |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
-
-        New pattern
         For motor:
         |  Command select       |     N/A      | Motor select          |     pwm signal       |
         |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
@@ -60,20 +65,18 @@ module top_level(
         |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
 
         Commands:
+            Drive Motor:
+            00000000
+            Send Data:
+            00000001
 
-        Drive Motor:
-        00000000
-        Send Data:
-        00000001
-
-        Data Addr:
-
-        000000: Debug
-            10-0: Period
-            
-        000001: Encoder
-            7-0: Current cycle count
-            8: direction
+            Data Addr:
+            000000: Debug
+                10-0: Period
+                
+            000001: Encoder
+                7-0: Current cycle count
+                8: direction
 
         
     */
@@ -90,8 +93,9 @@ module top_level(
     logic [7:0] data_addr_reg;
     always_comb begin
         case (data_addr_reg)
-            0: SPI_data_out = period; 
-            1: SPI_data_out = {{enc1_dir},{enc1_count}}; 
+            0: SPI_data_out = period; // Period of debug led
+            1: SPI_data_out = {{enc1_dir},{enc1_count}};  // Encoder 1 data
+            2: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
             default: SPI_data_out = SPI_data_in;
         endcase
     end
@@ -106,8 +110,8 @@ module top_level(
     // Data loading
     logic [10:0] load_period;
     logic load_it, data_ready_d;
-    posedge_trigger load_logic (.in(data_ready), .out(load_it), .clk(CLK_50), .reset(0));
-    always_ff @(posedge CLK_50) begin
+    posedge_trigger load_logic (.in(data_ready), .out(load_it), .clk(GCLK), .reset(0));
+    always_ff @(posedge GCLK) begin
         load_period[10:0]<={load_period[9:0], load_it};
         if (load_period[10]) begin
             if (control_motor) begin
@@ -128,20 +132,22 @@ module top_level(
     logic enc1_dir;
     logic [15:0] enc1_count;
 
-    encoder motorC (.inA(inA1), .inB(inB1), .inZ(inZ1), .clk(CLK_50), .count(enc1_count), .direction(enc1_dir));
+    encoder motorC (.inA(inA1), .inB(inB1), .inZ(inZ1), .clk(GCLK), .count(enc1_count), .direction(enc1_dir));
 
     // PWM setup
     logic [10:0] motor_periods [23:0];
     genvar i;
     localparam numMotorPins = 6;
+    assign RGB_2 = {GPIO[2], GPIO[1], GPIO[0]};
     generate;
         for (i=0; i<numMotorPins; i++) begin : pwm_signals
-            pwm motor_sig (.clk(CLK_50), .sig(GPIO[i]), .period(motor_periods[i]));
+            pwm motor_sig (.clk(GCLK), .sig(GPIO[i]), .period(motor_periods[i]));
         end
     endgenerate
 
     // Test LED
-    pwm led_sig (.clk(CLK_50), .sig(RGB_1[0]), .period(period));
+    assign RGB_1[0] = Enc1inA;
+    // pwm led_sig (.clk(GCLK), .sig(RGB_1[0]), .period(period));
 endmodule
 
 

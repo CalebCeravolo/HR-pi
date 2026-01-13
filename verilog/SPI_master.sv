@@ -1,5 +1,5 @@
 /*
-SPI data transmission module set up for Raspberry pi 5, but likely works for others
+Master SPI module, generates output clock
 Latches incoming data on the positive edge of the clock, then changes the outgoing bit on
 the negative edge. 
 */
@@ -10,7 +10,7 @@ module SPI #(parameter data_length = 64) (
     output logic [data_length-1:0] data_in, // Input data, when valid data_ready goes high
     input incoming, // Incoming bit of information
     output logic outgoing, // Outgoing bit of information
-    input clk, // Serial clock from raspberry pi
+    input clk, // Serial clock
     input CS,  // Chip select signal
     output logic data_ready // Signal for telling when input data reg is valid
     );

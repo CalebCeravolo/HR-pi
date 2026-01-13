@@ -15,11 +15,11 @@
 
 # Oscillator Constraints
 ########################
-create_clock -period 100000 -name osc_inst1 [get_ports {osc_inst1}]
+
 
 # PLL Constraints
 #################
-create_clock -period 20.000 -waveform {10.000 20.000} -name CLK_50 [get_ports {CLK_50}]
+create_clock -period 10.000 -waveform {5.000 10.000} -name GCLK [get_ports {GCLK}]
 
 create_clock -period 50.000 -waveform {25.000 50.000} -name SCLK [get_ports {SPI_CLK}]
 
