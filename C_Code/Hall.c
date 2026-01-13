@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <wiringPi.h>
 #include <stdint.h>
-#include "Hall.h"
 #define hallPin 0
 // General code file I use to generate all set all commands
 int main(int argc, char *argv[]){
