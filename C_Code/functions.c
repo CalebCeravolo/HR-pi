@@ -5,6 +5,7 @@
 #include <wiringPiSPI.h>
 #include "functions.h"
 
+#define SPIFREQ 5E6
 //#define TESTING 1
 #ifdef TESTING
     int main(int argc, char** argv){
@@ -59,7 +60,7 @@ void argparse(int argc, char** args, int * output){
     }
 }
 uint32_t fpga_raw(uint32_t outgoing){
-    if (wiringPiSPISetup(0, 1000000)<0){
+    if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
         return -1;
     }
@@ -75,24 +76,38 @@ uint32_t fpga_raw(uint32_t outgoing){
     return result;
 }
 uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period){
-    if (wiringPiSPISetup(0, 1000000)<0){
+    if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
         return -1;
     }
     uint32_t base = 0;
     unsigned char output[4];
+    uint32_t result1, result2;
     base|=(pwm_period);
     base|=(motor<<11);
     //print_bin(32, base);
     to_char_array(base, output);
     //print_arr(output, 4);
+    fpga_fasttran(3, &result1);
     wiringPiSPIDataRW(0, output, 4);
-    uint32_t result = to_uint_value(output);
+    result2 = to_uint_value(output);
+    int errors=0;
+    while(result2!=base){
+        errors++;
+        if (errors>=10){
+            printf("Command failed");
+            wiringPiSPIClose(0);
+        }
+        to_char_array(base, output);
+        wiringPiSPIDataRW(0, output, 4);
+        result2 = to_uint_value(output);
+    }
     wiringPiSPIClose(0);
-    return result;
+    return result2;
 }
+
 uint32_t fpga_datatran(uint8_t data_addr){
-    if (wiringPiSPISetup(0, 1000000)<0){
+    if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
         return -1;
     }
@@ -108,6 +123,38 @@ uint32_t fpga_datatran(uint8_t data_addr){
     uint32_t result = to_uint_value(output);
     wiringPiSPIClose(0);
     return result;
+}
+
+uint32_t fpga_safetran(uint8_t data_addr){
+    if (wiringPiSPISetup(0, SPIFREQ)<0){
+        perror("Setup failed\n");
+        return -1;
+    }
+    uint8_t command = 0b00000001;
+    uint32_t base = 0;
+    unsigned char output[4];
+    base|=data_addr;
+    base|=(command<<24);
+
+    //print_bin(32, base);
+    to_char_array(base, output);
+    // print_arr(output, 4);
+    wiringPiSPIDataRW(0, output, 4);
+    to_char_array(base, output);
+    wiringPiSPIDataRW(0, output, 4);
+    uint32_t result = to_uint_value(output);
+    wiringPiSPIClose(0);
+    return result;
+}
+void fpga_fasttran(uint8_t data_addr, uint32_t* result){
+    uint8_t command = 0b00000001;
+    uint32_t base = 0;
+    unsigned char output[4];
+    base|=data_addr;
+    base|=(command<<24);
+    to_char_array(base, output);
+    wiringPiSPIDataRW(0, output, 4);
+    *result = to_uint_value(output);
 }
 uint32_t to_uint_value(char * input){
     uint32_t out;

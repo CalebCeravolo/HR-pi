@@ -1,0 +1,396 @@
+Error rate: 1/100000
+Time elapsed: 1.460780s
+Average tran rate: 68456.578125hz
+
+Error rate: 0/100000
+Time elapsed: 1.442519s
+Average tran rate: 69323.179688hz
+
+Error rate: 0/100
+Time elapsed: 0.002051s
+Average tran rate: 48756.703125hz
+
+Error rate: 0/100
+Time elapsed: 0.002299s
+Average tran rate: 43497.171875hz
+
+Error rate: 0/100
+Time elapsed: 0.002169s
+Average tran rate: 46104.195312hz
+
+Error rate: 0/100
+Time elapsed: 0.000921s
+Average tran rate: 108577.632812hz
+
+Error rate: 0/1000
+Time elapsed: 0.009607s
+Average tran rate: 104090.765625hz
+
+Error rate: 0/10000
+Time elapsed: 0.090573s
+Average tran rate: 110408.179688hz
+
+Error rate: 0/100000
+Time elapsed: 0.726927s
+Average tran rate: 137565.406250hz
+
+Error rate: 0/100000
+Time elapsed: 0.776291s
+Average tran rate: 128817.671875hz
+
+Error rate: 0/10000
+Time elapsed: 0.090118s
+Average tran rate: 110965.625000hz
+
+Error rate: 0/100000
+Time elapsed: 0.857681s
+Average tran rate: 116593.468750hz
+
+Error rate: 0/1000000
+Time elapsed: 7.529997s
+Average tran rate: 132802.187500hz
+
+Error rate: 1/10000000
+Time elapsed: 81.091934s
+Average tran rate: 123316.828125hz
+
+Error rate: 0/1000
+Time elapsed: 0.019759s
+Average tran rate: 50609.851562hz
+
+Error rate: 0/10000
+Time elapsed: 0.160817s
+Average tran rate: 62182.480469hz
+
+Error rate: 0/100000
+Time elapsed: 1.451466s
+Average tran rate: 68895.859375hz
+
+Error rate: 1/100000
+Time elapsed: 1.444517s
+Average tran rate: 69227.289062hz
+
+Error rate: 12/10000000
+Time elapsed: 145.764679s
+Average tran rate: 68603.726562hz
+
+Error rate: 0/100000
+Time elapsed: 1.469071s
+Average tran rate: 68070.226562hz
+
+Error rate: 0/100000
+Time elapsed: 1.460591s
+Average tran rate: 68465.437500hz
+
+Error rate: 0/22857
+Time elapsed: 0.329956s
+Average tran rate: 69272.875000hz
+
+Error rate: 0/13136
+Time elapsed: 0.186608s
+Average tran rate: 70393.554688hz
+
+Error rate: 0/-681110384
+Time elapsed: 0.000196s
+Average tran rate: -3475053215744.000000hz
+
+Error rate: 0/-673977728
+Time elapsed: 0.000160s
+Average tran rate: -4212361003008.000000hz
+
+Error rate: 0/-254058464
+Time elapsed: 0.000168s
+Average tran rate: -1512252768256.000000hz
+
+Error rate: 0/-19119744
+Time elapsed: 0.000182s
+Average tran rate: -105053536256.000000hz
+
+Error rate: 0/-22626608
+Time elapsed: 0.000186s
+Average tran rate: -121648422912.000000hz
+
+Error rate: 0/-763427760
+Time elapsed: 0.000140s
+Average tran rate: -5453055524864.000000hz
+
+Error rate: 0/-466157248
+Time elapsed: 0.000179s
+Average tran rate: -2604230508544.000000hz
+
+Error rate: 0/-749071152
+Time elapsed: 0.000170s
+Average tran rate: -4406300901376.000000hz
+
+Error rate: 0/-1010610608
+Time elapsed: 0.000158s
+Average tran rate: -6396270084096.000000hz
+
+Error rate: 0/-628526448
+Time elapsed: 0.000193s
+Average tran rate: -3256613863424.000000hz
+
+Error rate: 0/1000
+Time elapsed: 0.039892s
+Average tran rate: 25067.683594hz
+
+Error rate: 0/25206
+Time elapsed: 0.777799s
+Average tran rate: 32406.830078hz
+
+Error rate: 0/14372
+Time elapsed: 0.415401s
+Average tran rate: 34597.894531hz
+
+Error rate: 0/22515
+Time elapsed: 0.678864s
+Average tran rate: 33165.699219hz
+
+Error rate: 0/1000
+Time elapsed: 0.028207s
+Average tran rate: 35452.191406hz
+
+Error rate: 0/10000
+Time elapsed: 0.340917s
+Average tran rate: 29332.654297hz
+
+Error rate: 0/10000
+Time elapsed: 0.338540s
+Average tran rate: 29538.607422hz
+
+Error rate: 0/10000
+Time elapsed: 0.308656s
+Average tran rate: 32398.527344hz
+
+Error rate: 0/10000
+Time elapsed: 0.324311s
+Average tran rate: 30834.601562hz
+
+Error rate: 0/10000
+Time elapsed: 0.289216s
+Average tran rate: 34576.230469hz
+
+Error rate: 0/10000
+Time elapsed: 0.348361s
+Average tran rate: 28705.855469hz
+
+Error rate: 0/10000
+Time elapsed: 0.292584s
+Average tran rate: 34178.218750hz
+
+Error rate: 0/10000
+Time elapsed: 0.286650s
+Average tran rate: 34885.750000hz
+
+Error rate: 0/10000
+Time elapsed: 0.348500s
+Average tran rate: 28694.404297hz
+
+Error rate: 0/100000
+Time elapsed: 2.982803s
+Average tran rate: 33525.511719hz
+
+Error rate: 0/9249
+Time elapsed: 0.268627s
+Average tran rate: 34430.644531hz
+
+Error rate: 0/13396
+Time elapsed: 0.462764s
+Average tran rate: 28947.800781hz
+
+Error rate: 0/13583
+Time elapsed: 0.394584s
+Average tran rate: 34423.593750hz
+
+Error rate: 0/15139
+Time elapsed: 0.436968s
+Average tran rate: 34645.558594hz
+
+Error rate: 0/4414
+Time elapsed: 0.156199s
+Average tran rate: 28258.824219hz
+
+Error rate: 0/1000000
+Time elapsed: 30.123066s
+Average tran rate: 33197.152344hz
+
+Error rate: 1/10000
+Time elapsed: 0.088064s
+Average tran rate: 113553.781250hz
+
+Error rate: 0/10000
+Time elapsed: 0.071073s
+Average tran rate: 140700.406250hz
+
+Error rate: 0/10000
+Time elapsed: 0.086488s
+Average tran rate: 115622.976562hz
+
+Error rate: 0/10000
+Time elapsed: 0.073233s
+Average tran rate: 136550.453125hz
+
+Error rate: 0/10000
+Time elapsed: 0.084532s
+Average tran rate: 118298.398438hz
+
+Error rate: 1656/10000
+Time elapsed: 0.068954s
+Average tran rate: 145024.218750hz
+
+Error rate: 0/10000
+Time elapsed: 0.074983s
+Average tran rate: 133363.562500hz
+
+Error rate: 0/10000
+Time elapsed: 0.073544s
+Average tran rate: 135973.015625hz
+
+Error rate: 0/10000
+Time elapsed: 0.090891s
+Average tran rate: 110021.890625hz
+
+Error rate: 0/1000
+Time elapsed: 0.038690s
+Average tran rate: 0.827087 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.025746s
+Average tran rate: 1.242911 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.039255s
+Average tran rate: 0.815183 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.037771s
+Average tran rate: 0.847211 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.029426s
+Average tran rate: 1.087474 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.029029s
+Average tran rate: 1.102346 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.040162s
+Average tran rate: 0.796773 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.038773s
+Average tran rate: 0.825317 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.040254s
+Average tran rate: 0.794952 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.039956s
+Average tran rate: 0.800881 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.039147s
+Average tran rate: 0.817432 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.028518s
+Average tran rate: 1.122098 Mbits/s
+
+Error rate: 0/10000
+Time elapsed: 0.346335s
+Average tran rate: 0.923961 Mbits/s
+
+Error rate: 0/100000
+Time elapsed: 2.801722s
+Average tran rate: 1.142155 Mbits/s
+
+Error rate: 0/100000
+Time elapsed: 3.050105s
+Average tran rate: 1.049144 Mbits/s
+
+Error rate: 0/100000
+Time elapsed: 2.880362s
+Average tran rate: 1.110971 Mbits/s
+
+Error rate: 0/100000
+Time elapsed: 2.883147s
+Average tran rate: 1.109898 Mbits/s
+
+Error rate: 0/10000
+Time elapsed: 0.259807s
+Average tran rate: 1.231684 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.038539s
+Average tran rate: 0.830328 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.027665s
+Average tran rate: 1.156696 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.029684s
+Average tran rate: 1.078022 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.038691s
+Average tran rate: 0.827066 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.036142s
+Average tran rate: 0.885397 Mbits/s
+
+Error rate: 0/1000
+Time elapsed: 0.039226s
+Average tran rate: 0.815785 Mbits/s
+
+Error rate: 0/10000
+Time elapsed: 0.267266s
+Average tran rate: 1.197309 Mbits/s
+
+Error rate: 0/100000
+Time elapsed: 3.115261s
+Average tran rate: 1.027201 Mbits/s
+
+Error rate: 0/100000
+Time elapsed: 2.985017s
+Average tran rate: 1.072021 Mbits/s
+
+Error rate: 1/10000
+Time elapsed: 0.087882s
+Average tran rate: 113788.945312hz
+
+Error rate: 0/10000
+Time elapsed: 0.265987s
+Average tran rate: 1.203066 Mbits/s
+
+Error rate: 0/10000
+Time elapsed: 0.278280s
+Average tran rate: 1.149921 Mbits/s
+
+Error rate: 0/10000
+Time elapsed: 0.346770s
+Average tran rate: 0.922802 Mbits/s
+
+Average tran rate CPU time: 0.922802 Mbits/s
+Average tran rate total: 0.299690 Mbits/s
+Error rate: 0/325000
+Time elapsed: 9.930941s
+Average tran rate: 1.047232 Mbits/s
+
+Average tran rate CPU time: 1.047232 Mbits/s
+Average tran rate total: 0.322966 Mbits/s
+Error rate: 0/1000000
+Time elapsed: 28.400801s
+Average tran rate: 1.126729 Mbits/s
+
+Average tran rate CPU time: 1.126729 Mbits/s
+Average tran rate total: 0.338000 Mbits/s
+Error rate: 0/10000000
+Time elapsed: 308.541962s
+Average tran rate: 1.037136 Mbits/s
+
+Average tran rate CPU time: 1.037136 Mbits/s
+Average tran rate total: 0.321583 Mbits/s

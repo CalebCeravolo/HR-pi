@@ -45,9 +45,24 @@ pwm_period: 0-2000 value representing duty cycle
 */
 extern uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period);
 
+/*
+Sends raw data out. Not recommended for use
+*/
 extern uint32_t fpga_raw(uint32_t outgoing);
+
+/*
+Requests the return of data by sending the address of the data
+*/
 extern uint32_t fpga_datatran(uint8_t data_addr);
 
+/*
+Requests then returns data from FPGA
+*/
+extern uint32_t fpga_safetran(uint8_t data_addr);
+/*
+Fast version of data transfer. Manual opening and closing of spi channel needed
+*/
+void fpga_fasttran(uint8_t data_addr, uint32_t* result);
 
 /*
 Converts a character array to a uint32 value
