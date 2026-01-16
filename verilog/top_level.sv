@@ -1,35 +1,59 @@
 
-module top_level(
-                input GCLK, 
-                output logic [2:0] RGB_1, 
-                output logic [2:0] RGB_2, 
-                output SPI_outgoing, 
-                input SPI_incoming, 
-                input SPI_CLK, 
-                input CS, 
-                output [9:0] GPIO, 
-                input Enc1inA, 
-                input Enc1inB, 
-                input Enc1inZ,
-                input [9:0] spectroChannel0_DATA,
-                input [9:0] spectroChannel1_DATA,
-                input [9:0] spectroChannel2_DATA,
-                input [9:0] spectroChannel3_DATA,
-                output spectroChannel0_ENA,
-                output spectroChannel1_ENA,
-                output spectroChannel2_ENA,
-                output spectroChannel3_ENA,
-                output spectroSlave
-                );
+module top_level
+    (
+            input GCLK, 
+            output logic [2:0] RGB_1, 
+            output logic [2:0] RGB_2, 
+            output SPI_outgoing, 
+            input SPI_incoming, 
+            input SPI_CLK, 
+            input CS, 
+            output [9:0] GPIO, 
+            input Enc1inA, 
+            input Enc1inB, 
+            input Enc1inZ,
+            input spectroClock,
+            input [9:0] spectroChannel0_DATA,
+            input [9:0] spectroChannel1_DATA,
+            input [9:0] spectroChannel2_DATA,
+            input [9:0] spectroChannel3_DATA,
+            input spectroChannel0_FIFO_EMPTY,
+            input spectroChannel1_FIFO_EMPTY,
+            input spectroChannel2_FIFO_EMPTY,
+            input spectroChannel3_FIFO_EMPTY,
+            output spectroChannel0_RST,
+            output spectroChannel1_RST,
+            output spectroChannel2_RST,
+            output spectroChannel3_RST,
+            output logic spectroChannel0_FIFO_RD,
+            output logic spectroChannel1_FIFO_RD,
+            output logic spectroChannel2_FIFO_RD,
+            output logic spectroChannel3_FIFO_RD,
+            output logic spectroChannel0_ENA,
+            output logic spectroChannel1_ENA,
+            output logic spectroChannel2_ENA,
+            output logic spectroChannel3_ENA,
+            output logic spectroSlave,
+            output logic spectroClock_ENA
+    );
+    assign {spectroChannel0_ENA, spectroChannel1_ENA,spectroChannel2_ENA,spectroChannel3_ENA, spectroClock_ENA} = 5'b11111;
     logic [10:0] period;
-    
+    localparam NUM_BINS = 640;
+    localparam BIN_WIDTH = 1280/NUM_BINS;
+    reg [19+BIN_WIDTH:0] pixelBins [NUM_BINS-1:0];
+    // Spectrometer control
+    spectro #(.NUM_BINS(NUM_BINS)) spc (.spectroChannel0_DATA, .spectroChannel0_ENA, .spectroChannel0_FIFO_EMPTY, .spectroChannel0_FIFO_RD,
+                .spectroChannel1_DATA, .spectroChannel1_ENA, .spectroChannel1_FIFO_EMPTY, .spectroChannel1_FIFO_RD,
+                .spectroChannel2_DATA, .spectroChannel2_ENA, .spectroChannel2_FIFO_EMPTY, .spectroChannel2_FIFO_RD,
+                .spectroChannel3_DATA, .spectroChannel3_ENA, .spectroChannel3_FIFO_EMPTY, .spectroChannel3_FIFO_RD,
+                .clk(spectroClock), .pixelBins);
     // Button Inputs
     logic button1_ps, button2_ps;
     logic deb1, deb2;
     debounce deb1d (.in(Button1), .out(deb1), .clk(clk_div[4]));
     debounce deb2d (.in(Button2), .out(deb2), .clk(clk_div[4]));
-    posedge_trigger #(.stabilize(1)) b1_cont (.in(~deb1), .out(button1_ps), .clk(GCLK), .reset(0));
-    posedge_trigger #(.stabilize(1)) b2_cont (.in(~deb2), .out(button2_ps), .clk(GCLK), .reset(0));
+    posedge_trigger #(.stabilize(1)) b1_cont (.in(~deb1), .out(button1_ps), .clk(GCLK), .reset(1'b0));
+    posedge_trigger #(.stabilize(1)) b2_cont (.in(~deb2), .out(button2_ps), .clk(GCLK), .reset(1'b0));
 
     // Debug signals
     logic [3:0] debug_out;
@@ -91,11 +115,13 @@ module top_level(
     logic [7:0] command;
     logic control_motor, send_data;
     logic [7:0] data_addr_reg;
+    logic [9:0] binAddr = 0;
     always_comb begin
         case (data_addr_reg)
             0: SPI_data_out = period; // Period of debug led
             1: SPI_data_out = {{enc1_dir},{enc1_count}};  // Encoder 1 data
             2: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
+            3: SPI_data_out = pixelBins[binAddr];
             default: SPI_data_out = SPI_data_in;
         endcase
     end
@@ -120,6 +146,8 @@ module top_level(
             end
             if (send_data) begin
                 data_addr_reg<=data_addr;
+                if (data_addr==3)
+                    binAddr<=binAddr+1'b1;
             end
         end
     end

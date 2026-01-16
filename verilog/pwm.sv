@@ -3,7 +3,7 @@ module pwm(input clk, // System clock, intended 100mhz. A different clock speed 
            input logic [10:0] period // Period of signal with range of 0-2000
            );
     logic [10:0] counter; // Counter counting current part of period
-    logic [8:0] div;      // Clock divider
+    logic [9:0] div;      // Clock divider
     initial begin
         counter=0;
         div=0;

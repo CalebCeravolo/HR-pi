@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<efxpt:design_db name="test_project" device_def="Ti60F225" version="2025.1.110" db_version="20251999" last_change_date="Tue Jan 13 13:58:08 2026" xmlns:efxpt="http://www.efinixinc.com/peri_design_db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/peri_design_db peri_design_db.xsd ">
+<efxpt:design_db name="test_project" device_def="Ti60F225" version="2025.1.110" db_version="20251999" last_change_date="Thu Jan 15 11:28:45 2026" xmlns:efxpt="http://www.efinixinc.com/peri_design_db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/peri_design_db peri_design_db.xsd ">
     <efxpt:device_info>
         <efxpt:iobank_info>
             <efxpt:iobank name="1A" iostd="1.8 V LVCMOS" is_dyn_voltage="false" mode_sel_name="1A_MODE_SEL"/>
@@ -196,7 +196,7 @@
     <efxpt:osc_info/>
     <efxpt:lvds_info>
         <efxpt:lvds name="spectroChannel0" lvds_def="GPIOR_PN_01" ops_type="rx">
-            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel0_DATA" reset_name="spectroChannel0_RX_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
+            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel0_DATA" reset_name="spectroChannel0_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
                 <efxpt:gen_pin>
                     <efxpt:pin name="spectroChannel0_DATA" type_name="IN" is_bus="true"/>
                     <efxpt:pin name="spectroChannel0_FIFO_EMPTY" type_name="FIFO_EMPTY" is_bus="false"/>
@@ -204,7 +204,7 @@
                     <efxpt:pin name="spectroChannel0_RX_TERM" type_name="TERM" is_bus="false"/>
                     <efxpt:pin name="spectroChannel0_ENA" type_name="ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel0_RX_DLY_RST" type_name="DLY_RST" is_bus="false"/>
-                    <efxpt:pin name="spectroChannel0_RX_RST" type_name="INRST" is_bus="false"/>
+                    <efxpt:pin name="spectroChannel0_RST" type_name="INRST" is_bus="false"/>
                     <efxpt:pin name="spectroChannel0_RX_DLY_INC" type_name="DLY_INC" is_bus="false"/>
                     <efxpt:pin name="spectroChannel0_RX_DLY_ENA" type_name="DLY_ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel0_FIFO_RD" type_name="FIFO_RD" is_bus="false"/>
@@ -216,7 +216,7 @@
             </efxpt:adv_lrx_info>
         </efxpt:lvds>
         <efxpt:lvds name="spectroChannel1" lvds_def="GPIOR_PN_02" ops_type="rx">
-            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel1_DATA" reset_name="spectroChannel1_RX_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
+            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel1_DATA" reset_name="spectroChannel1_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
                 <efxpt:gen_pin>
                     <efxpt:pin name="spectroChannel1_DATA" type_name="IN" is_bus="true"/>
                     <efxpt:pin name="spectroChannel1_FIFO_EMPTY" type_name="FIFO_EMPTY" is_bus="false"/>
@@ -224,7 +224,7 @@
                     <efxpt:pin name="spectroChannel1_RX_TERM" type_name="TERM" is_bus="false"/>
                     <efxpt:pin name="spectroChannel1_ENA" type_name="ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel1_RX_DLY_RST" type_name="DLY_RST" is_bus="false"/>
-                    <efxpt:pin name="spectroChannel1_RX_RST" type_name="INRST" is_bus="false"/>
+                    <efxpt:pin name="spectroChannel1_RST" type_name="INRST" is_bus="false"/>
                     <efxpt:pin name="spectroChannel1_RX_DLY_INC" type_name="DLY_INC" is_bus="false"/>
                     <efxpt:pin name="spectroChannel1_RX_DLY_ENA" type_name="DLY_ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel1_FIFO_RD" type_name="FIFO_RD" is_bus="false"/>
@@ -236,7 +236,7 @@
             </efxpt:adv_lrx_info>
         </efxpt:lvds>
         <efxpt:lvds name="spectroChannel2" lvds_def="GPIOR_PN_03" ops_type="rx">
-            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel2_DATA" reset_name="spectroChannel2_RX_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
+            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel2_DATA" reset_name="spectroChannel2_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
                 <efxpt:gen_pin>
                     <efxpt:pin name="spectroChannel2_DATA" type_name="IN" is_bus="true"/>
                     <efxpt:pin name="spectroChannel2_FIFO_EMPTY" type_name="FIFO_EMPTY" is_bus="false"/>
@@ -244,7 +244,7 @@
                     <efxpt:pin name="spectroChannel2_RX_TERM" type_name="TERM" is_bus="false"/>
                     <efxpt:pin name="spectroChannel2_ENA" type_name="ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel2_RX_DLY_RST" type_name="DLY_RST" is_bus="false"/>
-                    <efxpt:pin name="spectroChannel2_RX_RST" type_name="INRST" is_bus="false"/>
+                    <efxpt:pin name="spectroChannel2_RST" type_name="INRST" is_bus="false"/>
                     <efxpt:pin name="spectroChannel2_RX_DLY_INC" type_name="DLY_INC" is_bus="false"/>
                     <efxpt:pin name="spectroChannel2_RX_DLY_ENA" type_name="DLY_ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel2_FIFO_RD" type_name="FIFO_RD" is_bus="false"/>
@@ -256,7 +256,7 @@
             </efxpt:adv_lrx_info>
         </efxpt:lvds>
         <efxpt:lvds name="spectroChannel3" lvds_def="GPIOR_PN_04" ops_type="rx">
-            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel3_DATA" reset_name="spectroChannel3_RX_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
+            <efxpt:adv_lrx_info pll_instance="" fast_clock_name="spectroCaptureClock" slow_clock_name="spectroDataClock" in_bname="spectroChannel3_DATA" reset_name="spectroChannel3_RST" conn_type="normal" clkmux_buf_name="" delay="16" delay_mode="static" is_fifo="true" is_half_rate="true" is_serial="true" serial_width="10" is_voc_driver="false" termination="on" is_slvs="false">
                 <efxpt:gen_pin>
                     <efxpt:pin name="spectroChannel3_DATA" type_name="IN" is_bus="true"/>
                     <efxpt:pin name="spectroChannel3_FIFO_EMPTY" type_name="FIFO_EMPTY" is_bus="false"/>
@@ -264,7 +264,7 @@
                     <efxpt:pin name="spectroChannel3_RX_TERM" type_name="TERM" is_bus="false"/>
                     <efxpt:pin name="spectroChannel3_ENA" type_name="ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel3_RX_DLY_RST" type_name="DLY_RST" is_bus="false"/>
-                    <efxpt:pin name="spectroChannel3_RX_RST" type_name="INRST" is_bus="false"/>
+                    <efxpt:pin name="spectroChannel3_RST" type_name="INRST" is_bus="false"/>
                     <efxpt:pin name="spectroChannel3_RX_DLY_INC" type_name="DLY_INC" is_bus="false"/>
                     <efxpt:pin name="spectroChannel3_RX_DLY_ENA" type_name="DLY_ENA" is_bus="false"/>
                     <efxpt:pin name="spectroChannel3_FIFO_RD" type_name="FIFO_RD" is_bus="false"/>
@@ -282,7 +282,7 @@
                     <efxpt:pin name="spectroClock_RX_FIFO_EMPTY" type_name="FIFO_EMPTY" is_bus="false"/>
                     <efxpt:pin name="spectroClock_RX_LOCK" type_name="LOCK" is_bus="false"/>
                     <efxpt:pin name="spectroClock_RX_TERM" type_name="TERM" is_bus="false"/>
-                    <efxpt:pin name="spectroClock_RX_ENA" type_name="ENA" is_bus="false"/>
+                    <efxpt:pin name="spectroClock_ENA" type_name="ENA" is_bus="false"/>
                     <efxpt:pin name="spectroClock_RX_DLY_RST" type_name="DLY_RST" is_bus="false"/>
                     <efxpt:pin name="spectroClock_RX_RST" type_name="INRST" is_bus="false"/>
                     <efxpt:pin name="spectroClock_RX_DLY_INC" type_name="DLY_INC" is_bus="false"/>
