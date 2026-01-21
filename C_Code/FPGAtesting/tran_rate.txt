@@ -394,3 +394,21 @@ Average tran rate: 1.037136 Mbits/s
 
 Average tran rate CPU time: 1.037136 Mbits/s
 Average tran rate total: 0.321583 Mbits/s
+Error rate: 0/1000
+Time elapsed: 0.038606s
+Average tran rate: 0.828887 Mbits/s
+
+Average tran rate CPU time: 0.828887 Mbits/s
+Average tran rate total: 0.282175 Mbits/s
+Error rate: 0/10000
+Time elapsed: 0.288886s
+Average tran rate: 1.107703 Mbits/s
+
+Average tran rate CPU time: 1.107703 Mbits/s
+Average tran rate total: 0.331075 Mbits/s
+Error rate: 0/100000
+Time elapsed: 2.995169s
+Average tran rate: 1.068387 Mbits/s
+
+Average tran rate CPU time: 1.068387 Mbits/s
+Average tran rate total: 0.324219 Mbits/s

@@ -88,15 +88,16 @@ uint32_t fpga_pwm(uint8_t motor, uint16_t pwm_period){
     //print_bin(32, base);
     to_char_array(base, output);
     //print_arr(output, 4);
-    fpga_fasttran(3, &result1);
+    fpga_fasttran(7, &result1);
     wiringPiSPIDataRW(0, output, 4);
     result2 = to_uint_value(output);
     int errors=0;
     while(result2!=base){
         errors++;
         if (errors>=10){
-            printf("Command failed");
+            printf("Command failed: %i, %i\n", result2, base);
             wiringPiSPIClose(0);
+            return result2;
         }
         to_char_array(base, output);
         wiringPiSPIDataRW(0, output, 4);
