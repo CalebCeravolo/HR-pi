@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     if (argc>1){
         
     }
-    sleep(5);
+    sleep(1);
     // digitalWrite(RIGHTEN, 0);
     // digitalWrite(LEFTEN, 1);
     // sleep(5);
