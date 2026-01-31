@@ -48,16 +48,29 @@ void to_char_array(uint32_t base, char * output){
 }
 
 // Converts character string to integer
-int char_to_int(char * arg){
-    int res = 0;
+float char_to_int(char * arg){
+    float res = 0;
     uint8_t negative = *arg=='-';
+    uint8_t decimal = 0;
+    uint8_t deci_count = 10;
+    int curr_num=0;
     for (int i=negative; *(arg+i)!='\0'; i++){
-        res*=10;
-        res+=(int)(*(arg+i))-(int)'0';
+        if (*(arg+i)=='.'){
+            decimal=1;
+        } else {
+            curr_num=(int)(*(arg+i))-(int)'0';
+            if (!decimal){
+                res*=10;
+                res+=curr_num;
+            } else {
+                res+=((float)curr_num)/deci_count;
+                deci_count*=10;
+            }
+        }
     }
     return (negative ? -1*res : res);
 }
-void argparse(int argc, char** args, int * output){
+void argparse(int argc, char** args, float * output){
     for (int i=0; i<argc; i++){
         *(output+i)=char_to_int(*(args+i));
     }

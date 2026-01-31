@@ -12,7 +12,7 @@ Converts a string to an integer
 arg: The pointer to the string
 output: int value of string
 */
-extern int char_to_int(char * arg);
+extern float char_to_int(char * arg);
 /*
 Prints the binary representation of a number 
 len: Length of output binary number
@@ -32,7 +32,7 @@ argc: length of args
 args: list of strings
 output: int list to be overwritten
 */
-extern void argparse(int argc, char** args, int * output);
+extern void argparse(int argc, char** args, float * output);
 /*
 Converts a uint32 number to a byte array
 */
