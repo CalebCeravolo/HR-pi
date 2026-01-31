@@ -1,4 +1,3 @@
-#include <stdio.h>  
 
 #include "sdp_i2c.h"
 #include "sensirion_common.h"
@@ -62,6 +61,7 @@ int main(void) {
 
         if (error) {
             printf("Error executing sdp_read_measurement(): %i\n", error);
+            break;
         } else {
             printf("Differential pressure: %0.2f Pa\n", differential_pressure);
             printf("Temperature: %0.2f °C\n", temperature);
