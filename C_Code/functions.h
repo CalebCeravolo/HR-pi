@@ -12,7 +12,9 @@ Converts a string to an integer
 arg: The pointer to the string
 output: int value of string
 */
-extern float char_to_int(char * arg);
+extern int char_to_int(char * arg);
+
+extern float char_to_float(char * arg);
 /*
 Prints the binary representation of a number 
 len: Length of output binary number
@@ -32,11 +34,12 @@ argc: length of args
 args: list of strings
 output: int list to be overwritten
 */
-extern void argparse(int argc, char** args, float * output);
+extern void intparse(int argc, char** args, int * output);
+extern void floatparse(int argc, char** args, float * output);
 /*
 Converts a uint32 number to a byte array
 */
-void to_char_array(uint32_t base, char * output);
+void to_char_array(uint32_t base, unsigned char * output);
 
 /*
 Creates a pwm signal on the fpga
@@ -67,7 +70,7 @@ void fpga_fasttran(uint8_t data_addr, uint32_t* result);
 /*
 Converts a character array to a uint32 value
 */
-extern uint32_t to_uint_value(char * input);
+extern uint32_t to_uint_value(unsigned char * input);
 /*
 Returns length of a character string
 */

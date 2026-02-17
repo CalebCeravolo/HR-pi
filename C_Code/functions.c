@@ -1,11 +1,11 @@
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include "functions.h"
 
-#define SPIFREQ 5E6
+#define SPIFREQ 10E6
 #define SETPERIOD 2
 #define GETDATA 1
 #define SETUPTIME 0
@@ -39,16 +39,27 @@ void print_bin(int len, int in){
 }
 
 // Converts uint32_t to character array
-void to_char_array(uint32_t base, char * output){
+void to_char_array(uint32_t base, unsigned char output[4]){
     uint8_t mask=0xFF;
     for (int i=0; i<4; i++){
-        
-        *(output+i)=(base&(mask<<8*(3-i)))>>(8*(3-i));
+        output[i]=(base&(mask<<8*(3-i)))>>(8*(3-i));
     }
 }
 
 // Converts character string to integer
-float char_to_int(char * arg){
+int char_to_int(char * arg){
+    float res = 0;
+    uint8_t negative = *arg=='-';
+    int curr_num=0;
+    for (int i=negative; *(arg+i)!='\0'; i++){
+            curr_num=(int)(*(arg+i))-(int)'0';
+            res*=10;
+            res+=curr_num;
+    }
+    return (negative ? -1*res : res);
+}
+// Converts character string to integer
+float char_to_float(char * arg){
     float res = 0;
     uint8_t negative = *arg=='-';
     uint8_t decimal = 0;
@@ -70,7 +81,12 @@ float char_to_int(char * arg){
     }
     return (negative ? -1*res : res);
 }
-void argparse(int argc, char** args, float * output){
+void floatparse (int argc, char** args, float * output){
+    for (int i=0; i<argc; i++){
+        *(output+i)=char_to_float(*(args+i));
+    }
+}
+void intparse (int argc, char** args, int * output){
     for (int i=0; i<argc; i++){
         *(output+i)=char_to_int(*(args+i));
     }
@@ -105,7 +121,7 @@ uint32_t fpga_pwm_uptime(uint8_t motor, uint32_t pwm_uptime){
     // print_bin(32, base);a
     to_char_array(base, output);
     //print_arr(output, 4);
-    fpga_fasttran(7, &result1);
+    fpga_fasttran(0, &result1);
     wiringPiSPIDataRW(0, output, 4);
     result2 = to_uint_value(output);
     int errors=0;
@@ -140,7 +156,7 @@ uint32_t fpga_pwm_period(uint8_t motor, uint32_t pwm_period){
     //print_bin(32, base);
     to_char_array(base, output);
     //print_arr(output, 4);
-    fpga_fasttran(7, &result1);
+    fpga_fasttran(0, &result1);
     wiringPiSPIDataRW(0, output, 4);
     result2 = to_uint_value(output);
     int errors=0;
@@ -211,10 +227,10 @@ void fpga_fasttran(uint8_t data_addr, uint32_t* result){
     wiringPiSPIDataRW(0, output, 4);
     *result = to_uint_value(output);
 }
-uint32_t to_uint_value(char * input){
+uint32_t to_uint_value(unsigned char input[4]){
     uint32_t out;
     for (int i=0; i<4; i++){
-        out|=*(input+(3-i))<<8*i;
+        out|=input[3-i]<<8*i;
     }
     return out;
 }
