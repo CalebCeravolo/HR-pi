@@ -43,11 +43,14 @@ module SPI #(parameter data_length = 64) (
         end
         else begin
             addr<=next_addr;
-            if (next_addr==0) begin
-                data_loaded<=data_out;
-            end
+            // if (next_addr==0) begin
+            //     data_loaded<=data_out;
+            // end
         end
     end
+
+    always_ff @(negedge CS)
+        data_loaded<=data_out;
     always_ff @(posedge clk) begin
         // done<=(next_addr==data_length-1);
         data_in_buffer<=new_data;
