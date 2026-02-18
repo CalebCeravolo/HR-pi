@@ -1,6 +1,6 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
-#include <stdio.h>
+// #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
 #include "../functions.h"
@@ -10,7 +10,7 @@
 int main(int argc, char *argv[]) {
     wiringPiSetupPinType(WPI_PIN_WPI);
     int vals[argc-1];
-    argparse(argc-1, argv+1, vals);
+    intparse(argc-1, argv+1, vals);
     pinMode(LEFTEN, OUTPUT);
     pinMode(RIGHTEN, OUTPUT);
     if (vals[0]==1){

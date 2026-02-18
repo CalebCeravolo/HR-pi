@@ -11,8 +11,8 @@
 #define LEFTEN 4//4
 #define RIGHTEN 5//5
 struct PWMinput {
-    int pin,
-    int* period
+    int pin;
+    int* period;
 };
 long int get_time(){
     struct timeval tv;
@@ -22,8 +22,8 @@ long int get_time(){
 void* softPWM(void* input){
     long int current_t = get_time();
     // int period = *((int *)input); // 1-100
-    PWMinput* args = (PWMinput*)input;
-    printf("Period: %i pin: %i\n", args->period, *(args->pin));
+    struct PWMinput* args = (struct PWMinput*)input;
+    printf("Period: %i pin: %i\n", *(args->period), args->pin);
     while (1){
         digitalWrite(args->pin, 1);
         usleep(*(args->period)*100);
@@ -34,7 +34,7 @@ void* softPWM(void* input){
 int main(int argc, char *argv[]) {
     wiringPiSetupPinType(WPI_PIN_WPI);
     int vals[argc-1];
-    argparse(argc-1, argv+1, vals);
+    intparse(argc-1, argv+1, vals);
     int period = 0;
     struct PWMinput arguments;
     arguments.pin = LEFTEN;

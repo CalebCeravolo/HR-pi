@@ -27,7 +27,7 @@ void* softPWM(void* input){
 int main(int argc, char *argv[]) {
     wiringPiSetupPinType(WPI_PIN_WPI);
     float vals[argc-1];
-    argparse(argc-1, argv+1, vals);
+    floatparse(argc-1, argv+1, vals);
     int period = 0;
     struct PWMinput arguments;
     arguments.pin = LEFTEN;
