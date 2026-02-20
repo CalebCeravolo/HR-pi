@@ -1,5 +1,9 @@
 
-module top_level
+module top_level #(parameter 
+    NUM_ENCODERS=3,
+    NUM_GPIO=3,
+    NUM_HALL=3
+    )
     (
             input GCLK, 
             input pwmCLK,
@@ -9,9 +13,10 @@ module top_level
             input SPI_incoming, 
             input SPI_CLK, 
             input CS, 
-            output [9:0] GPIO, 
-            input Enc1inA, 
-            input Enc1inB, 
+            input logic [NUM_ENCODERS-1:0] ENCinA,
+            input logic [NUM_ENCODERS-1:0] ENCinB,
+            input logic [NUM_HALL-1:0] HallSensor,
+            output logic [NUM_GPIO-1:0] GPIO, 
             input spectroClock,
             input [9:0] spectroChannel0_DATA,
             input [9:0] spectroChannel1_DATA,
@@ -33,9 +38,11 @@ module top_level
             output logic spectroChannel1_ENA,
             output logic spectroChannel2_ENA,
             output logic spectroChannel3_ENA,
-            output logic spectroSlave,
+            // output logic spectroSlave,
             output logic spectroClock_ENA
     );
+    logic reset;
+    assign reset=0;
     assign {spectroChannel0_ENA, spectroChannel1_ENA,spectroChannel2_ENA,spectroChannel3_ENA, spectroClock_ENA} = 5'b11111;
     logic [20:0] period;
     localparam NUM_BINS = 640;
@@ -69,8 +76,8 @@ module top_level
         clk_div=0;
         period=1001;
         debug_out=0;
-        motor_periods='{numMotorPins{20'd1}};
-        motor_uptimes='{numMotorPins{20'd20000}};
+        motor_periods='{NUM_GPIO{20'd20000}};
+        motor_uptimes='{NUM_GPIO{20'd20000}};
         //count<=0;
     end
 
@@ -82,7 +89,11 @@ module top_level
 
     /* Control for the motors. Signal decoding
         For motor:
-        |  Command select | Motor Select |         PWM Period (10us)/pwm uptime               |
+        |  Command select | Motor Select |         PWM Period (1us)/pwm uptime                |
+        |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
+        
+        Reset Encoder:
+        |  Command select |Encoder Select|                                                    |
         |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|0|
 
 
@@ -97,6 +108,8 @@ module top_level
             00000002
             Send Data:
             00000001
+            Reset Enc:
+            00000003
 
             Data Addr:
             000000: Debug
@@ -113,20 +126,22 @@ module top_level
                     .clk(SPI_CLK), .CS, .data_ready);
     // Data control
     logic [7:0] data_addr;
-    logic [4:0] motor_addr;
+    logic [4:0] ind_addr;
     logic [20:0] new_pwm_period;
     logic [20:0] new_pwm_uptime;
     logic [5:0] command;
-    logic set_pwm_period, set_pwm_uptime, send_data;
+    logic set_pwm_period, set_pwm_uptime, send_data, reset_enc;
     logic [7:0] data_addr_reg;
     logic [9:0] binAddr = 0;
     always_comb begin
         case (data_addr_reg)
             0: SPI_data_out = SPI_data_in; // Period of debug led
-            1: SPI_data_out = {{enc1_dir},{enc1_count}};  // Encoder 1 data
-            2: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
-            3: SPI_data_out = pixelBins[binAddr];
-            default: SPI_data_out = period;
+            1: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
+            2: SPI_data_out = pixelBins[binAddr];
+            3: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
+            4: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
+            5: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
+            default: SPI_data_out = SPI_data_in;
         endcase
     end
     // Data decoding
@@ -134,8 +149,9 @@ module top_level
     assign set_pwm_period = command == 8'd2;
     assign set_pwm_uptime = command == 8'd0;
     assign send_data = command == 8'b1;
+    assign reset_enc = command == 8'd3;
     assign data_addr = SPI_data_in[7:0];
-    assign motor_addr = SPI_data_in[25:21];
+    assign ind_addr = SPI_data_in[25:21];
     assign new_pwm_uptime = SPI_data_in[20:0];
     assign new_pwm_period = SPI_data_in[20:0];
 
@@ -149,11 +165,14 @@ module top_level
         if (load_it) begin
             if (set_pwm_period) begin
                 period<=new_pwm_period;
-                motor_periods[motor_addr]<=new_pwm_period;
+                motor_periods[ind_addr]<=new_pwm_period;
                 
             end
             if (set_pwm_uptime) begin
-                motor_uptimes[motor_addr]<=new_pwm_uptime;
+                motor_uptimes[ind_addr]<=new_pwm_uptime;
+            end
+            if (reset_enc) begin
+                trigZ[ind_addr]=~trigZ[ind_addr];
             end
             if (send_data) begin
                 data_addr_reg<=data_addr;
@@ -164,32 +183,36 @@ module top_level
     end
 
     // Encoder Control
-    logic inA1, inB1, inZ1;
-    assign inA1 = Enc1inA;
-    assign inB1 = Enc1inB;
-    assign inZ1 = 1'b0;
-    logic enc1_dir;
-    logic [15:0] enc1_count;
 
-    encoder motorC (.inA(inA1), .inB(inB1), .inZ(inZ1), .clk(GCLK), .count(enc1_count), .direction(enc1_dir));
+    logic inA [NUM_ENCODERS-1:0], inB [NUM_ENCODERS-1:0], inZ [NUM_ENCODERS-1:0], trigZ [NUM_ENCODERS-1:0];
+    logic enc_dir [NUM_ENCODERS-1:0];
+    localparam COUNT_BITS = 16;
+    logic [COUNT_BITS-1:0] enc_count [NUM_ENCODERS-1:0];
+    genvar i;
+    generate
+        for (i=0; i<NUM_ENCODERS; i++) begin : encs 
+            level_trigger en_res (.in(trigZ[i]), .out(inZ[i]), .clk(GCLK), .reset);
+            assign inA[i] = ENCinA[i];
+            assign inB[i] = ENCinB[i];
+            encoder motorC (.inA(inA[i]), .inB(inB[i]), .inZ(inZ[i]), .clk(GCLK), .count(enc_count[i]), .direction(enc_dir[i]));
+        end
+    endgenerate
 
     // PWM setup
-    localparam numMotorPins = 6;
-    logic [20:0] motor_periods [numMotorPins-1:0];
-    logic [20:0] motor_uptimes [numMotorPins-1:0];
-    genvar i;
+    logic [20:0] motor_periods [NUM_GPIO-1:0];
+    logic [20:0] motor_uptimes [NUM_GPIO-1:0];
     logic pwm1usCLK;
     always_ff @(posedge pwmCLK)
         pwm1usCLK<=~pwm1usCLK;
     assign RGB_2 = {GPIO[2], GPIO[1], GPIO[0]};
     generate;
-        for (i=0; i<numMotorPins; i++) begin : pwm_signals
+        for (i=0; i<NUM_GPIO; i++) begin : pwm_signals
             pwm motor_sig (.clk(pwm1usCLK), .sig(GPIO[i]), .period(motor_periods[i]), .uptime(motor_uptimes[i]));
         end
     endgenerate
 
     // Test LED
-    assign RGB_1[0] = Enc1inA;
+    assign RGB_1[0] = ENCinA[0];
     // pwm led_sig (.clk(GCLK), .sig(RGB_1[0]), .period(period));
 endmodule
 

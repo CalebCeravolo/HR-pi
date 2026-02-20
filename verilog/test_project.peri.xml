@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<efxpt:design_db name="test_project" device_def="Ti60F225" version="2025.1.110" db_version="20251999" last_change_date="Tue Feb 17 19:32:01 2026" xmlns:efxpt="http://www.efinixinc.com/peri_design_db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/peri_design_db peri_design_db.xsd ">
+<efxpt:design_db name="test_project" device_def="Ti60F225" version="2025.1.110" db_version="20251999" last_change_date="Thu Feb 19 16:31:49 2026" xmlns:efxpt="http://www.efinixinc.com/peri_design_db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/peri_design_db peri_design_db.xsd ">
     <efxpt:device_info>
         <efxpt:iobank_info>
             <efxpt:iobank name="1A" iostd="1.8 V LVCMOS" is_dyn_voltage="false" mode_sel_name="1A_MODE_SEL"/>
@@ -112,6 +112,15 @@
         <efxpt:comp_gpio name="GPIO[2]" gpio_def="GPIOR_N_17" mode="output" bus_name="GPIO" io_standard="1.8 V LVCMOS">
             <efxpt:output_config name="GPIO[2]" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
         </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="HallSensor[0]" gpio_def="GPIOR_P_13" mode="input" bus_name="HallSensor" io_standard="1.8 V LVCMOS">
+            <efxpt:input_config name="HallSensor[0]" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="HallSensor_PULL_UP_ENA[0]" dyn_delay_en_name="HallSensor_DLY_ENA[0]" dyn_delay_reset_name="HallSensor_DLY_RST[0]" dyn_delay_ctrl_name="HallSensor_DLY_CTRL[0]" clkmux_buf_name=""/>
+        </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="HallSensor[1]" gpio_def="GPIOR_N_13" mode="input" bus_name="HallSensor" io_standard="1.8 V LVCMOS">
+            <efxpt:input_config name="HallSensor[1]" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="HallSensor_PULL_UP_ENA[1]" dyn_delay_en_name="HallSensor_DLY_ENA[1]" dyn_delay_reset_name="HallSensor_DLY_RST[1]" dyn_delay_ctrl_name="HallSensor_DLY_CTRL[1]" clkmux_buf_name=""/>
+        </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="HallSensor[2]" gpio_def="GPIOR_P_17" mode="input" bus_name="HallSensor" io_standard="1.8 V LVCMOS">
+            <efxpt:input_config name="HallSensor[2]" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="HallSensor_PULL_UP_ENA[2]" dyn_delay_en_name="HallSensor_DLY_ENA[2]" dyn_delay_reset_name="HallSensor_DLY_RST[2]" dyn_delay_ctrl_name="HallSensor_DLY_CTRL[2]" clkmux_buf_name=""/>
+        </efxpt:comp_gpio>
         <efxpt:comp_gpio name="PLL_IN" gpio_def="GPIOL_P_18" mode="input" bus_name="" io_standard="1.8 V LVCMOS">
             <efxpt:input_config name="PLL_IN" name_ddio_lo="" conn_type="pll_clkin" is_register="false" clock_name="" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="PLL_IN_PULL_UP_ENA" dyn_delay_en_name="PLL_IN_DLY_ENA" dyn_delay_reset_name="PLL_IN_DLY_RST" dyn_delay_ctrl_name="PLL_IN_DLY_CTRL" clkmux_buf_name=""/>
         </efxpt:comp_gpio>
@@ -148,6 +157,7 @@
         <efxpt:bus name="GPIO" mode="output" msb="2" lsb="0"/>
         <efxpt:bus name="RGB_1" mode="output" msb="2" lsb="0"/>
         <efxpt:bus name="RGB_2" mode="output" msb="2" lsb="0"/>
+        <efxpt:bus name="HallSensor" mode="input" msb="2" lsb="0"/>
     </efxpt:gpio_info>
     <efxpt:pll_info>
         <efxpt:pll name="pll_inst1" pll_def="PLL_TL0" ref_clock_name="" ref_clock_freq="25.0000" multiplier="4" pre_divider="1" post_divider="16" reset_name="" locked_name="" is_ipfrz="false" is_bypass_lock="true">
