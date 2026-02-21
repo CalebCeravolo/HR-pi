@@ -9,6 +9,7 @@
 #define SETPERIOD 2
 #define GETDATA 1
 #define SETUPTIME 0
+#define RESETENC 3
 // #define TESTING 1
 #ifdef TESTING
     int main(int argc, char** argv){
@@ -218,6 +219,12 @@ uint32_t fpga_pwm_period(uint8_t motor, uint32_t pwm_period){
     return fpga_command(base);
 }
 
+uint32_t fpga_reset_encoder(uint8_t encoder){
+    uint32_t base = 0;
+    base|=(encoder<<21);
+    base|=(RESETENC<<26);
+    return fpga_command(base);
+}
 /*
 Requests the transfer of data from given data address
 */

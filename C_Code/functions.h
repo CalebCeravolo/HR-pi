@@ -24,5 +24,6 @@ extern uint32_t fpga_safetran(uint8_t data_addr);
 void fpga_fasttran(uint8_t data_addr, uint32_t* result);
 extern uint32_t to_uint_value(unsigned char * input);
 extern int length_of(char * point);
+uint32_t fpga_reset_encoder(uint8_t encoder);
 
 #endif // FPGA_UTILS_H
