@@ -37,10 +37,14 @@ int main(int argc, char *argv[]) {
     pinMode(RIGHTEN, OUTPUT);
     digitalWrite(RIGHTEN, 0);
     period = vals[0];
+
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
+    
     usleep(1000*vals[1]);
+
     pthread_cancel(pwmProc);
-    pthread_join(pwmProc, NULL);  
+    pthread_join(pwmProc, NULL); 
+
     pinMode(LEFTEN, PM_OFF);
     pinMode(RIGHTEN, PM_OFF);
     return 0;

@@ -11,12 +11,12 @@ int main(int argc, char *argv[]) {
     intparse(argc-1, argv+1, vals);
     int mode = getAlt(vals[0]);
     if (mode==1){
-        printf("%i",digitalRead(vals[0]));
-        digitalWrite(vals[0], ~digitalRead(vals[0]));
+        // printf("%i",digitalRead(vals[0]));
+        digitalWrite(vals[0], vals[1]);
         return 0;
     } else {
         pinMode(vals[0], OUTPUT);
-        digitalWrite(vals[0], 1);
+        digitalWrite(vals[0], vals[1]);
         return 0;
     }
 }
