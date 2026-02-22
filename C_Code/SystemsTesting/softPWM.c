@@ -6,8 +6,8 @@
 #include "../functions.h"
 #include <pthread.h>
 #include <sys/time.h>
-#define LEFTEN 4//4
-#define RIGHTEN 5//5
+// #define LEFTEN 4//4
+// #define RIGHTEN 5//5
 struct PWMinput {
     int pin;
     int* period;
@@ -26,26 +26,29 @@ void* softPWM(void* input){
 
 int main(int argc, char *argv[]) {
     wiringPiSetupPinType(WPI_PIN_WPI);
-    float vals[argc-1];
-    floatparse(argc-1, argv+1, vals);
+    int vals[argc-1];
+    intparse(argc-1, argv+1, vals);
     int period = 0;
     struct PWMinput arguments;
-    arguments.pin = LEFTEN;
+    arguments.pin = vals[0];
     arguments.period = &period;
     pthread_t pwmProc;
-    pinMode(LEFTEN, OUTPUT);
-    pinMode(RIGHTEN, OUTPUT);
-    digitalWrite(RIGHTEN, 0);
-    period = vals[0];
+    pinMode(vals[0], OUTPUT);
+    pinMode(vals[1], OUTPUT);
+    digitalWrite(vals[1], 0);
+    period = vals[2];
 
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
-    
-    usleep(1000*vals[1]);
+    // while (period<100){
+    //     period+=1;
+    //     usleep(100000);
+    // }
+    usleep(1000*vals[3]);
 
     pthread_cancel(pwmProc);
     pthread_join(pwmProc, NULL); 
 
-    pinMode(LEFTEN, PM_OFF);
-    pinMode(RIGHTEN, PM_OFF);
+    pinMode(vals[0], PM_OFF);
+    // pinMode(RIGHTEN, PM_OFF);
     return 0;
 }

@@ -33,9 +33,11 @@ int main(int argc, char *argv[]) {
     pinMode(left, OUTPUT);
     pinMode(right, OUTPUT);
     int dir;
+    
     int16_t amount;
     float degrees;
     enc_dec(&dir, &amount, &degrees);
+    int16_t distance_remaining = fabsf((degrees)-(vals[0]));
     if (degrees>vals[0]){
         digitalWrite(left, 0);
         digitalWrite(right,1);
@@ -44,13 +46,14 @@ int main(int argc, char *argv[]) {
         digitalWrite(right,0);
     }
     
-    while (fabsf((degrees)-(vals[0]))>5){
+    while ((distance_remaining)>5){
         if (sigint){
             digitalWrite(left, 0);
             digitalWrite(right,0);
         }
         usleep(10000);
         enc_dec(&dir, &amount, &degrees);
+        distance_remaining=fabsf((degrees)-(vals[0]));
     }
     digitalWrite(left, 0);
     digitalWrite(right,0);
