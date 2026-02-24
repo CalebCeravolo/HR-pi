@@ -34,21 +34,18 @@ int main(int argc, char *argv[]) {
     arguments.period = &period;
     pthread_t pwmProc;
     pinMode(vals[0], OUTPUT);
-    pinMode(vals[1], OUTPUT);
-    digitalWrite(vals[1], 0);
-    period = vals[2];
+    period = vals[1];
 
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
     // while (period<100){
     //     period+=1;
     //     usleep(100000);
     // }
-    usleep(1000*vals[3]);
+    usleep(1000*vals[2]);
 
     pthread_cancel(pwmProc);
     pthread_join(pwmProc, NULL); 
-
-    pinMode(vals[0], PM_OFF);
+    digitalWrite(vals[0], 0);
     // pinMode(RIGHTEN, PM_OFF);
     return 0;
 }

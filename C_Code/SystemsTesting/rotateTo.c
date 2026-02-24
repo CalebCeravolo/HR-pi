@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
         if (sigint){
             digitalWrite(left, 0);
             digitalWrite(right,0);
+            break;
         }
         usleep(10000);
         enc_dec(&dir, &amount, &degrees);
