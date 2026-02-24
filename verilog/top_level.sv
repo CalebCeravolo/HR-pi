@@ -103,13 +103,17 @@ module top_level #(parameter
 
         Commands:
             Set PWM uptime:
-            00000000
+            0
             Set PWM period:
-            00000002
+            2
             Send Data:
-            00000001
+            1
             Reset Enc:
-            00000003
+            3
+
+
+            Read Hall:
+            4
 
             Data Addr:
             000000: Debug
@@ -130,9 +134,10 @@ module top_level #(parameter
     logic [20:0] new_pwm_period;
     logic [20:0] new_pwm_uptime;
     logic [5:0] command;
-    logic set_pwm_period, set_pwm_uptime, send_data, reset_enc;
     logic [7:0] data_addr_reg;
     logic [9:0] binAddr = 0;
+    // logic [NUM_HALL-1:0] halls;
+
     always_comb begin
         case (data_addr_reg)
             0: SPI_data_out = SPI_data_in; // Period of debug led
@@ -141,15 +146,20 @@ module top_level #(parameter
             3: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
             4: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
             5: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
+            6: SPI_data_out = HallSensor;
             default: SPI_data_out = SPI_data_in;
         endcase
     end
+    logic set_pwm_period, set_pwm_uptime, send_data, reset_enc, read_hall;
     // Data decoding
     assign command = SPI_data_in[31:26];
+
     assign set_pwm_period = command == 8'd2;
     assign set_pwm_uptime = command == 8'd0;
     assign send_data = command == 8'b1;
     assign reset_enc = command == 8'd3;
+    // assign read_hall = command == 8'd4;
+
     assign data_addr = SPI_data_in[7:0];
     assign ind_addr = SPI_data_in[25:21];
     assign new_pwm_uptime = SPI_data_in[20:0];
@@ -172,7 +182,7 @@ module top_level #(parameter
                 motor_uptimes[ind_addr]<=new_pwm_uptime;
             end
             if (reset_enc) begin
-                trigZ[ind_addr]=~trigZ[ind_addr];
+                trigZ[ind_addr]<=~trigZ[ind_addr];
             end
             if (send_data) begin
                 data_addr_reg<=data_addr;
@@ -198,6 +208,9 @@ module top_level #(parameter
         end
     endgenerate
 
+
+    // Hall Control
+
     // PWM setup
     logic [20:0] motor_periods [NUM_GPIO-1:0];
     logic [20:0] motor_uptimes [NUM_GPIO-1:0];
@@ -212,7 +225,7 @@ module top_level #(parameter
     endgenerate
 
     // Test LED
-    assign RGB_1[0] = ENCinA[0];
+    assign RGB_1[0] = ENCinA[2];
     // pwm led_sig (.clk(GCLK), .sig(RGB_1[0]), .period(period));
 endmodule
 

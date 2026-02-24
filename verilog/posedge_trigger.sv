@@ -29,7 +29,7 @@ module level_trigger #(parameter stabilize = 0) (in, out, clk, reset);
 		end
 		else begin
 			prev_state <= in;
-			pre_out        <= in~^prev_state;  // generate 1-cycle pulse on edge
+			pre_out        <= in^prev_state;  // generate 1-cycle pulse on edge
 			stable_out<=pre_out;
 		end 
     end 
