@@ -1,4 +1,4 @@
-#include <stdio.h>
+// #include <stdio.h>
 #include <wiringPi.h>
 #include <stdint.h>
 
@@ -7,10 +7,12 @@ int not_in(int, int*, int);
 int main(int argc, char *argv[]){
     wiringPiSetupPinType(WPI_PIN_WPI);
     //printf("The casted value is %d\n", (int)(**(argv+1))-(int)'0');
-    int not_list[5] = {10, 11, 12, 13, 14};
-    for (int i=0; i<29; i++){
-        if (not_in(i, not_list, 5))
-            pinMode(i, PM_OFF);
+    int not_list[4] = {10, 12, 13, 14};
+    for (int i=0; i<32; i++){
+        if (not_in(i, not_list, 4)){
+            pinMode(i, OUTPUT);
+            digitalWrite(i,0);
+        }
         //digitalWrite(i, (int)(**(argv+1))-(int)'0');
         //digitalWrite(i, PWM_OUTPUT);
     }

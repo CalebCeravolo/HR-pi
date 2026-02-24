@@ -9,7 +9,8 @@
 #define SETPERIOD 2
 #define GETDATA 1
 #define SETUPTIME 0
-//#define TESTING 1
+#define RESETENC 3
+// #define TESTING 1
 #ifdef TESTING
     int main(int argc, char** argv){
         int *output = malloc((argc-1) * sizeof(int));
@@ -24,6 +25,9 @@
     }
 #endif
 
+/*
+Mostly a debug function. Used to print out a list
+*/
 void print_arr(void * input, int len){
     char* ch=(char *)input;
     for (int i=0; i<len; i++){
@@ -31,6 +35,12 @@ void print_arr(void * input, int len){
     }
     printf("\n");
 }
+
+/*
+Prints the binary representation of a number 
+len: Length of output binary number
+in: Number to print as binary
+*/
 void print_bin(int len, int in){
     for (int i=0; i<len; i++){
         printf("%d", ((1<<(len-1-i))&in)&&1);
@@ -38,7 +48,9 @@ void print_bin(int len, int in){
     printf("\n");
 }
 
-// Converts uint32_t to character array
+/*
+Converts a uint32 number to a byte array
+*/
 void to_char_array(uint32_t base, unsigned char output[4]){
     uint8_t mask=0xFF;
     for (int i=0; i<4; i++){
@@ -46,7 +58,11 @@ void to_char_array(uint32_t base, unsigned char output[4]){
     }
 }
 
-// Converts character string to integer
+/*
+Converts a string to an integer
+arg: The pointer to the string
+output: int value of string
+*/
 int char_to_int(char * arg){
     float res = 0;
     uint8_t negative = *arg=='-';
@@ -58,7 +74,12 @@ int char_to_int(char * arg){
     }
     return (negative ? -1*res : res);
 }
-// Converts character string to integer
+
+/*
+Converts a string to a float
+arg: The pointer to the string
+output: float value of string
+*/
 float char_to_float(char * arg){
     float res = 0;
     uint8_t negative = *arg=='-';
@@ -81,16 +102,43 @@ float char_to_float(char * arg){
     }
     return (negative ? -1*res : res);
 }
+
+/*
+Turns a list of args into floats
+
+Inputs: 
+
+argc: length of args
+
+args: list of strings
+
+output: float list to be overwritten
+*/
 void floatparse (int argc, char** args, float * output){
     for (int i=0; i<argc; i++){
         *(output+i)=char_to_float(*(args+i));
     }
 }
+/*
+Turns a list of args into ints
+
+Inputs: 
+
+argc: length of args
+
+args: list of strings
+
+output: int list to be overwritten
+*/
 void intparse (int argc, char** args, int * output){
     for (int i=0; i<argc; i++){
         *(output+i)=char_to_int(*(args+i));
     }
 }
+
+/*
+Sends raw data out. Not recommended for use
+*/
 uint32_t fpga_raw(uint32_t outgoing){
     if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
@@ -107,76 +155,79 @@ uint32_t fpga_raw(uint32_t outgoing){
     wiringPiSPIClose(0);
     return result;
 }
+
+/*
+Adjusts the pwm pin at the address to have the given uptime
+
+*/
 uint32_t fpga_pwm_uptime(uint8_t motor, uint32_t pwm_uptime){
     if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
         return -1;
     }
     uint32_t base = 0;
-    unsigned char output[4];
-    uint32_t result1, result2;
     base|=(SETUPTIME<<26);
     base|=(pwm_uptime);
     base|=(motor<<21);
-    // print_bin(32, base);a
-    to_char_array(base, output);
+    return fpga_command(base);
+}
+
+/*
+Sends a command to the FPGA
+*/
+uint32_t fpga_command (uint32_t command){
+    if (wiringPiSPISetup(0, SPIFREQ)<0){
+        perror("Setup failed\n");
+        return -1;
+    }
+    unsigned char output[4];
+    uint32_t result1, result2;
+
+    //print_bin(32, base);
+    to_char_array(command, output);
     //print_arr(output, 4);
     fpga_fasttran(0, &result1);
     wiringPiSPIDataRW(0, output, 4);
     result2 = to_uint_value(output);
     int errors=0;
-    while(result2!=base){
+    while(result2!=command){
         errors++;
         if (errors>=10){
-            printf("Command pwm uptime failed: \n");
-            print_bin(32, base);
-            print_bin(32, result2);
+            printf("Command failed: %i, %i\n", result2, command);
             wiringPiSPIClose(0);
             return result2;
         }
-        to_char_array(base, output);
+        to_char_array(command, output);
         wiringPiSPIDataRW(0, output, 4);
         result2 = to_uint_value(output);
     }
     wiringPiSPIClose(0);
     return result2;
 }
-
+/*
+Causes the GPIO pin at the address to have a given period
+*/
 uint32_t fpga_pwm_period(uint8_t motor, uint32_t pwm_period){
     if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
         return -1;
     }
     uint32_t base = 0;
-    unsigned char output[4];
-    uint32_t result1, result2;
     base|=(pwm_period);
     base|=(motor<<21);
     base|=(SETPERIOD<<26);
-    //print_bin(32, base);
-    to_char_array(base, output);
-    //print_arr(output, 4);
-    fpga_fasttran(0, &result1);
-    wiringPiSPIDataRW(0, output, 4);
-    result2 = to_uint_value(output);
-    int errors=0;
-    while(result2!=base){
-        errors++;
-        if (errors>=10){
-            printf("Command pwm period failed: %i, %i\n", result2, base);
-            wiringPiSPIClose(0);
-            return result2;
-        }
-        to_char_array(base, output);
-        wiringPiSPIDataRW(0, output, 4);
-        result2 = to_uint_value(output);
-    }
-    wiringPiSPIClose(0);
-    return result2;
+    return fpga_command(base);
 }
 
-
-
+uint32_t fpga_reset_encoder(uint8_t encoder){
+    uint32_t base = 0;
+    base|=(encoder<<21);
+    base|=(RESETENC<<26);
+    return fpga_command(base);
+}
+/*
+Requests the transfer of data from given data address
+*/
 uint32_t fpga_datatran(uint8_t data_addr){
     if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
@@ -196,6 +247,9 @@ uint32_t fpga_datatran(uint8_t data_addr){
     return result;
 }
 
+/*
+Safer method to transfer data from pi. Returns the data requested
+*/
 uint32_t fpga_safetran(uint8_t data_addr){
     if (wiringPiSPISetup(0, SPIFREQ)<0){
         perror("Setup failed\n");
@@ -217,6 +271,10 @@ uint32_t fpga_safetran(uint8_t data_addr){
     wiringPiSPIClose(0);
     return result;
 }
+
+/*
+Fast version of data transfer. Manual opening and closing of spi channel needed
+*/
 void fpga_fasttran(uint8_t data_addr, uint32_t* result){
     uint8_t command = 0b00000001;
     uint32_t base = 0;
@@ -227,6 +285,10 @@ void fpga_fasttran(uint8_t data_addr, uint32_t* result){
     wiringPiSPIDataRW(0, output, 4);
     *result = to_uint_value(output);
 }
+
+/*
+Converts a character array to a uint32 value
+*/
 uint32_t to_uint_value(unsigned char input[4]){
     uint32_t out;
     for (int i=0; i<4; i++){
@@ -234,6 +296,10 @@ uint32_t to_uint_value(unsigned char input[4]){
     }
     return out;
 }
+
+/*
+Returns length of a character string
+*/
 int length_of(char * point){
     int length = 0;
     for (int i=0; *(point+i)!='\0'; i++){
