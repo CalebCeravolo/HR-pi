@@ -13,14 +13,14 @@
 // #define TESTING 1
 #ifdef TESTING
     int main(int argc, char** argv){
-        int *output = malloc((argc-1) * sizeof(int));
-        argparse(argc-1, argv+1, output);
+        int output[argc-1];
+        intparse(argc-1, argv+1, output);
         //print_bin(8, (*output)<<*(output+1));
-        printf("%d", (int)'\0');
+        // printf("%d", (int)'\0');
         //printf("%X", print);
-        // for (int i=0; i<argc-1; i++){
-        //     printf("%d ", *(output+i));
-        // }
+        for (int i=0; i<argc-1; i++){
+            printf("%d ", *(output+i));
+        }
         printf("\n");
     }
 #endif
@@ -75,10 +75,10 @@ int char_to_int(char * arg){
         }
     }
     int curr_num=0;
-    for (int i=negative; *(arg+i)!='\0'; i++){
+    for (int i=negative+2*(base!=10); *(arg+i)!='\0'; i++){
             curr_num=(int)(*(arg+i))-(int)'0';
             if (curr_num>9){
-                curr_num-=22;
+                curr_num-=39;
             }
             res*=base;
             res+=curr_num;
