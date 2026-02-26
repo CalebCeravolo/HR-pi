@@ -66,10 +66,21 @@ output: int value of string
 int char_to_int(char * arg){
     float res = 0;
     uint8_t negative = *arg=='-';
+    uint8_t base = 10;
+    if (*(arg+negative)=='0'){
+        if (*(arg+negative+1)=='b'){
+            base=2;
+        } else if (*(arg+negative+1)=='x'){
+            base=16;
+        }
+    }
     int curr_num=0;
     for (int i=negative; *(arg+i)!='\0'; i++){
             curr_num=(int)(*(arg+i))-(int)'0';
-            res*=10;
+            if (curr_num>9){
+                curr_num-=22;
+            }
+            res*=base;
             res+=curr_num;
     }
     return (negative ? -1*res : res);
