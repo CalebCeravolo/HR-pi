@@ -19,7 +19,7 @@
         // printf("%d", (int)'\0');
         //printf("%X", print);
         for (int i=0; i<argc-1; i++){
-            printf("%d ", *(output+i));
+            printf("%x ", *(output+i));
         }
         printf("\n");
     }
