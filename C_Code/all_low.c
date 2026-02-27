@@ -7,9 +7,9 @@ int not_in(int, int*, int);
 int main(int argc, char *argv[]){
     wiringPiSetupPinType(WPI_PIN_WPI);
     //printf("The casted value is %d\n", (int)(**(argv+1))-(int)'0');
-    int not_list[4] = {10, 12, 13, 14};
+    int not_list[7] = {10, 12, 13, 14, 8, 9, 7};
     for (int i=0; i<32; i++){
-        if (not_in(i, not_list, 4)){
+        if (not_in(i, not_list, 7)){
             pinMode(i, OUTPUT);
             digitalWrite(i,0);
         }

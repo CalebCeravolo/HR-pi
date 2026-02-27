@@ -52,7 +52,7 @@ int main(void) {
 
     for (int i = 0; i < 10000; i++) {
         // Read Measurement every 10ms
-        sensirion_i2c_hal_sleep_usec(10000);
+        sensirion_i2c_hal_sleep_usec(100000);
 
         float differential_pressure;
         float temperature;
@@ -63,6 +63,7 @@ int main(void) {
             printf("Error executing sdp_read_measurement(): %i\n", error);
             break;
         } else {
+            printf("\033[1A\033[2K\r\033[1A\033[2K\r");
             printf("Differential pressure: %0.2f Pa\n", differential_pressure);
             printf("Temperature: %0.2f °C\n", temperature);
         }
