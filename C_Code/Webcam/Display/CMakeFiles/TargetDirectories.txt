@@ -1,0 +1,3 @@
+/home/robot/HR-pi/C_Code/Webcam/Display/CMakeFiles/Rotate180.dir
+/home/robot/HR-pi/C_Code/Webcam/Display/CMakeFiles/edit_cache.dir
+/home/robot/HR-pi/C_Code/Webcam/Display/CMakeFiles/rebuild_cache.dir

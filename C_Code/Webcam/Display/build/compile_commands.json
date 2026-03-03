@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/robot/HR-pi/C_Code/Webcam/Display/build",
+  "command": "/usr/bin/c++  -isystem /usr/include/opencv4  -o CMakeFiles/RotateImage.dir/DisplayImage.cpp.o -c /home/robot/HR-pi/C_Code/Webcam/Display/DisplayImage.cpp",
+  "file": "/home/robot/HR-pi/C_Code/Webcam/Display/DisplayImage.cpp",
+  "output": "CMakeFiles/RotateImage.dir/DisplayImage.cpp.o"
+}
+]

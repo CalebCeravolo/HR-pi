@@ -13,15 +13,20 @@ while [ "$args" != "Done" ]; do
     if [ "$output" != "$last_output" ]; then
         for ((i=0; i<count; i++)); do
             printf "\033[1A"
-            printf "\033[2K\r"
         done
+        printf "\033[2K\r"
         printf "%s\n" "$output"
         last_output="$output"
     fi
     count=$(printf '%s\n' "$output" | count_new)
-    read args
-    printf "\033[1A"
-    printf "\033[2K\r"
+
+    while read -r -t 0; do 
+        read args
+        printf "\033[1A"
+        printf "\033[2K\r"
+    done
+    # read args
+   
     
     # printf "\033[1A"
     # printf "\033[2K\r"
