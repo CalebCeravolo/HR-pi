@@ -1,34 +1,32 @@
+// #include "/home/robot/HR-pi/C_Code/functions.h"
 #include <opencv2/core.hpp>
 #include <opencv2/core/hal/interface.h>
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
-//g++ capture.cpp -o analyze `pkg-config --cflags --libs opencv4`
+//g++ extract.cpp -o ~/Pictures/extract `pkg-config --cflags --libs opencv4`
 // using namespace std;
 int main(int argc, char** argv) {
-    cv::VideoCapture cap(argv[1], cv::CAP_V4L2);  // camera 
+    // cv::VideoCapture cap("/dev/video0", cv::CAP_V4L2);  // camera 
     
-    cap.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('Y','U','Y','V'));
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
-    cap.set(cv::CAP_PROP_FPS, 5);   // lower FPS if neededindex 0
-    cap.set(cv::CAP_PROP_CONVERT_RGB, 0);
+    // cap.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('Y','U','Y','V'));
+    // cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
+    // cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+    // cap.set(cv::CAP_PROP_FPS, 5);   // lower FPS if neededindex 0
+    // cap.set(cv::CAP_PROP_CONVERT_RGB, 0);
     
-    if (!cap.isOpened()) {
-        std::cout << "Camera not opened\n";
-        return -1;
-    }
+    // if (!cap.isOpened()) {
+    //     std::cout << "Camera not opened\n";
+    //     return -1;
+    // }
 
-    cv::Mat frame;
+    cv::Mat frame = imread(argv[1], cv::IMREAD_GRAYSCALE);
 
-    cap >> frame;
+    // cap >> frame;
+    
     if (frame.empty()) return 1;
-    cv::cvtColor(frame, frame, cv::COLOR_YUV2GRAY_YUYV);
-    std::cout << "Channels: " << frame.channels() << "\n";
-    cv::imwrite("raw.tiff", frame);
-    // cv::imshow("Camera", frame);
-    std::cout << "Imwritten\n";
-    std::cout << "Channels: " << frame.channels() << "\n";
+    // cv::cvtColor(frame, frame, cv::COLOR_YUV2GRAY_YUYV);
+
     std::vector<int> column_data(frame.cols);
     uint8_t* data = frame.ptr<uint8_t>(0);
     for (int y = 0; y < frame.rows; y++) {
