@@ -4,6 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
+#include <cmath>
+#include <cstdlib>
 //g++ extract.cpp -o ~/Pictures/extract `pkg-config --cflags --libs opencv4`
 // using namespace std;
 int main(int argc, char** argv) {
@@ -21,7 +23,7 @@ int main(int argc, char** argv) {
     // }
 
     cv::Mat frame = imread(argv[1], cv::IMREAD_GRAYSCALE);
-
+    
     // cap >> frame;
     
     if (frame.empty()) return 1;
