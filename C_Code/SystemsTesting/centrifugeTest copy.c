@@ -33,42 +33,17 @@ void* softPWM(void* input){
         usleep((100-*(args->period))*100);
     }
 }
-void rotate90() {
-    // 1. Get current position (Properly parenthesized for order of operations)
-    uint32_t current_val = fpga_safetran(1) & 0xFFFF;
-    int start_cf = current_val % tpr;
-    
-    // 2. Calculate target position (current + 90 degrees)
-    // tpr / 4 represents 90 degrees. We use modulo tpr to wrap around.
-    int target_cf = (start_cf + (tpr / 4)) % tpr;
-    
-    // 3. Wait until the target position is reached
-    uint32_t fpga_out;
-    while(1) {
-        fpga_out = fpga_safetran(1) & 0xFFFF;
-        if (fpga_out % tpr == target_cf) {
-            break; // 90 degree rotation complete
-        }
-    }
-}
 
-int main(int argc, char *argv[]) {
-    wiringPiSetupPinType(WPI_PIN_WPI);
-    int vals[argc-1];
-    intparse(argc-1, argv+1, vals);
-    
-
-    int start_cf = (fpga_safetran(1)&(0xFFFF)) % tpr;
-
+void move(){
     int period = 0;
     struct PWMinput arguments;
     arguments.pin = LEFTEN;
     arguments.period = &period;
     pthread_t pwmProc;
 
+    int start_cf = (fpga_safetran(1)&(0xFFFF)) % tpr;
+
     pinMode(LEFTEN, OUTPUT);
-    // pinMode(RIGHTEN, OUTPUT);
-    // digitalWrite(RIGHTEN, 0);
     period = 100;
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
     uint32_t fpga_out;
@@ -83,9 +58,44 @@ int main(int argc, char *argv[]) {
     }
     pthread_cancel(pwmProc);
     pthread_join(pwmProc, NULL);  
-    // pinMode(RIGHTEN, OUTPUT);
     digitalWrite(LEFTEN, 0);
-    // pinMode(LEFTEN, PM_OFF);
-    // pinMode(RIGHTEN, PM_OFF);
+}
+
+void rotate90() {
+    int period = 0;
+    struct PWMinput arguments;
+    arguments.pin = LEFTEN;
+    arguments.period = &period;
+    pthread_t pwmProc;
+    
+    // 1. Get current position
+    int start_cf = (fpga_safetran(1)&(0xFFFF)) % tpr;
+    
+    // 2. Calculate target position (current + 90 degrees)
+    int target_cf = (start_cf + (tpr / 4)) % tpr;
+
+    // 3. Move the centrifuge
+    pinMode(LEFTEN, OUTPUT);
+    period = 75;
+    pthread_create(&pwmProc, NULL, softPWM, &arguments);
+    sleep(5);    
+    
+    // 4. Wait until the target position is reached
+    uint32_t fpga_out;
+    while(1) {
+        fpga_out = fpga_safetran(1) & 0xFFFF;
+        if (fpga_out % tpr == target_cf) {
+            break;
+        }
+    }
+    pthread_cancel(pwmProc);
+    pthread_join(pwmProc, NULL);  
+    digitalWrite(LEFTEN, 0);
+}
+
+int main(int argc, char *argv[]) {
+    wiringPiSetupPinType(WPI_PIN_WPI);
+    int vals[argc-1];
+    intparse(argc-1, argv+1, vals);
 }
 
