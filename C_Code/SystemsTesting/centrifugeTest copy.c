@@ -8,8 +8,7 @@
 #include <sys/time.h>
 #include <pthread.h>
 //#include <signal.h>
-#define LEFTEN 4//4
-//#define RIGHTEN 5//5
+#define LEFTEN 4 //we only move to the left (and only use the left pin)
 #define tpr 13 //ticks per revolution
 
 struct PWMinput {
@@ -77,6 +76,8 @@ void rotate90() {
     // 3. Move the centrifuge
     pinMode(LEFTEN, OUTPUT);
     period = 75;
+    //period = vals[0];
+    //(to make it manual)
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
     sleep(5);    
     
