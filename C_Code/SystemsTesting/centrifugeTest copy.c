@@ -8,8 +8,8 @@
 #include <sys/time.h>
 #include <pthread.h>
 //#include <signal.h>
-#define LEFTEN 4//4
-//#define RIGHTEN 5//5
+#define LEFTEN 4 //we only move one way
+//#define RIGHTEN 5 //we are not using the right pin
 #define tpr 13 //ticks per revolution
 struct PWMinput {
     int pin;
