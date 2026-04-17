@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
     int plot_h = 540;
     cv::Mat output_im(cv::Size(width, height),CV_8UC1);
     cv::Mat plot(plot_h, width, CV_8UC1, cv::Scalar(255));
+    cv::namedWindow("Frame", cv::WINDOW_NORMAL);
     while(true) {
         
         cap >> frame;
@@ -84,8 +85,8 @@ int main(int argc, char** argv) {
         
         for(int x=1;x<width;x++) {
 
-            int y1 = plot_h-(column_data[x-1]*plot_h)/255;
-            int y2 = plot_h-(column_data[x]*plot_h)/255;
+            int y1 = plot_h-(column_data[x-1]*plot_h)>>8; //Divide by ~255
+            int y2 = plot_h-(column_data[x]*plot_h)>>8;
 
             cv::line(plot,
                     cv::Point((x-1),y1),
