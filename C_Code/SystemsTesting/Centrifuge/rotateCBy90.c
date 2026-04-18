@@ -8,8 +8,12 @@
 #include <sys/time.h>
 #include <pthread.h>
 //#include <signal.h>
+
 #define LEFTEN 4 //we only move to the left (and only use the left pin)
 #define tpr 30 //ticks per revolution
+// It is impossible to actually achieve a 90 degree rotation with this encoder
+// because it has teeth at every 1/30th of a revolution so it is impossible
+// to land on exactly 90 degrees. We land on 84 degrees.
 
 struct PWMinput {
     int pin;
@@ -46,7 +50,7 @@ void rotate90() {
     int start_cf = (fpga_safetran(1)&(0xFFFF)) % tpr;
     
     // 2. Calculate target position (current + 90 degrees)
-    int target_cf = (start_cf + (tpr / 4)) % tpr;
+    int target_cf = (start_cf + (tpr / 4) % tpr;
 
     // 3. Move the centrifuge
     pinMode(LEFTEN, OUTPUT);
