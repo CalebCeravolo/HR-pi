@@ -9,7 +9,7 @@
 #include <pthread.h>
 //#include <signal.h>
 #define LEFTEN 4 //we only move to the left (and only use the left pin)
-#define tpr 13 //ticks per revolution
+#define tpr 30 //ticks per revolution (30 slots, 6 degrees each)
 
 struct PWMinput {
     int pin;
