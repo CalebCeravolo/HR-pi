@@ -10,7 +10,7 @@
 //#include <signal.h>
 #define LEFTEN 4 //we only move to the left (and only use the left pin)
 #define tpr 30 //ticks per revolution
-//rotate by how many teeth - one tooth is 12 degrees
+//rotate by how many teeth - one tooth is 12 degrees, so we can do 84deg to get 90deg
 
 struct PWMinput {
     int pin;

@@ -25,6 +25,16 @@ int main(int argc, char *argv[]){
     wiringPiI2CWriteReg8(fd, COMMAND_REGISTER_BIT | 0x01, 0b00000000); 
 
     //-added-
+    //RGBC INTEGRATION TIME REGISTER
+    //0xFF 1 cycle (default)
+    //0xF6 10 cycles
+    //0xD6 42 cycles
+    //0xC0 64 cycles
+    //0x00 256 cycles
+    // Max Count = #cycles * 1024
+    wiringPiI2CWriteReg8(fd, COMMAND_REGISTER_BIT | 0x01, 0b11000000); // 0xC0 65335 max count, 64 cycles
+  
+    //-added-
     //sets the wait long time - when asserted, wait cycles are increased by a in 
     // factor 12x from that programmed the WTIME resgister
     // 0b00000010 = 0x02

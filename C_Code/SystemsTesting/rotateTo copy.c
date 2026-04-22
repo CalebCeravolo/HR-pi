@@ -15,27 +15,13 @@
 #define DATA_ADDR 5
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
-// Gets the encoder value
-void enc_dec(int *dir, int16_t *amount, float *degrees) {
-  uint32_t value = fpga_safetran(DATA_ADDR) & (0xFFFF);
-  *amount = value & 0xFFFF;
-  *dir = value & (1 << 17);
-  *degrees = (*amount * 360) / CPR;
-}
-int main(int argc, char *argv[]) {
-  signal(SIGINT, intHandler);
-  wiringPiSetupPinType(WPI_PIN_WPI);
-  int vals[argc - 1];
-  intparse(argc - 1, argv + 1, vals);
-  pinMode(left, OUTPUT);
-  pinMode(right, OUTPUT);
+int rotateTo(float target) {
   int dir;
-
   int16_t amount;
   float degrees;
   enc_dec(&dir, &amount, &degrees);
-  int16_t distance_remaining = fabsf((degrees) - (vals[0]));
-  if (degrees > vals[0]) {
+  int16_t distance_remaining = fabsf((degrees) - (target));
+  if (degrees > target) {
     digitalWrite(left, 0);
     digitalWrite(right, 1);
   } else {
@@ -51,14 +37,27 @@ int main(int argc, char *argv[]) {
     }
     usleep(10000);
     enc_dec(&dir, &amount, &degrees);
-    distance_remaining = fabsf((degrees) - (vals[0]));
+    distance_remaining = fabsf((degrees) - (target));
   }
   digitalWrite(left, 0);
   digitalWrite(right, 0);
-  printf("Target: %i\nActual: %f\n", vals[0], degrees);
+  printf("Target: %f\nActual: %f\n", target, degrees);
   return 0;
-  // uint32_t result = fpga_safetran(DATA_ADDR)&(0xFFFF);
-
-  // digitalWrite(LEFTEN, 1);
-  // sleep(5);
+}
+// Gets the encoder value
+void enc_dec(int *dir, int16_t *amount, float *degrees) {
+  uint32_t value = fpga_safetran(DATA_ADDR);
+  *amount = value & 0xFFFF;
+  *dir = value & (1 << 17);
+  *degrees = (*amount * 360.0) / CPR;
+}
+int main(int argc, char *argv[]) {
+  signal(SIGINT, intHandler);
+  wiringPiSetupPinType(WPI_PIN_WPI);
+  int vals[argc - 1];
+  intparse(argc - 1, argv + 1, vals);
+  pinMode(left, OUTPUT);
+  pinMode(right, OUTPUT);
+  rotateTo(vals[0]);
+  return 0;
 }
