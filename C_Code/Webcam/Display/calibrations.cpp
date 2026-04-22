@@ -40,7 +40,7 @@ std::vector<int> compute_column_average(const cv::Mat& frame) {
 }
 
 // Capture dark calibration
-std::vector<int> calibrate_dark(cv::VideoCapture& cap, int frames) {
+std::vector<int> calibrate(cv::VideoCapture& cap, int frames) {
     cv::Mat frame;
     std::vector<int> avg;
 

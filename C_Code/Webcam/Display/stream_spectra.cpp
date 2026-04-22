@@ -119,7 +119,8 @@ int main(int argc, char** argv) {
         std::vector<int> dark_profile = load_calibration("dark_calibration.csv");
         for (int ii=0; ii<width; ii++) {
             column_data[ii]/=height;
-            column_data[ii] -= 
+            column_data[ii] -= dark_profile[ii];
+            column_data[ii]+= 10;
         }
 
 
