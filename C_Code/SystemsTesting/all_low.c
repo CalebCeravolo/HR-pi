@@ -1,6 +1,7 @@
 // #include <stdio.h>
 #include <wiringPi.h>
 #include <stdint.h>
+#include "../pins.h"
 
 int not_in(int, int*, int);
 // General code file I use to generate all set all commands
