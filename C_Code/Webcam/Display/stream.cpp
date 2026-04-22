@@ -2,6 +2,8 @@
 // #include "/home/robot/HR-pi/C_Code/functions.h"
 // #include <vector>
 //g++ stream.cpp -o stream `pkg-config --cflags --libs opencv4`
+#define SCREEN_WIDTH 2880
+#define SCREEN_HEIGHT 1800
 int char_to_int(char * arg){
     float res = 0;
     uint8_t negative = *arg=='-';
@@ -34,12 +36,21 @@ int main(int argc, char** argv) {
     intparse(argc-1, argv+1, vals);
     cv::VideoCapture cap(argv[1], cv::CAP_V4L2);  // camera 
     
-    // cap.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('Y','U','Y','V'));
+    cap.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('Y','U','Y','V'));
     cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
     cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
     cap.set(cv::CAP_PROP_FPS, vals[1]);   // lower FPS if needed
-    // cap.set(cv::CAP_PROP_CONVERT_RGB, 0);
-    
+    cap.set(cv::CAP_PROP_CONVERT_RGB, 0);
+    const uint32_t width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+    const uint32_t height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+    cv::namedWindow("Frame", cv::WINDOW_NORMAL);
+    const float horiz_scale = (SCREEN_WIDTH/width);
+    const float vert_scale = (SCREEN_HEIGHT/height);
+    const float window_scailing = horiz_scale>vert_scale ? vert_scale : horiz_scale;
+    const uint32_t scaled_width = (uint32_t)(window_scailing*width);
+    const uint32_t scaled_height = (uint32_t)(window_scailing*height);
+    // printf("%i, %i, %i, %i\n", scaled_width, scaled_height, width, height);
+    cv::Mat resized_image(cv::Size(scaled_width, scaled_height),CV_8UC1);
     if (!cap.isOpened()) {
         std::cout << "Camera not opened\n";
         return -1;
@@ -49,8 +60,9 @@ int main(int argc, char** argv) {
         cv::Mat frame;
         cap >> frame;
         if(frame.empty()) break;
-        // cv::cvtColor(frame, frame, cv::COLOR_YUV2GRAY_YUYV);
-        cv::imshow("Frame", frame);
+        cv::cvtColor(frame, frame, cv::COLOR_YUV2GRAY_YUYV);
+        cv::resize(frame, resized_image, cv::Size(scaled_width, scaled_height));
+        cv::imshow("Frame", resized_image);
         if(cv::waitKey(1) == 'q')
             break;
     }
