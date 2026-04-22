@@ -3,6 +3,9 @@
 #include <fstream>
 #include <vector>
 
+#include <thread>
+#include <chrono>
+
 //To Compile:
 //g++ calibrations.cpp -o calib `pkg-config --cflags --libs opencv4`
 //To get calibration values:
@@ -93,19 +96,28 @@ int main(int argc, char** argv) {
     cap.set(cv::CAP_PROP_FPS, 5);
     cap.set(cv::CAP_PROP_CONVERT_RGB, 0);
 
+    //Dark cali
+
     std::cout << "Cover the lens for dark calibration...\n";
-    cv::waitKey(2000); // give time to cover lens
+    std::this_thread::sleep_for(std::chrono::seconds(10)); // give time to cover lens
 
     std::vector<int> dark = calibrate(cap, 10);
-
-    std::cout << "Expose the lens to light...\n";
-    cv::waitKey(2000); // give time to cover lens
-
-    std::vector<int> light = calibrate(cap, 10);
 
     save_calibration(dark, "dark_calibration.csv");
 
     std::cout << "Saved dark_calibration.csv\n";
+
+
+    //Light cali
+
+    std::cout << "Expose the lens to light...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(10)); // give time to cover lens
+
+    std::vector<int> light = calibrate(cap, 10);
+
+    save_calibration(light, "light_calibration.csv");
+
+    std::cout << "Saved light_calibration.csv\n";
 
     return 0;
 }

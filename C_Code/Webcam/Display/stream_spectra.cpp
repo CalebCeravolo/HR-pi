@@ -117,9 +117,16 @@ int main(int argc, char** argv) {
             }
         }
         std::vector<int> dark_profile = load_calibration("dark_calibration.csv");
+        std::vector<int> light_profile = load_calibration("light_calibration.csv");
         for (int ii=0; ii<width; ii++) {
+            //Avg sum of col values
             column_data[ii]/=height;
+            //Subtract out dark value form avg value
             column_data[ii] -= dark_profile[ii];
+            //Subtract out dark value from MAX value
+            light_profile[ii] -= dark_profile[ii];
+
+
             column_data[ii]+= 10;
         }
 
