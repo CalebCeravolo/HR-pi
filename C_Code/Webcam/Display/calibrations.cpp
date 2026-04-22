@@ -97,6 +97,10 @@ int main(int argc, char** argv) {
     cv::waitKey(2000); // give time to cover lens
 
     std::vector<int> dark = calibrate(cap, 10);
+
+    std::cout << "Expose the lens to light...\n";
+    cv::waitKey(2000); // give time to cover lens
+
     std::vector<int> light = calibrate(cap, 10);
 
     save_calibration(dark, "dark_calibration.csv");
