@@ -13,9 +13,20 @@ int main(int argc, char *argv[]){
         printf("Failed to init I2C communication.\n");
         return -1;
     }
+
     //enable 0b00000011 is another way of writing 0x03 = 3 with 0x meaning hex 
     wiringPiI2CWriteReg8(fd, COMMAND_REGISTER_BIT | 0x00, 0b00000011); 
 
+    //-added-
+    //RGBC INTEGRATION TIME REGISTER
+    //0xFF 1 cycle (default)
+    //0xF6 10 cycles
+    //0xD6 42 cycles
+    //0xC0 64 cycles
+    //0x00 256 cycles
+    // Max Count = #cycles * 1024
+    wiringPiI2CWriteReg8(fd, COMMAND_REGISTER_BIT | 0x01, 0b11000000); // 0xC0 65335 max count, 64 cycles
+  
     //-added-
     //sets the wait long time - when asserted, wait cycles are increased by a in 
     // factor 12x from that programmed the WTIME resgister
@@ -35,7 +46,7 @@ int main(int argc, char *argv[]){
     // 00       1            1              00         10 
     // 100%  reserved  dark_if_saturated  reserved  16x_gain
     wiringPiI2CWriteReg8(fd, COMMAND_REGISTER_BIT | 0x0F, 0b00110010); // gain control register
-    
+  
     int redb = wiringPiI2CReadReg8(fd,  COMMAND_REGISTER_BIT | MULTI_BYTE_BIT | 0x16);
     int greenb = wiringPiI2CReadReg8(fd,  COMMAND_REGISTER_BIT | MULTI_BYTE_BIT | 0x18);
     int blueb = wiringPiI2CReadReg8(fd,  COMMAND_REGISTER_BIT | MULTI_BYTE_BIT | 0x1a);
