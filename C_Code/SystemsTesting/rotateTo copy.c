@@ -9,13 +9,13 @@
 #include <stdint.h>
 #include <unistd.h>
 // #include <signal.h>
-#define left H1A_3
-#define right H1A_4
 #define CPR 663.0 / 6 // Counts per revolution
 #define DATA_ADDR 5
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
-int rotateTo(float target) {
+int rotateTo(float target, int left, int right) {
+  pinMode(left, OUTPUT);
+  pinMode(right, OUTPUT);
   int dir;
   int16_t amount;
   float degrees;
@@ -56,8 +56,6 @@ int main(int argc, char *argv[]) {
   wiringPiSetupPinType(WPI_PIN_WPI);
   int vals[argc - 1];
   intparse(argc - 1, argv + 1, vals);
-  pinMode(left, OUTPUT);
-  pinMode(right, OUTPUT);
-  rotateTo(vals[0]);
+  rotateTo(vals[0], H1A_3, H1A_4);
   return 0;
 }
