@@ -5,22 +5,27 @@
 #include <unistd.h>
 #include "../functions.h"
 //#include <signal.h>
-int main(int argc, char *argv[]) {
-    wiringPiSetupPinType(WPI_PIN_WPI);
-    int vals[argc-1];
-    intparse(argc-1, argv+1, vals);
-    for (int i=0; i<argc-1; i++){
-        int mode = getAlt(vals[i]);
-    
-    if (mode==1){
-        // printf("%i\n", !digitalRead(vals[0]));
-        digitalWrite(vals[i], !digitalRead(vals[i]));
-        // return 0;
+
+static void toggle_or_drive_high(int pin) {
+    int mode = getAlt(pin);
+    if (mode == 1) {
+        digitalWrite(pin, !digitalRead(pin));
     } else {
-        pinMode(vals[0], OUTPUT);
-        digitalWrite(vals[i], 1);
-        // return 0;
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, 1);
     }
+}
+
+static int run_toggle(int argc, char *argv[]) {
+    wiringPiSetupPinType(WPI_PIN_WPI);
+    int vals[argc - 1];
+    intparse(argc - 1, argv + 1, vals);
+    for (int i = 0; i < argc - 1; i++) {
+        toggle_or_drive_high(vals[i]);
     }
     return 0;
+}
+
+int main(int argc, char *argv[]) {
+    return run_toggle(argc, argv);
 }
