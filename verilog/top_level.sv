@@ -1,6 +1,6 @@
 
 module top_level #(parameter 
-    NUM_ENCODERS=3,
+    NUM_ENCODERS=4,
     NUM_GPIO=3,
     NUM_HALL=3
     )
@@ -16,44 +16,44 @@ module top_level #(parameter
             input logic [NUM_ENCODERS-1:0] ENCinA,
             input logic [NUM_ENCODERS-1:0] ENCinB,
             input logic [NUM_HALL-1:0] HallSensor,
-            output logic [NUM_GPIO-1:0] GPIO, 
-            input spectroClock,
-            input [9:0] spectroChannel0_DATA,
-            input [9:0] spectroChannel1_DATA,
-            input [9:0] spectroChannel2_DATA,
-            input [9:0] spectroChannel3_DATA,
-            input spectroChannel0_FIFO_EMPTY,
-            input spectroChannel1_FIFO_EMPTY,
-            input spectroChannel2_FIFO_EMPTY,
-            input spectroChannel3_FIFO_EMPTY,
-            output spectroChannel0_RST,
-            output spectroChannel1_RST,
-            output spectroChannel2_RST,
-            output spectroChannel3_RST,
-            output logic spectroChannel0_FIFO_RD,
-            output logic spectroChannel1_FIFO_RD,
-            output logic spectroChannel2_FIFO_RD,
-            output logic spectroChannel3_FIFO_RD,
-            output logic spectroChannel0_ENA,
-            output logic spectroChannel1_ENA,
-            output logic spectroChannel2_ENA,
-            output logic spectroChannel3_ENA,
-            // output logic spectroSlave,
-            output logic spectroClock_ENA
+            output logic [NUM_GPIO-1:0] GPIO
+            // ,input spectroClock,
+            // input [9:0] spectroChannel0_DATA,
+            // input [9:0] spectroChannel1_DATA,
+            // input [9:0] spectroChannel2_DATA,
+            // input [9:0] spectroChannel3_DATA,
+            // input spectroChannel0_FIFO_EMPTY,
+            // input spectroChannel1_FIFO_EMPTY,
+            // input spectroChannel2_FIFO_EMPTY,
+            // input spectroChannel3_FIFO_EMPTY,
+            // output spectroChannel0_RST,
+            // output spectroChannel1_RST,
+            // output spectroChannel2_RST,
+            // output spectroChannel3_RST,
+            // output logic spectroChannel0_FIFO_RD,
+            // output logic spectroChannel1_FIFO_RD,
+            // output logic spectroChannel2_FIFO_RD,
+            // output logic spectroChannel3_FIFO_RD,
+            // output logic spectroChannel0_ENA,
+            // output logic spectroChannel1_ENA,
+            // output logic spectroChannel2_ENA,
+            // output logic spectroChannel3_ENA,
+            // // output logic spectroSlave,
+            // output logic spectroClock_ENA
     );
     logic reset;
     assign reset=0;
-    assign {spectroChannel0_ENA, spectroChannel1_ENA,spectroChannel2_ENA,spectroChannel3_ENA, spectroClock_ENA} = 5'b11111;
+    // assign {spectroChannel0_ENA, spectroChannel1_ENA,spectroChannel2_ENA,spectroChannel3_ENA, spectroClock_ENA} = 5'b11111;
     logic [20:0] period;
-    localparam NUM_BINS = 640;
-    localparam BIN_WIDTH = 1280/NUM_BINS;
-    reg [19+BIN_WIDTH:0] pixelBins [NUM_BINS-1:0];
-    // Spectrometer control
-    spectro #(.NUM_BINS(NUM_BINS)) spc (.spectroChannel0_DATA, .spectroChannel0_ENA, .spectroChannel0_FIFO_EMPTY, .spectroChannel0_FIFO_RD,
-                .spectroChannel1_DATA, .spectroChannel1_ENA, .spectroChannel1_FIFO_EMPTY, .spectroChannel1_FIFO_RD,
-                .spectroChannel2_DATA, .spectroChannel2_ENA, .spectroChannel2_FIFO_EMPTY, .spectroChannel2_FIFO_RD,
-                .spectroChannel3_DATA, .spectroChannel3_ENA, .spectroChannel3_FIFO_EMPTY, .spectroChannel3_FIFO_RD,
-                .clk(spectroClock), .pixelBins);
+    // localparam NUM_BINS = 640;
+    // localparam BIN_WIDTH = 1280/NUM_BINS;
+    // reg [19+BIN_WIDTH:0] pixelBins [NUM_BINS-1:0];
+    // // Spectrometer control
+    // spectro #(.NUM_BINS(NUM_BINS)) spc (.spectroChannel0_DATA, .spectroChannel0_ENA, .spectroChannel0_FIFO_EMPTY, .spectroChannel0_FIFO_RD,
+    //             .spectroChannel1_DATA, .spectroChannel1_ENA, .spectroChannel1_FIFO_EMPTY, .spectroChannel1_FIFO_RD,
+    //             .spectroChannel2_DATA, .spectroChannel2_ENA, .spectroChannel2_FIFO_EMPTY, .spectroChannel2_FIFO_RD,
+    //             .spectroChannel3_DATA, .spectroChannel3_ENA, .spectroChannel3_FIFO_EMPTY, .spectroChannel3_FIFO_RD,
+    //             .clk(spectroClock), .pixelBins);
     // Button Inputs
     logic button1_ps, button2_ps;
     logic deb1, deb2;
@@ -142,10 +142,10 @@ module top_level #(parameter
         case (data_addr_reg)
             0: SPI_data_out = SPI_data_in; // Period of debug led
             1: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
-            2: SPI_data_out = pixelBins[binAddr];
-            3: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
-            4: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
-            5: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
+            2: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
+            3: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
+            4: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
+            5: SPI_data_out = {{enc_dir[3]},{enc_count[3]}};  // Encoder 2 data
             6: SPI_data_out = HallSensor;
             default: SPI_data_out = SPI_data_in;
         endcase
