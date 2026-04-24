@@ -47,6 +47,9 @@ int model, revision;
 	printf("Model ID - %d\n", model);
 	printf("Revision ID - %d\n", revision);
 
+	setMeasurementTimingBudget(200000);
+	printf("High Accuracy Enabled (200ms) \n");
+
 	for (i=0; i<1200; i++) // read values 20 times a second for 1 minute
 	{
 		iDistance = tofReadDistance();

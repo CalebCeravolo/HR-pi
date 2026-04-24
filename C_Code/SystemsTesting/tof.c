@@ -33,7 +33,7 @@ static void writeReg(unsigned char ucAddr, unsigned char ucValue);
 static void writeRegList(unsigned char *ucList);
 static int initSensor(int);
 static int performSingleRefCalibration(uint8_t vhv_init_byte);
-static int setMeasurementTimingBudget(uint32_t budget_us);
+int setMeasurementTimingBudget(uint32_t budget_us);
 
 #define calcMacroPeriod(vcsel_period_pclks) ((((uint32_t)2304 * (vcsel_period_pclks) * 1655) + 500) / 1000)
 // Encode VCSEL pulse period register value from period in PCLKs
@@ -548,7 +548,7 @@ static int setVcselPulsePeriod(vcselPeriodType type, uint8_t period_pclks)
 // factor of N decreases the range measurement standard deviation by a factor of
 // sqrt(N). Defaults to about 33 milliseconds; the minimum is 20 ms.
 // based on VL53L0X_set_measurement_timing_budget_micro_seconds()
-static int setMeasurementTimingBudget(uint32_t budget_us)
+int setMeasurementTimingBudget(uint32_t budget_us)
 {
 uint32_t used_budget_us;
 uint32_t final_range_timeout_us;

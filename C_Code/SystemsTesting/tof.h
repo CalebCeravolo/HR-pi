@@ -35,4 +35,6 @@ int tofReadDistance(void);
 //
 int tofInit(int iChan, int iAddr, int bLongRange);
 
+int setMeasurementTimingBudget(unsigned int budget_us);
+
 #endif // _TOFLIB_H
