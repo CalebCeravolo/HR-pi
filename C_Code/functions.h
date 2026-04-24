@@ -7,7 +7,7 @@
 #include <wiringPiSPI.h>
 
 // Function declarations
-
+void enc_dec(int16_t *amount, float *degrees);
 extern int char_to_int(char * arg);
 extern float char_to_float(char * arg);
 extern void print_bin(int len, int in);

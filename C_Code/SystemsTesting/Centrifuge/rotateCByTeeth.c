@@ -10,6 +10,7 @@
 //#include <signal.h>
 #define LEFTEN 4 //we only move to the left (and only use the left pin)
 #define tpr 30 //ticks per revolution
+#define channel 5
 //rotate by how many teeth - one tooth is 12 degrees, so we can do 84deg to get 90deg
 
 struct PWMinput {
@@ -42,14 +43,14 @@ void rotateByTeeth(int teeth) {
     pthread_t pwmProc;
     
     // 1. Get current position
-    int start_cf = (fpga_safetran(1)&(0xFFFF)) % tpr;
+    int start_cf = (fpga_safetran(channel)) % tpr;
     
     // 2. Calculate target position (current + how many teeth we want to move by)
     int target_cf = (start_cf + teeth) % tpr;
 
     // 3. Move the centrifuge
     pinMode(LEFTEN, OUTPUT);
-    period = 75;
+    period = 10;
     //period = vals[0];
     //(to make it manual)
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
@@ -58,7 +59,7 @@ void rotateByTeeth(int teeth) {
     // 4. Wait until the target position is reached
     uint32_t fpga_out;
     while(1) {
-        fpga_out = fpga_safetran(1) & 0xFFFF;
+        fpga_out = fpga_safetran(channel);
         if (fpga_out % tpr == target_cf) {
             break;
         }

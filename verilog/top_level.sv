@@ -15,6 +15,7 @@ module top_level #(parameter
             input CS, 
             input logic [NUM_ENCODERS-1:0] ENCinA,
             input logic [NUM_ENCODERS-1:0] ENCinB,
+            input centrifuge_absolute_i,
             input logic [NUM_HALL-1:0] HallSensor,
             output logic [NUM_GPIO-1:0] GPIO
             // ,input spectroClock,
@@ -111,7 +112,6 @@ module top_level #(parameter
             Reset Enc:
             3
 
-
             Read Hall:
             4
 
@@ -142,15 +142,22 @@ module top_level #(parameter
         case (data_addr_reg)
             0: SPI_data_out = SPI_data_in; // Period of debug led
             1: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
-            2: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
-            3: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
-            4: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
-            5: SPI_data_out = {{enc_dir[3]},{enc_count[3]}};  // Encoder 2 data
+            // 2: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
+            // 3: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
+            // 4: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
+            // 5: SPI_data_out = {{enc_dir[3]},{enc_count[3]}};  // Encoder 2 data
+            2: SPI_data_out = enc_count[0];  // Encoder 0 data
+            3: SPI_data_out = enc_count[1];  // Encoder 1 data
+            4: SPI_data_out = enc_count[2];  // Encoder 2 data
+            5: SPI_data_out = enc_count[3];  // Encoder 2 data
             6: SPI_data_out = HallSensor;
+            7: SPI_data_out = centrifuge_pwm_uptime;
             default: SPI_data_out = SPI_data_in;
         endcase
     end
     logic set_pwm_period, set_pwm_uptime, send_data, reset_enc, read_hall;
+    wire [9:0] centrifuge_pwm_uptime;
+    pwm_in centrifuge_encoder (.signal(centrifuge_absolute_i), .micro_clk(pwm1usCLK), .uptime(centrifuge_pwm_uptime));
     // Data decoding
     assign command = SPI_data_in[31:26];
 
@@ -196,7 +203,7 @@ module top_level #(parameter
 
     logic inA [NUM_ENCODERS-1:0], inB [NUM_ENCODERS-1:0], inZ [NUM_ENCODERS-1:0], trigZ [NUM_ENCODERS-1:0];
     logic enc_dir [NUM_ENCODERS-1:0];
-    localparam COUNT_BITS = 16;
+    localparam COUNT_BITS = 32;
     logic [COUNT_BITS-1:0] enc_count [NUM_ENCODERS-1:0];
     genvar i;
     generate
@@ -204,7 +211,7 @@ module top_level #(parameter
             level_trigger en_res (.in(trigZ[i]), .out(inZ[i]), .clk(GCLK), .reset);
             assign inA[i] = ENCinA[i];
             assign inB[i] = ENCinB[i];
-            encoder motorC (.inA(inA[i]), .inB(inB[i]), .inZ(inZ[i]), .clk(GCLK), .count(enc_count[i]), .direction(enc_dir[i]));
+            encoder #(.COUNT_BITS(COUNT_BITS)) motorC (.inA(inA[i]), .inB(inB[i]), .inZ(inZ[i]), .clk(GCLK), .count(enc_count[i]), .direction(enc_dir[i]));
         end
     endgenerate
 

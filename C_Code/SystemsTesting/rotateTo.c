@@ -16,13 +16,6 @@
 #define DATA_ADDR 5
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
-// Gets the encoder value
-void enc_dec(int *dir, int16_t *amount, float *degrees) {
-  uint32_t value = fpga_safetran(DATA_ADDR) & (0xFFFF);
-  *amount = value & 0xFFFF;
-  *dir = value & (1 << 17);
-  *degrees = (*amount * 360) / CPR;
-}
 
 static int rotate_to_target_degrees(int target_deg) {
   pinMode(left, OUTPUT);
@@ -31,7 +24,7 @@ static int rotate_to_target_degrees(int target_deg) {
   int16_t amount;
   float degrees;
 
-  enc_dec(&dir, &amount, &degrees);
+  enc_dec( &amount, &degrees, CPR);
   int16_t distance_remaining = fabsf(degrees - (float)target_deg);
   if (degrees > target_deg) {
     digitalWrite(left, 0);
@@ -48,7 +41,7 @@ static int rotate_to_target_degrees(int target_deg) {
       break;
     }
     usleep(10000);
-    enc_dec(&dir, &amount, &degrees);
+    enc_dec( &amount, &degrees);
     distance_remaining = fabsf(degrees - (float)target_deg);
   }
   digitalWrite(left, 0);

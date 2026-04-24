@@ -1,8 +1,8 @@
-module encoder (input inA, // First encoder pin
+module encoder #(parameter COUNT_BITS = 16)(input inA, // First encoder pin
                 input inB, // Second encoder pin
                 input inZ, // Extra output for zeroing 
                 input clk, // System clock
-                output logic [15:0] count,// Output data array
+                output logic [COUNT_BITS-1:0] count,// Output data array
                 output logic direction // current direction. 0 for A triggered first, 1 for B triggered first
                 );
     initial count = 0;
