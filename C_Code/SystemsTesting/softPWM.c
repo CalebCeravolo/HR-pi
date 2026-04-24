@@ -24,10 +24,10 @@ void* softPWM(void* input){
     }
 }
 
-int main(int argc, char *argv[]) {
+static int run_soft_pwm_cli(int argc, char *argv[]) {
     wiringPiSetupPinType(WPI_PIN_WPI);
-    int vals[argc-1];
-    intparse(argc-1, argv+1, vals);
+    int vals[argc - 1];
+    intparse(argc - 1, argv + 1, vals);
     int period = 0;
     struct PWMinput arguments;
     arguments.pin = vals[0];
@@ -37,15 +37,14 @@ int main(int argc, char *argv[]) {
     period = vals[1];
 
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
-    // while (period<100){
-    //     period+=1;
-    //     usleep(100000);
-    // }
-    usleep(1000*vals[2]);
+    usleep(1000 * vals[2]);
 
     pthread_cancel(pwmProc);
-    pthread_join(pwmProc, NULL); 
+    pthread_join(pwmProc, NULL);
     digitalWrite(vals[0], 0);
-    // pinMode(RIGHTEN, PM_OFF);
     return 0;
+}
+
+int main(int argc, char *argv[]) {
+    return run_soft_pwm_cli(argc, argv);
 }

@@ -45,18 +45,22 @@ int sdp_read(float *pressure_pa, float *temperature_c) {
     return 0;
 }
 
-int main() {
-    if (sdp_init() < 0)
-        return -1;
-
+static int run_pressure_reading(void) {
     float pressure, temperature;
 
     if (sdp_read(&pressure, &temperature) == 0) {
         printf("Pressure: %.4f Pa\n", pressure);
-    } else {
-        printf("Reading Error\n");
+        return 0;
     }
+    printf("Reading Error\n");
+    return -1;
+}
 
+int main(void) {
+    if (sdp_init() < 0)
+        return -1;
+
+    run_pressure_reading();
     close(fd);
     return 0;
 }

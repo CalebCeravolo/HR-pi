@@ -2,3 +2,4 @@ env
 .vscode/*
 verilog/*/*
 .lock
+.DS_Store

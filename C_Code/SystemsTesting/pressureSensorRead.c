@@ -4,11 +4,11 @@
 #include <unistd.h>
 #include <wiringPiI2C.h>
 
-#define SDP_ADDR 0x25 //CHANGE TO ADDR OF SENSOR!!
+#define SDP_ADDR 0x25 /* CHANGE TO ADDR OF SENSOR */
 
 int fd;
 
-int sdp_init() {
+int sdp_init(void) {
     fd = wiringPiI2CSetup(SDP_ADDR);
     if (fd < 0) {
         fprintf(stderr, "Failed to open I2C device\n");
@@ -19,12 +19,13 @@ int sdp_init() {
 
 int sdp_read(float *pressure_pa, float *temperature_c) {
     uint8_t cmd[2] = {0x36, 0x2F};
+    (void)temperature_c;
     if (write(fd, cmd, 2) != 2) {
         perror("Failed to send trigger command");
         return -1;
     }
 
-    usleep(50000); // 50ms
+    usleep(50000);
 
     uint8_t data[9];
     if (read(fd, data, 9) != 9) {
@@ -40,24 +41,27 @@ int sdp_read(float *pressure_pa, float *temperature_c) {
         return -1;
     }
 
-    *pressure_pa   = (float) pressure_raw / (float) scale_factor;
-    *temperature_c = (float) temp_raw / 200.0f;
-
+    *pressure_pa = (float)pressure_raw / (float)scale_factor;
     return 0;
 }
 
-int main() {
-    if (sdp_init() < 0)
-        return -1;
-
+static int run_pressure_reading(void) {
     float pressure, temperature;
 
     if (sdp_read(&pressure, &temperature) == 0) {
-        printf("Pressure: %.4f Pa  |  Temperature: %.2f C\n", pressure, temperature);
-    } else {
-        print("Reading Error");
+        printf("Pressure: %.4f Pa\n", pressure);
+        return 0;
+    }
+    printf("Reading Error\n");
+    return -1;
+}
+
+int main(void) {
+    if (sdp_init() < 0) {
+        return -1;
     }
 
+    run_pressure_reading();
     close(fd);
     return 0;
 }

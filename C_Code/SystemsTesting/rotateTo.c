@@ -1,4 +1,5 @@
 // #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
@@ -22,20 +23,17 @@ void enc_dec(int *dir, int16_t *amount, float *degrees) {
   *dir = value & (1 << 17);
   *degrees = (*amount * 360) / CPR;
 }
-int main(int argc, char *argv[]) {
-  signal(SIGINT, intHandler);
-  wiringPiSetupPinType(WPI_PIN_WPI);
-  int vals[argc - 1];
-  intparse(argc - 1, argv + 1, vals);
+
+static int rotate_to_target_degrees(int target_deg) {
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
   int dir;
-
   int16_t amount;
   float degrees;
+
   enc_dec(&dir, &amount, &degrees);
-  int16_t distance_remaining = fabsf((degrees) - (vals[0]));
-  if (degrees > vals[0]) {
+  int16_t distance_remaining = fabsf(degrees - (float)target_deg);
+  if (degrees > target_deg) {
     digitalWrite(left, 0);
     digitalWrite(right, 1);
   } else {
@@ -43,7 +41,7 @@ int main(int argc, char *argv[]) {
     digitalWrite(right, 0);
   }
 
-  while ((distance_remaining) > 5) {
+  while (distance_remaining > 5) {
     if (sigint) {
       digitalWrite(left, 0);
       digitalWrite(right, 0);
@@ -51,14 +49,18 @@ int main(int argc, char *argv[]) {
     }
     usleep(10000);
     enc_dec(&dir, &amount, &degrees);
-    distance_remaining = fabsf((degrees) - (vals[0]));
+    distance_remaining = fabsf(degrees - (float)target_deg);
   }
   digitalWrite(left, 0);
   digitalWrite(right, 0);
-  printf("Target: %i\nActual: %f\n", vals[0], degrees);
+  printf("Target: %i\nActual: %f\n", target_deg, degrees);
   return 0;
-  // uint32_t result = fpga_safetran(DATA_ADDR)&(0xFFFF);
+}
 
-  // digitalWrite(LEFTEN, 1);
-  // sleep(5);
+int main(int argc, char *argv[]) {
+  signal(SIGINT, intHandler);
+  wiringPiSetupPinType(WPI_PIN_WPI);
+  int vals[argc - 1];
+  intparse(argc - 1, argv + 1, vals);
+  return rotate_to_target_degrees(vals[0]);
 }

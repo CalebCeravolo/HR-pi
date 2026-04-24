@@ -50,7 +50,7 @@ void rotate90() {
     int start_cf = (fpga_safetran(1)&(0xFFFF)) % tpr;
     
     // 2. Calculate target position (current + 90 degrees)
-    int target_cf = (start_cf + (tpr / 4) % tpr;
+    int target_cf = (start_cf + (tpr / 4)) % tpr;
 
     // 3. Move the centrifuge
     pinMode(LEFTEN, OUTPUT);

@@ -25,24 +25,21 @@
 
 #include "tof.h" // time of flight sensor library
 
-int main(int argc, char *argv[])
-{
-int i;
-int iDistance;
-int model, revision;
+static int run_tof_test(void) {
+	int i;
+	int iDistance;
+	int model, revision;
 
-	// For Raspberry Pi's, the I2C channel is usually 1
-	// For other boards (e.g. OrangePi) it's 0
-	i = tofInit(1, 0x29, 0); // set long range mode (up to 2m)
-	if (i != 1)
-	{
-		return -1; // problem - quit
+	/* For Raspberry Pi's, the I2C channel is usually 1 */
+	i = tofInit(1, 0x29, 0);
+	if (i != 1) {
+		return -1;
 	}
-	
+
 	printf("VL53L0X device successfully opened.\n");
 	i = tofGetModel(&model, &revision);
 	if (i != 1) {
-		return -1; // problem - quit
+		return -1;
 	}
 	printf("Model ID - %d\n", model);
 	printf("Revision ID - %d\n", revision);
@@ -53,11 +50,18 @@ int model, revision;
 	for (i=0; i<1200; i++) // read values 20 times a second for 1 minute
 	{
 		iDistance = tofReadDistance();
-		if (iDistance < 4096) // valid range?
-		    printf("\033[1A\033[2K\r");
+		if (iDistance < 4096) {
+			printf("\033[1A\033[2K\r");
 			printf("Distance = %dmm\n", iDistance);
-		usleep(50000); // 50ms
+		}
+		usleep(50000);
 	}
 
-return 0;
-} /* main() */
+	return 0;
+}
+
+int main(int argc, char *argv[]) {
+	(void)argc;
+	(void)argv;
+	return run_tof_test();
+}

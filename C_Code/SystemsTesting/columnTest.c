@@ -7,26 +7,28 @@
 //#include <signal.h>
 #define LEFTEN 4//4
 #define RIGHTEN 5//5
-int main(int argc, char *argv[]) {
+
+static void run_column_test(int argc, char *argv[]) {
     wiringPiSetupPinType(WPI_PIN_WPI);
-    int vals[argc-1];
-    intparse(argc-1, argv+1, vals);
+    int vals[argc - 1];
+    intparse(argc - 1, argv + 1, vals);
     pinMode(LEFTEN, OUTPUT);
     pinMode(RIGHTEN, OUTPUT);
-    if (vals[0]==1){
+    if (vals[0] == 1) {
         digitalWrite(RIGHTEN, 0);
         digitalWrite(LEFTEN, 1);
     } else {
         digitalWrite(LEFTEN, 0);
         digitalWrite(RIGHTEN, 1);
     }
-    if (argc>1){
-        
+    if (argc > 1) {
     }
     sleep(1);
-    // digitalWrite(RIGHTEN, 0);
-    // digitalWrite(LEFTEN, 1);
-    // sleep(5);
     pinMode(LEFTEN, PM_OFF);
     pinMode(RIGHTEN, PM_OFF);
+}
+
+int main(int argc, char *argv[]) {
+    run_column_test(argc, argv);
+    return 0;
 }
