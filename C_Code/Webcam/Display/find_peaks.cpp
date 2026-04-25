@@ -118,8 +118,8 @@ int main(int argc, char** argv) {
     std::cout << "Saved calibration.csv\n";
 
     // find peaks
-    vector<double> values = readCSV("calibration.csv");
-    vector<int> peaks = findPeaks(values);
+    std::vector<double> values = readCSV("calibration.csv");
+    std::vector<int> peaks = findPeaks(values);
 
     return 0;
 }
