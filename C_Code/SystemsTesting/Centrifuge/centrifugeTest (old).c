@@ -3,16 +3,13 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-#include "../../functions.h"
+#include "../functions.h"
 #include <time.h>
 #include <sys/time.h>
 #include <pthread.h>
 //#include <signal.h>
-#define LEFTEN 4 //we only move to the left (and only use the left pin)
-#define tpr 30 //ticks per revolution
-#define channel 5
-//rotate by how many teeth - one tooth is 12 degrees, so we can do 84deg to get 90deg
-
+#define LEFTEN 4//4
+#define RIGHTEN 5//5
 struct PWMinput {
     int pin;
     int* period;
@@ -34,49 +31,34 @@ void* softPWM(void* input){
         usleep((100-*(args->period))*100);
     }
 }
-
-void rotateByTeeth(int teeth) {
+int main(int argc, char *argv[]) {
+    wiringPiSetupPinType(WPI_PIN_WPI);
+    int vals[argc-1];
+    intparse(argc-1, argv+1, vals);
     int period = 0;
     struct PWMinput arguments;
     arguments.pin = LEFTEN;
     arguments.period = &period;
     pthread_t pwmProc;
-    
-    // 1. Get current position
-    int start_cf = (fpga_safetran(channel)) % tpr;
-    
-    // 2. Calculate target position (current + how many teeth we want to move by)
-    int target_cf = (start_cf + teeth) % tpr;
-
-    // 3. Move the centrifuge
     pinMode(LEFTEN, OUTPUT);
-    period = 10;
-    //period = vals[0];
-    //(to make it manual)
+    pinMode(RIGHTEN, OUTPUT);
+    digitalWrite(RIGHTEN, 0);
+    period = 100;
     pthread_create(&pwmProc, NULL, softPWM, &arguments);
-    sleep(5);
-    
-    // 4. Wait until the target position is reached
     uint32_t fpga_out;
-    while(1) {
-        fpga_out = fpga_safetran(channel);
-        if (fpga_out % tpr == target_cf) {
+    sleep(5);
+    period = vals[0];
+    sleep(3);
+    while(1){
+        fpga_out = fpga_safetran(1)&(0xFFFF);
+        if (fpga_out%13==5){
             break;
         }
     }
     pthread_cancel(pwmProc);
     pthread_join(pwmProc, NULL);  
-    digitalWrite(LEFTEN, 0);
-}
-
-int main(int argc, char *argv[]) {
-    wiringPiSetupPinType(WPI_PIN_WPI);
-    int vals[argc-1];
-    intparse(argc-1, argv+1, vals);
-
-    int teeth = vals[0];
-
-    rotateByTeeth(teeth);
-    return 0;
+    // pinMode(RIGHTEN, OUTPUT);
+    pinMode(LEFTEN, PM_OFF);
+    pinMode(RIGHTEN, PM_OFF);
 }
 
