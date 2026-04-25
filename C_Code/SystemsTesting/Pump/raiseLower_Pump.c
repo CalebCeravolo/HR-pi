@@ -11,46 +11,44 @@ static int sigint = 0;
 static void intHandler(int dummy) { sigint = 1; }
 
 #define HALL_CHANNEL ENC_RAISE_LOWER
+#define HALL_BIT 0 // Adjust this to the correct bit index if necessary
+#define RAISED 1   // Target bit state when the pump is fully raised
+#define LOWERED 0  // Target bit state when the pump is fully lowered
 
-void pump(int distance) {
-  if (distance == 0)
+int get_fpga_bit(int channel, int bit) {
+  uint32_t data = fpga_safetran(channel);
+  return (data >> bit) & 1;
+}
+
+void pump(int should_raise) {
+  int active_pin = should_raise ? RAISE : LOWER;
+
+  // The target state corresponds to the defined RAISED and LOWERED states
+  // Change the defines at the top of the file if the bit mapping is inverted
+  int target_state = should_raise ? RAISED : LOWERED;
+
+  // If we're already at the target state, don't do anything to prevent grinding
+  if (get_fpga_bit(HALL_CHANNEL, HALL_BIT) == target_state) {
     return;
-
-  // Use RAISE pin if distance is positive, LOWER if negative
-  int active_pin = (distance > 0) ? RAISE : LOWER;
-  int target_distance = abs(distance);
-
-  // Get initial position
-  uint32_t start_pos = fpga_safetran(HALL_CHANNEL);
+  }
 
   pinMode(RAISE, OUTPUT);
   pinMode(LOWER, OUTPUT);
 
-  // Ensure both are off before starting
   digitalWrite(RAISE, 0);
   digitalWrite(LOWER, 0);
 
-  // Turn on the desired direction
   digitalWrite(active_pin, 1);
 
-  uint32_t current_pos = fpga_safetran(HALL_CHANNEL);
-  int distance_traveled = abs((int)(current_pos - start_pos));
-  int distance_remaining = target_distance - distance_traveled;
-
-  while (distance_remaining > 5) {
+  while (get_fpga_bit(HALL_CHANNEL, HALL_BIT) != target_state) {
     if (sigint) {
-      digitalWrite(RAISE, 0);
-      digitalWrite(LOWER, 0);
       break;
     }
     usleep(10000);
-    current_pos = fpga_safetran(HALL_CHANNEL);
-    distance_traveled = abs((int)(current_pos - start_pos));
-    distance_remaining = target_distance - distance_traveled;
   }
 
-  // Stop the motor
-  digitalWrite(active_pin, 0);
+  digitalWrite(RAISE, 0);
+  digitalWrite(LOWER, 0);
 }
 
 int main(int argc, char *argv[]) {
