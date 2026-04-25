@@ -9,8 +9,7 @@ int main(int argc, char *argv[]) {
     int vals[argc-1];
     intparse(argc-1, argv+1, vals);
     uint32_t result=fpga_safetran(*vals);
-    int16_t pos = result&(0xFFFF);
-    printf("%i, %d\n", pos, (result<<16)&(0xF));
+    printf("%i\n", result);
 
     // print_bin(32,result);
 }

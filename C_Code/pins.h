@@ -30,4 +30,17 @@
 #define LOWER H18A_3_1
 #define RAISE H18A_3_2
 
+#define SDA 8
+#define SCL 9
+#define MOSI 12
+#define MISO 13
+#define SCLK 14
+#define CE 10
+#define ONEWIRE 7
+
+#define ENC_CENTRIFUGE_INC 2
+#define ENC_CENTRIFUGE_ABS 6
+#define ENC_RAISE_LOWER 3
+#define ENC_COLUMN_ROTATE 4
+
 

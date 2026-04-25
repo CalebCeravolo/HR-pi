@@ -24,7 +24,7 @@ static int rotate_to_target_degrees(int target_deg) {
   int16_t amount;
   float degrees;
 
-  enc_dec( &amount, &degrees, CPR);
+  enc_dec( &amount, &degrees);
   int16_t distance_remaining = fabsf(degrees - (float)target_deg);
   if (degrees > target_deg) {
     digitalWrite(left, 0);

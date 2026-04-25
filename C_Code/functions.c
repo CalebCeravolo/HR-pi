@@ -24,13 +24,7 @@
         printf("\n");
     }
 #endif
-// Gets the encoder value
-void enc_dec(int16_t *amount, float *degrees, int cpr) {
-    *amount = fpga_safetran(DATA_ADDR);
-//   value;
-//   *dir = value & (1 << 17);
-    *degrees = (*amount * 360.0) / cpr;
-}
+
 /*
 Mostly a debug function. Used to print out a list
 */

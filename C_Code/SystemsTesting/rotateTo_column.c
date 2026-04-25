@@ -10,17 +10,26 @@
 #include <unistd.h>
 // #include <signal.h>
 #define CPR 663.0 / 6 // Counts per revolution
-#define DATA_ADDR 5
+#define DATA_ADDR ENC_COLUMN_ROTATE
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
+
+// Gets the encoder value
+void enc_dec(int32_t *amount, float *degrees) {
+    *amount = fpga_safetran(DATA_ADDR);
+//   value;
+//   *dir = value & (1 << 17);
+    *degrees = (*amount * 360.0) / CPR;
+}
+
 int rotateTo(float target, int left, int right) {
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
   // int dir;
-  int16_t amount;
+  int32_t amount;
   float degrees;
-  enc_dec(&amount, &degrees,CPR);
-  int16_t distance_remaining = fabsf((degrees) - (target));
+  enc_dec(&amount, &degrees);
+  float distance_remaining = fabsf((degrees) - (target));
   if (degrees > target) {
     digitalWrite(left, 0);
     digitalWrite(right, 1);
@@ -36,7 +45,7 @@ int rotateTo(float target, int left, int right) {
       break;
     }
     usleep(10000);
-    enc_dec( &amount, &degrees);
+    enc_dec(&amount, &degrees);
     distance_remaining = fabsf((degrees) - (target));
   }
   digitalWrite(left, 0);
