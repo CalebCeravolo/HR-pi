@@ -1,4 +1,4 @@
-all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column tofTest
+all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest
 
 getD: functions.c pins.h FPGAtesting/Get_data.c
 	gcc FPGAtesting/Get_data.c functions.c -lwiringPi -o ../Executables/getD
@@ -22,3 +22,5 @@ raise_lower_column: functions.c pins.h SystemsTesting/Column/raise_lower_column.
 	gcc SystemsTesting/Column/raise_lower_column.c functions.c -lwiringPi -o ../Executables/raise_lower_column
 tofTest: functions.c pins.h SystemsTesting/tof.c SystemsTesting/tofTest.c
 	gcc SystemsTesting/tofTest.c SystemsTesting/tof.c functions.c -lwiringPi -o ../Executables/tofTest
+raise_lower_pump: functions.c pins.h SystemsTesting/Pump/raiseLower_Pump.c
+	gcc SystemsTesting/Pump/raiseLower_Pump.c functions.c -lwiringPi -o ../Executables/raise_lower_pump

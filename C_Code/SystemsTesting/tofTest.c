@@ -28,6 +28,8 @@
 
 static int init (void) {
 	int i;
+	int model;
+	int revision;
 	i = tofInit(1, 0x29, 0);
 	if (i != 1) {
 		return -1;
@@ -50,6 +52,7 @@ static int init (void) {
 
 
 static int run_tof_test(void) {
+	int iDistance;
 	for (int i=0; i<1200; i++) // read values 20 times a second for 1 minute
 	{
 		iDistance = tofReadDistance();
