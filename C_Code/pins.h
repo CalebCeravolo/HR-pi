@@ -13,6 +13,7 @@
 // Fluids Pump
 #define H1A_1 5  // Out
 #define H1A_2 4  // In
+
 // Spin
 #define H1A_3 1  //
 #define H1A_4 16
@@ -38,6 +39,7 @@
 #define CE 10
 #define ONEWIRE 7
 
+// Encoder channels
 #define ENC_CENTRIFUGE_INC 2
 #define ENC_CENTRIFUGE_ABS 6
 #define ENC_RAISE_LOWER 3
