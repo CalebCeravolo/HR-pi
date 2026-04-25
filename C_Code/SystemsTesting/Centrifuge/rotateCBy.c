@@ -45,7 +45,7 @@ void rotateBy(int degrees) {
   int start_cf = (fpga_safetran(ENC_CENTRIFUGE_ABS));
 
   // 2. Calculate target position (current + how many teeth we want to move by)
-  int target_cf = (start_cf + degrees / 360 * tpr);
+  int target_cf = (start_cf + (degrees * tpr / 360.0));
 
   // 3. Move the centrifuge
   pinMode(LEFTEN, OUTPUT);
@@ -57,11 +57,15 @@ void rotateBy(int degrees) {
 
   // 4. Wait until the target position is reached
   uint32_t fpga_out;
-  while (1) {
-    fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
-    if (fpga_out == target_cf) {
+  fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
+  float distance_remaining = target_cf - fpga_out;
+  while (distance_remaining > 5) {
+    if (sigint) {
+      digitalWrite(LEFTEN, 0);
       break;
     }
+    fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
+    distance_remaining = target_cf - fpga_out;
   }
   pthread_cancel(pwmProc);
   pthread_join(pwmProc, NULL);
