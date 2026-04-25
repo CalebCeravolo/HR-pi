@@ -45,4 +45,6 @@
 #define ENC_RAISE_LOWER 3
 #define ENC_COLUMN_ROTATE 4
 
+#define HALL_CHANNEL 6
+
 
