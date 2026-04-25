@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
     std::cout << "Saved calibration.csv\n";
 
     // find peaks
-    std::vector<double> values = readCSV("calibration.csv")
+    vector<double> values = readCSV("calibration.csv");
     vector<int> peaks = findPeaks(values);
 
     return 0;
@@ -134,14 +134,6 @@ std::vector<double> readCSV(string filename) {
     }
 
     std::string line;
-    // getline(file, line);
-    // stringstream ss(line);
-    // string cell;
-
-    // while (getline(ss, cell, ",")) {
-    //     // convert each value from the CSV file from a string to a double
-    //     values.push_back(stod(cell));
-    // }
 
     if (std::getline(file, line)) {
         std::stringstream ss(line);
@@ -156,8 +148,8 @@ std::vector<double> readCSV(string filename) {
     return values;
 }
 
-vector<int> findPeaks(vector<double> values) {
-    vector<int> peaks;
+std::vector<int> findPeaks(vector<double> values) {
+    std::vector<int> peaks;
     for (int i = 1; i < values.size() - 1; i++) {
         if (values[i] > values[i - 1] && values[i] > values[i + 1]) {
             peaks.push_back(i);
