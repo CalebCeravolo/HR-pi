@@ -1,13 +1,16 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 #include <thread>
 #include <chrono>
+using namespace std;
 
 //To Compile:
-//g++ calibrations.cpp -o calib `pkg-config --cflags --libs opencv4`
+//g++ find_peaks.cpp -o calib `pkg-config --cflags --libs opencv4`
+
 //To get calibration values:
 //./calib /dev/video0
 
@@ -75,7 +78,6 @@ std::vector<int> calibrate(cv::VideoCapture& cap, int frames) {
 
 int main(int argc, char** argv) {
     // Allow camera path like your main file (e.g. /dev/video0)
-    // For fluorescent light use input video20 (/dev/video20)
     const char* device = (argc > 1) ? argv[1] : "0";
 
     // 
@@ -107,40 +109,60 @@ int main(int argc, char** argv) {
     std::cout << "Cover the lens for dark calibration...\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
+    // dark actually means data
     std::vector<int> dark = calibrate(cap, 10);
 
     // saves calibration data to different file name depending on camera input
-    save_calibration(dark, "dark_calibration" + arg1 + ".csv");
+    save_calibration(dark, "calibration.csv");
 
-    std::cout << "Saved dark_calibration.csv\n";
+    std::cout << "Saved calibration.csv\n";
 
-    //Light cali
+    // find peaks
+    std::vector<double> values = readCSV("calibration.csv")
+    vector<int> peaks = findPeaks(values);
 
-    std::cout << "Expose the lens to light...\n";
-    std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
-
-    std::vector<int> light = calibrate(cap, 10);
-
-    save_calibration(light, "light_calibration" + arg1 + ".csv");
-
-    std::cout << "Saved light_calibration.csv\n";
-    
     return 0;
 }
 
 
+std::vector<double> readCSV(string filename) {
+    std::vector<double> values;
+    std::ifstream file(filename);
 
-// 
-// int avg_fluorescent(int argc, char** argv) {
+    if (!file.is_open()) {
+        return values;
+    }
 
-//     const char* device = (argc > 1) ? argv[1] : "0";
-//     cv::VideoCapture cap;
+    std::string line;
+    // getline(file, line);
+    // stringstream ss(line);
+    // string cell;
 
-//     if (!cap.isOpened()) {
-//         std::cerr << "Camera not opened\n";
-//         return -1;
-//     }
+    // while (getline(ss, cell, ",")) {
+    //     // convert each value from the CSV file from a string to a double
+    //     values.push_back(stod(cell));
+    // }
 
-//     int width = <int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));
-//     int height = <int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT));    
-// }
+    if (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std:string value;
+
+        while(std::getline(ss, value, ',')) {
+            // convert to double
+            values.push_back(std::stod(value));
+        }
+    }
+
+    return values;
+}
+
+vector<int> findPeaks(vector<double> values) {
+    vector<int> peaks;
+    for (int i = 1; i < values.size() - 1; i++) {
+        if (values[i] > values[i - 1] && values[i] > values[i + 1]) {
+            peaks.push_back(i);
+        }
+    }
+    return peaks;
+}
+

@@ -36,6 +36,8 @@ int aht_init(void) {
         perror("Failed to read status byte");
         return -1;
     }
+    
+    printf("Init status: 0x%02x\n", status);
 
     if ((status & AHT_STATUS_CAL_MASK) != AHT_STATUS_CAL_MASK) {
         // The datasheet says to write init registers 0x1B, 0x1C, 0x1E here
