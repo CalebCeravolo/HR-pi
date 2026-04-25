@@ -20,3 +20,5 @@ rotateTo_column: functions.c pins.h SystemsTesting/rotateTo_column.c
 	gcc SystemsTesting/rotateTo_column.c functions.c -lwiringPi -o ../Executables/rotateTo_column
 raise_lower_column: functions.c pins.h SystemsTesting/Column/raise_lower_column.c
 	gcc SystemsTesting/Column/raise_lower_column.c functions.c -lwiringPi -o ../Executables/raise_lower_column
+raise_lower_pump: functions.c pins.h SystemsTesting/Pump/raiseLower_Pump.c
+	gcc SystemsTesting/Pump/raiseLower_Pump.c functions.c -lwiringPi -o ../Executables/raise_lower_pump
