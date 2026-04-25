@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#define OFFSET 19
+#define OFFSET -44
 
 #include "tof.h" // time of flight sensor library
 
@@ -49,13 +49,11 @@ static int init (void) {
 	return i;
 }
 
-
-
 static int run_tof_test(void) {
 	int iDistance;
 	for (int i=0; i<1200; i++) // read values 20 times a second for 1 minute
 	{
-		iDistance = tofReadDistance();
+		iDistance = tofReadDistance() + OFFSET;
 		if (iDistance < 4096) {
 			printf("\033[1A\033[2K\r");
 			printf("Distance = %dmm\n", iDistance);
@@ -88,6 +86,6 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 	init();
-	calibrateOffset(70, 50);
-	return run_tof_test();
+	return calibrateOffset(138, 30);
+	//return run_tof_test();
 }
