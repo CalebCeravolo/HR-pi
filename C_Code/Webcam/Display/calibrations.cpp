@@ -139,5 +139,5 @@ int avg_fluorescent(int argc, char** argv) {
     }
 
     int width = <int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));
-    int height = <int>(cap.get(cv::))    
+    int height = <int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT));    
 }
