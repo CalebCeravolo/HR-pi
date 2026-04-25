@@ -13,8 +13,8 @@
 #include <string>
 #include <iostream>
 
-std::vector<int> load_calibration(const std::string& filename) {
-    std::vector<int> data;
+std::vector<float> load_calibration(const std::string& filename) {
+    std::vector<float> data;
     std::ifstream file(filename);
 
     if (!file.is_open()) {
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
     cv::Mat frame;
     const uint32_t width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
     const uint32_t height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-    std::vector<int> column_data(width, 0);
+    std::vector<float> column_data(width, 0);
     uint8_t* row;
     int scale = 1;
     int plot_h = 540;
@@ -99,6 +99,13 @@ int main(int argc, char** argv) {
     const uint32_t scaled_height = (uint32_t)(window_scailing*height);
     printf("%i, %i, %i, %i\n", scaled_width, scaled_height, width, height);
     cv::Mat resized_image(cv::Size(scaled_width, scaled_height),CV_8UC1);
+    std::vector<float> dark_profile = load_calibration("dark_calibration.csv");
+    std::vector<float> light_profile = load_calibration("light_calibration.csv");
+    //Subtract out dark value from MAX value
+    for (int kk=0; kk<width; kk++) {
+        light_profile[kk] -= dark_profile[kk];
+    }
+
     while(true) {
         
         cap >> frame;
@@ -116,18 +123,20 @@ int main(int argc, char** argv) {
                 
             }
         }
-        std::vector<int> dark_profile = load_calibration("dark_calibration.csv");
-        std::vector<int> light_profile = load_calibration("light_calibration.csv");
+        
         for (int ii=0; ii<width; ii++) {
             //Avg sum of col values
+            // float signal = column[ii];
             column_data[ii]/=height;
             //Subtract out dark value form avg value
             column_data[ii] -= dark_profile[ii];
-            //Subtract out dark value from MAX value
-            light_profile[ii] -= dark_profile[ii];
-
-
-            column_data[ii]+= 10;
+            
+            
+            //Find avg / MAX fraction
+            column_data[ii] /= light_profile[ii];
+            column_data[ii] *= 100;
+            //offset
+            column_data[ii]+= 30;
         }
 
 

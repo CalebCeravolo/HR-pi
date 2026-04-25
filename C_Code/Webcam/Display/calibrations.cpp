@@ -71,11 +71,17 @@ std::vector<int> calibrate(cv::VideoCapture& cap, int frames) {
     return avg;
 }
 
+
+
 int main(int argc, char** argv) {
     // Allow camera path like your main file (e.g. /dev/video0)
+    // For fluorescent light use input video20 (/dev/video20)
     const char* device = (argc > 1) ? argv[1] : "0";
 
-    cv::VideoCapture cap;
+    // 
+    std::string arg1 = argv[1];
+
+    cv::VideoCapture cap; 
 
     // Handle numeric vs string device
     if (std::isdigit(device[0])) {
@@ -99,25 +105,39 @@ int main(int argc, char** argv) {
     //Dark cali
 
     std::cout << "Cover the lens for dark calibration...\n";
-    std::this_thread::sleep_for(std::chrono::seconds(10)); // give time to cover lens
+    std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
     std::vector<int> dark = calibrate(cap, 10);
 
-    save_calibration(dark, "dark_calibration.csv");
+    // saves calibration data to different file name depending on camera input
+    save_calibration(dark, "dark_calibration" + arg1 + ".csv");
 
     std::cout << "Saved dark_calibration.csv\n";
-
 
     //Light cali
 
     std::cout << "Expose the lens to light...\n";
-    std::this_thread::sleep_for(std::chrono::seconds(10)); // give time to cover lens
+    std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
     std::vector<int> light = calibrate(cap, 10);
 
-    save_calibration(light, "light_calibration.csv");
+    save_calibration(light, "light_calibration" + arg1 + ".csv");
 
     std::cout << "Saved light_calibration.csv\n";
 
     return 0;
+}
+
+int avg_fluorescent(int argc, char** argv) {
+
+    const char* device = (argc > 1) ? argv[1] : "0";
+    cv::VideoCapture cap;
+
+    if (!cap.isOpened()) {
+        std::cerr << "Camera not opened\n";
+        return -1;
+    }
+
+    int width = <int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));
+    int height = <int>(cap.get(cv::))    
 }
