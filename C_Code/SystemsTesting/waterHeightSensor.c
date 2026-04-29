@@ -78,7 +78,7 @@ static int16_t ads1015_read(int fd, int channel) {
 
     if (timeout == 0) return -32768;
 
-    // Read 16-bit conversion register; result is left-aligned, shift right 4
+    // Read 16-bit conversion register, result is left-aligned, shift right 4
     int16_t raw = (int16_t)bswap16((uint16_t)wiringPiI2CReadReg16(fd, REG_CONVERSION));
     raw >>= 4;
     return raw;

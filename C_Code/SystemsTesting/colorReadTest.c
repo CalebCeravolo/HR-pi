@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
         printf("Failed to init I2C communication.\n");
         return -1;
     }
-    //enable 0b00000011 is another way of writing 0x03 = 3 with 0x meaning hex 
+    // enable 0b00000011 is another way of writing 0x03 = 3 with 0x meaning hex 
     // 0x80 enables register, 0x03 enables AEN and PON (power on)
     wiringPiI2CWriteReg8(fd, 0x80, 0b00000011); 
 
