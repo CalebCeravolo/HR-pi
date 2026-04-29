@@ -4,11 +4,11 @@
 #include <unistd.h>
 #include <wiringPiI2C.h>
 
-#define SDP_ADDR 0x25 //CHANGE TO ADDR OF SENSOR!!
+#define SDP_ADDR 0x25 /* CHANGE TO ADDR OF SENSOR */
 
 int fd;
 
-int sdp_init() {
+int sdp_init(void) {
     fd = wiringPiI2CSetup(SDP_ADDR);
     if (fd < 0) {
         fprintf(stderr, "Failed to open I2C device\n");
@@ -19,12 +19,13 @@ int sdp_init() {
 
 int sdp_read(float *pressure_pa, float *temperature_c) {
     uint8_t cmd[2] = {0x36, 0x2F};
+    (void)temperature_c;
     if (write(fd, cmd, 2) != 2) {
         perror("Failed to send trigger command");
         return -1;
     }
 
-    usleep(50000); // 50ms
+    usleep(50000);
 
     uint8_t data[9];
     if (read(fd, data, 9) != 9) {
@@ -40,8 +41,7 @@ int sdp_read(float *pressure_pa, float *temperature_c) {
         return -1;
     }
 
-    *pressure_pa = (float) pressure_raw / (float) scale_factor;
-
+    *pressure_pa = (float)pressure_raw / (float)scale_factor;
     return 0;
 }
 
@@ -57,8 +57,9 @@ static int run_pressure_reading(void) {
 }
 
 int main(void) {
-    if (sdp_init() < 0)
+    if (sdp_init() < 0) {
         return -1;
+    }
 
     run_pressure_reading();
     close(fd);

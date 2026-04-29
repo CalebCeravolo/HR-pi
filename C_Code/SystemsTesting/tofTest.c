@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#define OFFSET -44
+#define OFFSET -18
 
 #include "tof.h" // time of flight sensor library
 
@@ -86,6 +86,6 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 	init();
-	return calibrateOffset(138, 30);
-	//return run_tof_test();
+	//return calibrateOffset(138, 30);
+	return run_tof_test();
 }
