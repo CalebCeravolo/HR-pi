@@ -26,6 +26,7 @@ void *softPWM(void *input) {
   // int period = *((int *)input); // 1-100
   struct PWMinput *args = (struct PWMinput *)input;
   printf("Period: %i pin: %i\n", *(args->period), args->pin);
+  printf("working");
   while (1) {
     digitalWrite(args->pin, 1);
     usleep(*(args->period) * 100);
