@@ -9,7 +9,7 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 // #include <signal.h>
-#define LEFTEN 4 // we only move to the left (and only use the left pin)
+#define LEFTEN CENTRIFUGE_PIN // we only move to the left (and only use the left pin)
 #define tpr 1018.0
 
 struct PWMinput {
@@ -60,10 +60,10 @@ void rotateBy(int degrees) {
   fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
   float distance_remaining = target_cf - fpga_out;
   while (distance_remaining > 5) {
-    if (sigint) {
+    // if (sigint) {
       digitalWrite(LEFTEN, 0);
       break;
-    }
+    // }
     fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
     distance_remaining = target_cf - fpga_out;
   }

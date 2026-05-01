@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
     wiringPiI2CWriteReg8(fd, 0x80, 0b00000011); 
 
     //0x81: integration time.
-    wirintPiI2CWriteReg8(fd, 0x81, 0b00000000);
+    wiringPiI2CWriteReg8(fd, 0x81, 0b00000000);
 
     //-added-
     //sets the wait long time - when asserted, wait cycles are increased by a in 

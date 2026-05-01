@@ -10,7 +10,7 @@
 static int sigint = 0;
 static void intHandler(int dummy) { sigint = 1; }
 
-#define HALL_CHANNEL ENC_RAISE_LOWER
+// #define HALL_CHANNEL ENC_RAISE_LOWER
 #define HALL_BIT 0 // Adjust this to the correct bit index if necessary
 #define RAISED 1   // Target bit state when the pump is fully raised
 #define LOWERED 0  // Target bit state when the pump is fully lowered

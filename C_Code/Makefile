@@ -16,8 +16,8 @@ colorRead: functions.c pins.h SystemsTesting/colorRead.c
 	gcc SystemsTesting/colorRead.c functions.c -lwiringPi -o ../Executables/colorRead
 rotateCBy: functions.c pins.h SystemsTesting/Centrifuge/rotateCBy.c
 	gcc SystemsTesting/Centrifuge/rotateCBy.c functions.c -lwiringPi -o ../Executables/rotateCBy
-rotateTo_column: functions.c pins.h SystemsTesting/rotateTo_column.c
-	gcc SystemsTesting/rotateTo_column.c functions.c -lwiringPi -o ../Executables/rotateTo_column
+rotateTo_column: functions.c pins.h SystemsTesting/Column/rotateTo_column.c
+	gcc SystemsTesting/Column/rotateTo_column.c functions.c -lwiringPi -o ../Executables/rotateTo_column
 raise_lower_column: functions.c pins.h SystemsTesting/Column/raise_lower_column.c
 	gcc SystemsTesting/Column/raise_lower_column.c functions.c -lwiringPi -o ../Executables/raise_lower_column
 tofTest: functions.c pins.h SystemsTesting/tof.c SystemsTesting/tofTest.c
@@ -26,3 +26,5 @@ raise_lower_pump: functions.c pins.h SystemsTesting/Pump/raiseLower_Pump.c
 	gcc SystemsTesting/Pump/raiseLower_Pump.c functions.c -lwiringPi -o ../Executables/raise_lower_pump
 waterHeightSensor: functions.c pins.h SystemsTesting/waterHeightSensor.c
 	gcc SystemsTesting/waterHeightSensor.c functions.c pins.h -lwiringPi -o ../Executables/waterHeightSensor
+tempSensorRead: functions.c pins.h SystemsTesting/tempSensorRead.c
+	gcc SystemsTesting/tempSensorRead.c functions.c pins.h -lwiringPi -o ../Executables/tempSensorRead

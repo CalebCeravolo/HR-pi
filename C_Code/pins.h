@@ -10,6 +10,7 @@
 #define LOAD12_2 2 // Fan2
 #define LOAD12_3 0 // Centrifuge
 
+#define CENTRIFUGE_PIN LOAD12_3
 // Fluids Pump
 #define H1A_1 5  // Out
 #define H1A_2 4  // In
