@@ -65,6 +65,7 @@ void rotateBy(int degrees) {
       break;
     // }
     fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
+    printf("%d", fpga_out);
     distance_remaining = target_cf - fpga_out;
   }
   pthread_cancel(pwmProc);
