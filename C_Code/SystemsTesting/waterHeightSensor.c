@@ -14,14 +14,14 @@
 #define REG_CONFIG         0x01
 
 // Config register fields
-#define OS_START           (1 << 15)   // start single-shot conversion
+#define OS_START           (1 << 15)    // start single-shot conversion
 #define MUX_AIN0_GND       (0x04 << 12)
 #define MUX_AIN1_GND       (0x05 << 12)
 #define MUX_AIN2_GND       (0x06 << 12)
 #define MUX_AIN3_GND       (0x07 << 12)
 #define PGA_4_096V         (0x02 << 9)  // ±2.048V FSR, safe for 3.3V and 5V supplies
 #define MODE_SINGLE        (1 << 8)     // single-shot, not continuous
-#define DR_1600SPS         (0x04 << 5)
+#define DR_1600SPS         (0x04 << 5)  // Consider dropping to increase precision
 #define COMP_DISABLE       0x03         // disable comparator output
 
 // ADC full-scale for the 12-bit result (signed, positive half = 2047)
@@ -50,16 +50,7 @@ static uint16_t bswap16(uint16_t v) {
 // Perform one single-shot conversion on the given channel (0-3).
 // Returns the signed 12-bit ADC result, or -32768 on error.
 static int16_t ads1015_read(int fd, int channel) {
-    uint16_t mux;
-    switch (channel) {
-        case 0: mux = MUX_AIN0_GND; break;
-        case 1: mux = MUX_AIN1_GND; break;
-        case 2: mux = MUX_AIN2_GND; break;
-        case 3: mux = MUX_AIN3_GND; break;
-        default: return -32768;
-    }
-
-    uint16_t config = OS_START | mux | PGA_4_096V | MODE_SINGLE |
+    uint16_t config = OS_START | MUX_AIN0_GND | PGA_4_096V | MODE_SINGLE |
                       DR_1600SPS | COMP_DISABLE;
 
     // Write config register (byte-swap to big-endian before sending)
@@ -78,7 +69,7 @@ static int16_t ads1015_read(int fd, int channel) {
 
     if (timeout == 0) return -32768;
 
-    // Read 16-bit conversion register, result is left-aligned, shift right 4
+    // Read 16-bit conversion register, result is left-aligned, shift right 4 (ADC is 12-bit)
     int16_t raw = (int16_t)bswap16((uint16_t)wiringPiI2CReadReg16(fd, REG_CONVERSION));
     raw >>= 4;
     return raw;
@@ -89,14 +80,8 @@ int main(int argc, char *argv[]) {
     int num_samples   = DEFAULT_NUM_SAMPLES;
     int interval_ms   = DEFAULT_INTERVAL_MS;
 
-    if (argc > 1) channel     = atoi(argv[1]);
-    if (argc > 2) num_samples = atoi(argv[2]);
-    if (argc > 3) interval_ms = atoi(argv[3]);
-
-    if (channel < 0 || channel > 3) {
-        printf("Channel must be 0-3\n");
-        return 1;
-    }
+    if (argc > 1) num_samples = atoi(argv[1]);
+    if (argc > 2) interval_ms = atoi(argv[2]);
 
     int fd = wiringPiI2CSetup(ADS1015_ADDR);
     if (fd == -1) {

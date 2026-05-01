@@ -148,11 +148,10 @@ int main(int argc, char** argv) {
         //         row[x] = column_data[x];
         //     }
         // }
-
         // ticks
         for (int i = 0; i <= 5; i++) {
             int percent = i * 20;
-            int y = 510 - (percent * 410 / 100); //Set top/bottom bounds for y-axis tick marks
+            int y = plot_h - (percent * plot_h / 100);
 
             cv::line(plot,
                 cv::Point(margin_left - 5, y),

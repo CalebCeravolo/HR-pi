@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
     std::vector<int> dark = calibrate(cap, 10);
 
     // saves calibration data to different file name depending on camera input
-    save_calibration(dark, "dark_calibration" + arg1 + ".csv");
+    save_calibration(dark, "dark_calibration.csv");
 
     std::cout << "Saved dark_calibration.csv\n";
 
@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
 
     std::vector<int> light = calibrate(cap, 10);
 
-    save_calibration(light, "light_calibration" + arg1 + ".csv");
+    save_calibration(light, "light_calibration.csv");
 
     std::cout << "Saved light_calibration.csv\n";
     
