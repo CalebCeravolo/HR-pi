@@ -60,10 +60,10 @@ void rotateBy(int degrees) {
   fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
   float distance_remaining = target_cf - fpga_out;
   while (distance_remaining > 5) {
-    if (sigint) {
-      digitalWrite(LEFTEN, 0);
-      break;
-    }
+    // if (sigint) {
+    //   digitalWrite(LEFTEN, 0);
+    //   break;
+    // }
     fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
     distance_remaining = target_cf - fpga_out;
   }

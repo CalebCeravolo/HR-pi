@@ -6,7 +6,7 @@ module encoder #(parameter COUNT_BITS = 16)(input inA, // First encoder pin
                 output logic direction // current direction. 0 for A triggered first, 1 for B triggered first
                 );
     initial count = 0;
-    logic [15:0] next_count;
+    logic [COUNT_BITS-1:0] next_count;
     logic A, B, Z, dA, dB, dZ;
     debounce #(.length(50)) debA (.in(inA), .out(dA), .clk);
     debounce #(.length(50)) debB (.in(inB), .out(dB), .clk);
