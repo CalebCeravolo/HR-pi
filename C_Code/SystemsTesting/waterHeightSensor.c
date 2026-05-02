@@ -75,6 +75,19 @@ static int16_t ads1015_read(int fd, int channel) {
     return raw;
 }
 
+// Convert a raw ADC average to mm depth using piecewise linear interpolation.
+static float adc_to_mm(float adc) {
+    if (adc <= CAL[0].adc) return CAL[0].mm;
+    if (adc >= CAL[CAL_POINTS - 1].adc) return CAL[CAL_POINTS - 1].mm;
+    for (int i = 1; i < CAL_POINTS; i++) {
+        if (adc <= CAL[i].adc) {
+            float t = (adc - CAL[i-1].adc) / (CAL[i].adc - CAL[i-1].adc);
+            return CAL[i-1].mm + t * (CAL[i].mm - CAL[i-1].mm);
+        }
+    }
+    return CAL[CAL_POINTS - 1].mm;
+}
+
 int main(int argc, char *argv[]) {
     int channel       = DEFAULT_CHANNEL;
     int num_samples   = DEFAULT_NUM_SAMPLES;
@@ -92,6 +105,9 @@ int main(int argc, char *argv[]) {
     printf("ADS1015 water level sensor -- AIN%d, %d-sample average, %d ms interval\n\n",
            channel, num_samples, interval_ms);
     printf("\n\n\n\n");  // reserve lines for in-place update
+
+    float prev_avg   = -1.0f;
+    int stable_count = 0;
 
     while (1) {
         long sum = 0;
@@ -114,19 +130,29 @@ int main(int argc, char *argv[]) {
         float avg_raw = (float)sum / valid;
         float voltage = (avg_raw / ADC_MAX_COUNT) * VOLTAGE_REF;
 
-        float pct = (avg_raw - WATER_LEVEL_RAW_EMPTY) /
-                    (float)(WATER_LEVEL_RAW_FULL - WATER_LEVEL_RAW_EMPTY) * 100.0f;
-        if (pct < 0.0f)   pct = 0.0f;
-        if (pct > 100.0f) pct = 100.0f;
+        float signed_delta = (prev_avg < 0.0f) ? 9999.0f : (avg_raw - prev_avg);
+        float delta        = signed_delta < 0.0f ? -signed_delta : signed_delta;
+        prev_avg = avg_raw;
 
-        float depth_mm = (pct / 100.0f) * MAX_DEPTH_MM;
+        if (delta > STABLE_DELTA_THRESHOLD)
+            stable_count = 0;
+        else if (stable_count < STABLE_CONFIRM_CYCLES)
+            stable_count++;
+
+        float depth_mm = adc_to_mm(avg_raw);
+        float pct      = (depth_mm / CAL_MAX_MM) * 100.0f;
 
         // Erase the 4 data lines and reprint in-place
         printf("\033[4A");
-        printf("\033[2KRaw ADC:  %6.1f / %d\n", avg_raw, ADC_MAX_COUNT);
+        printf("\033[2KRaw ADC:  %6.1f  (delta %+.1f)\n", avg_raw, signed_delta);
         printf("\033[2KVoltage:  %.4f V\n", voltage);
-        printf("\033[2KLevel:   %6.1f %%\n", pct);
-        printf("\033[2KDepth:   %6.1f mm\n", depth_mm);
+        if (stable_count < STABLE_CONFIRM_CYCLES) {
+            printf("\033[2KLevel:    stabilizing...\n");
+            printf("\033[2KDepth:    stabilizing...\n");
+        } else {
+            printf("\033[2KLevel:   %6.1f %%\n", pct);
+            printf("\033[2KDepth:   %6.1f mm\n", depth_mm);
+        }
         fflush(stdout);
 
         usleep(interval_ms * 1000);
