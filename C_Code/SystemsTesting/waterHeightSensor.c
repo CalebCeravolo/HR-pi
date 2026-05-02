@@ -19,7 +19,7 @@
 #define MUX_AIN1_GND       (0x05 << 12)
 #define MUX_AIN2_GND       (0x06 << 12)
 #define MUX_AIN3_GND       (0x07 << 12)
-#define PGA_4_096V         (0x01 << 9)  // ±2.048V FSR, safe for 3.3V and 5V supplies
+#define PGA_4_096V         (0x01 << 9)  // ±2.048V FSR,safe for 3.3V and 5V supplies
 #define MODE_SINGLE        (1 << 8)     // single-shot, not continuous
 #define DR_1600SPS         (0x04 << 5)  // Consider dropping to increase precision
 #define COMP_DISABLE       0x03         // disable comparator output
