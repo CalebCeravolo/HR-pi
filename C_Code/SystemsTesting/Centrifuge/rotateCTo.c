@@ -14,6 +14,9 @@
 #define LEFTEN CENTRIFUGE_PIN // we only move to the left (and only use the left pin)
 #define tpr 1018.0
 
+int sigint = 0;
+void intHandler(int dummy) { sigint = 1; }
+
 struct PWMinput {
   int pin;
   volatile int *period;
@@ -51,6 +54,8 @@ void rotateBy(int degrees) {
   // 3. Move the centrifuge
   pinMode(LEFTEN, OUTPUT);
   period = 20;
+  usleep(5000);
+  period = 5;
   // period = vals[0];
   //(to make it manual)
   volatile int fpga_out;
@@ -61,10 +66,10 @@ void rotateBy(int degrees) {
   // 4. Wait until the target position is reached
   while (distance_remaining > 10) {
     // usleep(100E3);
-    // if (sigint) {
-    //   digitalWrite(LEFTEN, 0);
-    //   break;
-    // }
+    if (sigint) {
+      digitalWrite(LEFTEN, 0);
+      break;
+    }
     usleep(1E3);
     fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
     distance_remaining = abs(target_cf - fpga_out);

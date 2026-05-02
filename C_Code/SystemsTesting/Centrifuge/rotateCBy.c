@@ -15,6 +15,9 @@
 #define tpr 2048
 #define ENC ENC_CENTRIFUGE_INC
 
+int sigint = 0;
+void intHandler(int dummy) { sigint = 1; }
+
 struct PWMinput {
   int pin;
   int *period;
@@ -54,21 +57,26 @@ void rotateBy(int degrees) {
   printf("Current: %i Target: %i\n", start_cf, target_cf);
   // 3. Move the centrifuge
   pinMode(LEFTEN, OUTPUT);
-  period = 20;
-  // period = vals[0];
-  //(to make it manual)
   pthread_create(&pwmProc, NULL, softPWM, &arguments);
-  // sleep(5);
+
+  period = 50;
+  usleep(5000);
+  // period = 25;
+  // usleep(1000);
+  period = 20;
+  usleep(50000);
+  period = 10;
+  // period = vals[0]; //(to make it manual)
   // 4. Wait until the target position is reached
   uint32_t fpga_out;
   fpga_out = fpga_safetran(ENC);
   int distance_remaining = abs(target_cf - fpga_out);
-  while (distance_remaining > 15) {
+  while (distance_remaining > 300) {
     // usleep(10E3);
-    // if (sigint) {
-    //   digitalWrite(LEFTEN, 0);
-    //   break;
-    // }
+    if (sigint) {
+      digitalWrite(LEFTEN, 0);
+      break;
+    }
     fpga_out = fpga_safetran(ENC);
     // printf("%d", fpga_out);
     distance_remaining = abs(target_cf - fpga_out);

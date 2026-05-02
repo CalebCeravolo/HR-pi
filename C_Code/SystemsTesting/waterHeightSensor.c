@@ -20,36 +20,22 @@
 #define MUX_AIN2_GND       (0x06 << 12)
 #define MUX_AIN3_GND       (0x07 << 12)
 #define PGA_4_096V         (0x01 << 9)  // ±2.048V FSR,safe for 3.3V and 5V supplies
+#define PGA_4_096V         (0x03 << 9)  // ±2.048V FSR, safe for 3.3V and 5V supplies
 #define MODE_SINGLE        (1 << 8)     // single-shot, not continuous
 #define DR_1600SPS         (0x04 << 5)  // Consider dropping to increase precision
 #define COMP_DISABLE       0x03         // disable comparator output
 
 // ADC full-scale for the 12-bit result (signed, positive half = 2047)
 #define ADC_MAX_COUNT      2047
-#define VOLTAGE_REF        4.096f       // must match PGA_4_096V
+#define VOLTAGE_REF        1.024f       // must match PGA_4_096V
 
-// ── Calibration lookup table ──────────────────────────────────────────────────
-// Each entry is {semi-stable ADC average, water depth in mm}.
-// Readings were taken after the initial insertion spike settled but before
-// electrolysis drift began. Add more rows or extend the range as needed.
-static const struct { float adc; float mm; } CAL[] = {
-    {  442.5f,  0.0f },
-    {  746.25f, 5.0f },
-    {  947.0f, 10.0f },
-    { 1093.75f, 15.0f },
-    { 1211.25f, 20.0f },
-    { 1285.0f,  25.0f },
-    { 1316.0f,  30.0f },
-    { 1370.0f,  35.0f },
-};
-#define CAL_POINTS (int)(sizeof(CAL) / sizeof(CAL[0]))
-#define CAL_MAX_MM  35.0f
-
-// ADC counts/cycle below which the reading is considered settled.
-// Raise this if it declares "stable" too early; lower it if it takes too long.
-#define STABLE_DELTA_THRESHOLD  20.0f
-// How many consecutive stable cycles before the reading is trusted.
-#define STABLE_CONFIRM_CYCLES   3
+// ── Calibration constants ─────────────────────────────────────────────────────
+// Run with sensor dry (tank empty) and note the raw ADC value → WATER_LEVEL_RAW_EMPTY
+// Run with sensor fully submerged (tank full) and note the raw value → WATER_LEVEL_RAW_FULL
+// Measure the physical water column height at "full" → MAX_DEPTH_MM
+#define WATER_LEVEL_RAW_EMPTY   340
+#define WATER_LEVEL_RAW_FULL    1600
+#define MAX_DEPTH_MM            41.4f
 // ─────────────────────────────────────────────────────────────────────────────
 
 #define DEFAULT_CHANNEL         0

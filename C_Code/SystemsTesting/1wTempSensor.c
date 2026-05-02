@@ -3,79 +3,78 @@
 #include <string.h>
 #include <dirent.h>
 #include <unistd.h>
-#include <time.h> // Added for timestamps
+#include <wiringPi.h>
+
+#include "../pins.h"
+#include "../functions.h"
 
 #define BASE_DIR "/sys/bus/w1/devices/"
-#define LOG_FILE "temp_log.txt" // The name of your output file
 
-int main() {
-    DIR *dir;
-    struct dirent *direntp;
-    char device_folder[256];
-    char device_file[256];
-    int found = 0;
+float read_ds18b20_temp(void) {
+    static char cached_device_file[256] = {0};
+    static int path_found = 0;
 
-    // 1. Automatically find the device folder starting with "28-"
-    dir = opendir(BASE_DIR);
-    if (dir == NULL) {
-        perror("Failed to open 1-Wire directory. Is 1-Wire enabled?");
-        return -1;
-    }
+    // Search for the 1-Wire folder if we haven't found it yet
+    if (!path_found) {
+        DIR *dir = opendir(BASE_DIR);
+        struct dirent *direntp;
+        
+        if (dir == NULL) return -999.0; 
 
-    while ((direntp = readdir(dir)) != NULL) {
-        if (strncmp(direntp->d_name, "28-", 3) == 0) {
-            snprintf(device_folder, sizeof(device_folder), "%s%s", BASE_DIR, direntp->d_name);
-            found = 1;
-            break;
-        }
-    }
-    closedir(dir);
-
-    if (!found) {
-        printf("Error: No DS18B20 sensor found. Check your wiring.\n");
-        return -1;
-    }
-
-    snprintf(device_file, sizeof(device_file), "%s/temperature", device_folder);
-    printf("Successfully bound to: %s\n", device_file);
-    printf("Logging DS18B20 data to %s... Press Ctrl+C to stop.\n\n", LOG_FILE);
-
-    // 2. Continuous reading and logging loop
-    while (1) {
-        FILE *f = fopen(device_file, "r");
-        if (f == NULL) {
-            perror("Failed to open temperature file");
-            return -1;
-        }
-
-        char temp_str[16];
-        if (fgets(temp_str, sizeof(temp_str), f) != NULL) {
-            float temp_c = atof(temp_str) / 1000.0;
-            
-            // --- NEW LOGGING LOGIC ---
-            
-            // Get the current time
-            time_t now = time(NULL);
-            struct tm *t = localtime(&now);
-            char time_buf[64];
-            strftime(time_buf, sizeof(time_buf), "%Y-%m-%d %H:%M:%S", t);
-
-            // Print to the terminal so you can still watch it live
-            printf("[%s] Temperature: %.2f °C\n", time_buf, temp_c);
-
-            // Open the log file in "a" (append) mode
-            FILE *log = fopen(LOG_FILE, "a");
-            if (log != NULL) {
-                // Write the timestamp and temperature to the file
-                fprintf(log, "[%s] Temperature: %.2f °C\n", time_buf, temp_c);
-                fclose(log); // Close immediately so data saves if you hit Ctrl+C
-            } else {
-                perror("Failed to open log file");
+        while ((direntp = readdir(dir)) != NULL) {
+            if (strncmp(direntp->d_name, "28-", 3) == 0) {
+                snprintf(cached_device_file, sizeof(cached_device_file), "%s%s/temperature", BASE_DIR, direntp->d_name);
+                path_found = 1;
+                break;
             }
         }
-        fclose(f);
+        closedir(dir);
+        if (!path_found) return -999.0; 
+    }
 
-        sleep(1); 
+    // Read the file and convert the text to a float
+    FILE *f = fopen(cached_device_file, "r");
+    if (f == NULL) {
+        path_found = 0; 
+        return -999.0;
+    }
+
+    char temp_str[16];
+    float temp_c = -999.0;
+    
+    if (fgets(temp_str, sizeof(temp_str), f) != NULL) {
+        temp_c = atof(temp_str) / 1000.0;
+    }
+    
+    fclose(f);
+    
+    // Return the final float value
+    return temp_c;
+}
+
+// --- MAIN EXECUTION ---
+int main(int argc, char *argv[]) {
+    if (wiringPiSetup() == -1) {
+        printf("Failed to init wiringPi.\n");
+        return -1;
+    }
+
+    printf("Initializing 1-Wire Temp Sensor...\n");
+    printf("Press Ctrl+C to stop logging.\n\n");
+
+    while(1) {
+        // 1. Call the function and grab the single float value
+        float current_temp = read_ds18b20_temp();
+
+        // 2. Have main() handle the printing
+        if (current_temp != -999.0) {
+            printf("Current Temp: %.2f °C\n", current_temp);
+        } else {
+            printf("Error: Could not read DS18B20 sensor.\n");
+        }
+        
+        // Wait 1 second before grabbing the next reading
+        sleep(1);
     }
 
     return 0;
