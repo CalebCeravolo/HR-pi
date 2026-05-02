@@ -19,21 +19,21 @@
 #define MUX_AIN1_GND       (0x05 << 12)
 #define MUX_AIN2_GND       (0x06 << 12)
 #define MUX_AIN3_GND       (0x07 << 12)
-#define PGA_4_096V         (0x01 << 9)  // ±2.048V FSR, safe for 3.3V and 5V supplies
+#define PGA_4_096V         (0x03 << 9)  // ±2.048V FSR, safe for 3.3V and 5V supplies
 #define MODE_SINGLE        (1 << 8)     // single-shot, not continuous
 #define DR_1600SPS         (0x04 << 5)  // Consider dropping to increase precision
 #define COMP_DISABLE       0x03         // disable comparator output
 
 // ADC full-scale for the 12-bit result (signed, positive half = 2047)
 #define ADC_MAX_COUNT      2047
-#define VOLTAGE_REF        4.096f       // must match PGA_4_096V
+#define VOLTAGE_REF        1.024f       // must match PGA_4_096V
 
 // ── Calibration constants ─────────────────────────────────────────────────────
 // Run with sensor dry (tank empty) and note the raw ADC value → WATER_LEVEL_RAW_EMPTY
 // Run with sensor fully submerged (tank full) and note the raw value → WATER_LEVEL_RAW_FULL
 // Measure the physical water column height at "full" → MAX_DEPTH_MM
-#define WATER_LEVEL_RAW_EMPTY   0
-#define WATER_LEVEL_RAW_FULL    435
+#define WATER_LEVEL_RAW_EMPTY   340
+#define WATER_LEVEL_RAW_FULL    1600
 #define MAX_DEPTH_MM            41.4f
 // ─────────────────────────────────────────────────────────────────────────────
 
