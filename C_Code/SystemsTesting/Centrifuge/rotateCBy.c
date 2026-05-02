@@ -10,7 +10,7 @@
 #include <wiringPiSPI.h>
 #include <stdlib.h>
 // #include <math.h>
-// #include <signal.h>
+#include <signal.h>
 #define LEFTEN CENTRIFUGE_PIN // we only move to the left (and only use the left pin)
 #define tpr 2048
 #define ENC ENC_CENTRIFUGE_INC
@@ -59,28 +59,42 @@ void rotateBy(int degrees) {
   pinMode(LEFTEN, OUTPUT);
   pthread_create(&pwmProc, NULL, softPWM, &arguments);
 
-  period = 50;
-  usleep(5000);
-  // period = 25;
-  // usleep(1000);
-  period = 20;
-  usleep(50000);
+extern double findVelocity(int sample_time_us);
+
+  // Spin-up logic using findVelocity
   period = 10;
+  while (!sigint) {
+      double velocity = findVelocity(10000); // 10ms sample time
+      
+      if (velocity > 500.0 || velocity < -500.0) { // If moving at a certain speed
+          break;
+      }
+      
+      int current_pos = (int)fpga_safetran(ENC);
+      if (current_pos <= target_cf + 310) {
+          break;
+      }
+      
+      if (period < 100) {
+          period += 5; // Incrementally increase
+      }
+  }
+  
+  period = 10; // Set to low value
   // period = vals[0]; //(to make it manual)
   // 4. Wait until the target position is reached
-  uint32_t fpga_out;
-  fpga_out = fpga_safetran(ENC);
-  int distance_remaining = abs(target_cf - fpga_out);
-  while (distance_remaining > 300) {
+
+  int fpga_out = (int)fpga_safetran(ENC);
+  // int distance_remaining = abs(target_cf - fpga_out);
+  while (fpga_out <= target_cf + 300) {
     // usleep(10E3);
     if (sigint) {
       digitalWrite(LEFTEN, 0);
       break;
     }
-    fpga_out = fpga_safetran(ENC);
+    fpga_out = (int)fpga_safetran(ENC);
     // printf("%d", fpga_out);
-    distance_remaining = abs(target_cf - fpga_out);
-    
+    // distance_remaining = abs(target_cf - fpga_out);
   }
   pthread_cancel(pwmProc);
   pthread_join(pwmProc, NULL);
@@ -89,6 +103,7 @@ void rotateBy(int degrees) {
 }
 
 int main(int argc, char *argv[]) {
+  signal(SIGINT, intHandler);
   wiringPiSetupPinType(WPI_PIN_WPI);
   int vals[argc - 1];
   intparse(argc - 1, argv + 1, vals);
