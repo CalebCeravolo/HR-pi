@@ -12,7 +12,7 @@
 //./calib /dev/video0
 
 // Save calibration to CSV
-void save_calibration(const std::vector<int>& data, const std::string& filename) {
+void save_calibration(const std::vector<float>& data, const std::string& filename) {
     std::ofstream file(filename);
     for (size_t i = 0; i < data.size(); i++) {
         file << data[i];
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     std::cout << "Cover the lens for dark calibration...\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
-    std::vector<int> dark = calibrate(cap, 10);
+    std::vector<float> dark = calibrate(cap, 250);
 
     // saves calibration data to different file name depending on camera input
     save_calibration(dark, "dark_calibration.csv");
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
     std::cout << "Expose the lens to light...\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
-    std::vector<int> light = calibrate(cap, 10);
+    std::vector<float> light = calibrate(cap, 250);
 
     save_calibration(light, "light_calibration.csv");
 
