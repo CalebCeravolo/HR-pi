@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
         // ticks
         for (int i = 0; i <= 5; i++) {
             int percent = i * 20;
-            int y = plot_h - (percent * plot_h / 100);
+            int y =   
 
             cv::line(plot,
                 cv::Point(margin_left - 5, y),
