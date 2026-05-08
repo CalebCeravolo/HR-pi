@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
@@ -27,6 +29,13 @@
 // ADC full-scale for the 12-bit result (signed, positive half = 2047)
 #define ADC_MAX_COUNT      2047
 #define VOLTAGE_REF        1.024f       // must match PGA_4_096V
+
+// ── Temperature compensation ──────────────────────────────────────────────────
+// slope = (ADC_at_T2 - ADC_at_T1) / (T2 - T1)  [ADC counts per °C]
+// Set TEMP_REF_C to the temperature at which the CAL[] table was collected.
+#define TEMP_REF_C    20.0f   // reference temperature used during depth calibration
+#define TEMP_SLOPE     0.0f   // ADC counts per °C  <-- SET THIS FROM YOUR DATA
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ── Calibration lookup table ──────────────────────────────────────────────────
 // Each entry is {semi-stable ADC average, water depth in mm}.
@@ -62,10 +71,44 @@ static uint16_t bswap16(uint16_t v) {
     return (uint16_t)((v >> 8) | (v << 8));
 }
 
+static float read_ds18b20_temp(void) {
+    static char cached_device_file[256] = {0};
+    static int path_found = 0;
+
+    if (!path_found) {
+        DIR *dir = opendir("/sys/bus/w1/devices/");
+        struct dirent *direntp;
+        if (dir == NULL) return -999.0f;
+        while ((direntp = readdir(dir)) != NULL) {
+            if (strncmp(direntp->d_name, "28-", 3) == 0) {
+                snprintf(cached_device_file, sizeof(cached_device_file),
+                         "/sys/bus/w1/devices/%s/temperature", direntp->d_name);
+                path_found = 1;
+                break;
+            }
+        }
+        closedir(dir);
+        if (!path_found) return -999.0f;
+    }
+
+    FILE *f = fopen(cached_device_file, "r");
+    if (f == NULL) { path_found = 0; return -999.0f; }
+    char buf[16];
+    float temp_c = -999.0f;
+    if (fgets(buf, sizeof(buf), f) != NULL)
+        temp_c = atof(buf) / 1000.0f;
+    fclose(f);
+    return temp_c;
+}
+
 // Perform one single-shot conversion on the given channel (0-3).
 // Returns the signed 12-bit ADC result, or -32768 on error.
 static int16_t ads1015_read(int fd, int channel) {
-    uint16_t config = OS_START | MUX_AIN0_GND | PGA_4_096V | MODE_SINGLE |
+    static const uint16_t mux_table[] = {
+        MUX_AIN0_GND, MUX_AIN1_GND, MUX_AIN2_GND, MUX_AIN3_GND
+    };
+    uint16_t mux = (channel >= 0 && channel <= 3) ? mux_table[channel] : MUX_AIN0_GND;
+    uint16_t config = OS_START | mux | PGA_4_096V | MODE_SINGLE |
                       DR_1600SPS | COMP_DISABLE;
 
     // Write config register (byte-swap to big-endian before sending)
@@ -119,7 +162,7 @@ int main(int argc, char *argv[]) {
 
     printf("ADS1015 water level sensor -- AIN%d, %d-sample average, %d ms interval\n\n",
            channel, num_samples, interval_ms);
-    printf("\n\n\n\n");  // reserve lines for in-place update
+    printf("\n\n\n\n\n");  // reserve lines for in-place update
 
     float prev_avg   = -1.0f;
     int stable_count = 0;
@@ -154,13 +197,21 @@ int main(int argc, char *argv[]) {
         else if (stable_count < STABLE_CONFIRM_CYCLES)
             stable_count++;
 
-        float depth_mm = adc_to_mm(avg_raw);
+        float temp_c        = read_ds18b20_temp();
+        float adc_for_depth = (temp_c != -999.0f)
+                              ? avg_raw + TEMP_SLOPE * (temp_c - TEMP_REF_C)
+                              : avg_raw;
+        float depth_mm = adc_to_mm(adc_for_depth);
         float pct      = (depth_mm / CAL_MAX_MM) * 100.0f;
 
-        // Erase the 4 data lines and reprint in-place
-        printf("\033[4A");
+        // Erase the 5 data lines and reprint in-place
+        printf("\033[5A");
         printf("\033[2KRaw ADC:  %6.1f  (delta %+.1f)\n", avg_raw, signed_delta);
         printf("\033[2KVoltage:  %.4f V\n", voltage);
+        if (temp_c == -999.0f)
+            printf("\033[2KTemp:     sensor error (no compensation)\n");
+        else
+            printf("\033[2KTemp:     %.2f C\n", temp_c);
         if (stable_count < STABLE_CONFIRM_CYCLES) {
             printf("\033[2KLevel:    stabilizing...\n");
             printf("\033[2KDepth:    stabilizing...\n");

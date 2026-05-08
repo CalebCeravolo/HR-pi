@@ -10,6 +10,7 @@
 
 #define BASE_DIR "/sys/bus/w1/devices/"
 
+// Finds the sensor, reads the data, and returns a single float.
 float read_ds18b20_temp(void) {
     static char cached_device_file[256] = {0};
     static int path_found = 0;
@@ -47,35 +48,25 @@ float read_ds18b20_temp(void) {
     }
     
     fclose(f);
-    
-    // Return the final float value
     return temp_c;
 }
 
-// --- MAIN EXECUTION ---
 int main(int argc, char *argv[]) {
     if (wiringPiSetup() == -1) {
-        printf("Failed to init wiringPi.\n");
         return -1;
     }
 
-    printf("Initializing 1-Wire Temp Sensor...\n");
-    printf("Press Ctrl+C to stop logging.\n\n");
+    // Grab the single temperature reading
+    float current_temp = read_ds18b20_temp();
 
-    while(1) {
-        // 1. Call the function and grab the single float value
-        float current_temp = read_ds18b20_temp();
-
-        // 2. Have main() handle the printing
-        if (current_temp != -999.0) {
-            printf("Current Temp: %.2f °C\n", current_temp);
-        } else {
-            printf("Error: Could not read DS18B20 sensor.\n");
-        }
-        
-        // Wait 1 second before grabbing the next reading
-        sleep(1);
+    // Print raw float value 
+    if (current_temp != -999.0) {
+        printf("%.2f\n", current_temp);
+    } else {
+        printf("-999.0\n"); 
     }
-
+    
+    fflush(stdout);
+    
     return 0;
 }

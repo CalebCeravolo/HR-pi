@@ -12,7 +12,7 @@
 //./calib /dev/video0
 
 // Save calibration to CSV
-void save_calibration(const std::vector<int>& data, const std::string& filename) {
+void save_calibration(const std::vector<float>& data, const std::string& filename) {
     std::ofstream file(filename);
     for (size_t i = 0; i < data.size(); i++) {
         file << data[i];
@@ -22,11 +22,11 @@ void save_calibration(const std::vector<int>& data, const std::string& filename)
 }
 
 // Compute column averages
-std::vector<int> compute_column_average(const cv::Mat& frame) {
+std::vector<float> compute_column_average(const cv::Mat& frame) {
     int width = frame.cols;
     int height = frame.rows;
 
-    std::vector<int> column_data(width, 0);
+    std::vector<float> column_data(width, 0);
 
     for (int y = 0; y < height; y++) {
         const uint8_t* row = frame.ptr<uint8_t>(y);
@@ -43,9 +43,9 @@ std::vector<int> compute_column_average(const cv::Mat& frame) {
 }
 
 // Capture dark calibration
-std::vector<int> calibrate(cv::VideoCapture& cap, int frames) {
+std::vector<float> calibrate(cv::VideoCapture& cap, int frames) {
     cv::Mat frame;
-    std::vector<int> avg;
+    std::vector<float> avg;
 
     for (int i = 0; i < frames; i++) {
         cap >> frame;
@@ -53,7 +53,7 @@ std::vector<int> calibrate(cv::VideoCapture& cap, int frames) {
 
         cv::cvtColor(frame, frame, cv::COLOR_YUV2GRAY_YUYV);
 
-        std::vector<int> curr = compute_column_average(frame);
+        std::vector<float> curr = compute_column_average(frame);
 
         if (avg.empty()) {
             avg = curr;
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     std::cout << "Cover the lens for dark calibration...\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
-    std::vector<int> dark = calibrate(cap, 10);
+    std::vector<float> dark = calibrate(cap, 250);
 
     // saves calibration data to different file name depending on camera input
     save_calibration(dark, "dark_calibration.csv");
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
     std::cout << "Expose the lens to light...\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
-    std::vector<int> light = calibrate(cap, 10);
+    std::vector<float> light = calibrate(cap, 250);
 
     save_calibration(light, "light_calibration.csv");
 

@@ -94,8 +94,7 @@ int main(int argc, char** argv) {
     cv::namedWindow("Frame", cv::WINDOW_NORMAL);
     const float horiz_scale = (SCREEN_WIDTH/width);
     const float vert_scale = (SCREEN_HEIGHT/height);
-    const float window_scailing = horiz_scale>vert_scale ? vert_scale : horiz_scale;
-    const uint32_t scaled_width = (uint32_t)(window_scailing*width);
+    const float window_scale= (uint32_t)(window_scailing*width);
     const uint32_t scaled_height = (uint32_t)(window_scailing*height);
     printf("%i, %i, %i, %i\n", scaled_width, scaled_height, width, height);
     cv::Mat resized_image(cv::Size(scaled_width, scaled_height),CV_8UC1);
