@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <unistd.h>
 // #include <signal.h>
-#define CPR 663.0 / 6 // Counts per revolution
+#define CPR (663.0 / 6) // Counts per revolution
 #define DATA_ADDR ENC_COLUMN_ROTATE
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
