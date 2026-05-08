@@ -3,7 +3,7 @@
 // #include <vector>
 //g++ stream_spectra.cpp -o stream_spec `pkg-config --cflags --libs opencv4`
 //v4l2-ctl -d /dev/video0 --list-ctrls
-// v4l2-ctl -d /dev/video0 -c zoom_absolute=60
+// v4l2-ctl -d /dev/video0 -c exposure_time_absolute=1000
 #define SCREEN_WIDTH 2880
 #define SCREEN_HEIGHT 1800
 
@@ -13,8 +13,8 @@
 #include <string>
 #include <iostream>
 
-std::vector<float> load_calibration(const std::string& filename) {
-    std::vector<float> data;
+std::vector<double> load_calibration(const std::string& filename) {
+    std::vector<double> data;
     std::ifstream file(filename);
 
     if (!file.is_open()) {
@@ -40,7 +40,7 @@ std::vector<float> load_calibration(const std::string& filename) {
 }
 
 int char_to_int(char * arg){
-    float res = 0;
+    double res = 0;
     uint8_t negative = *arg=='-';
     uint8_t base = 10;
     if (*(arg+negative)=='0'){
@@ -85,21 +85,22 @@ int main(int argc, char** argv) {
     cv::Mat frame;
     const uint32_t width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
     const uint32_t height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-    std::vector<float> column_data(width, 0);
+    std::vector<int> column_data(width, 0);
     uint8_t* row;
     int scale = 1;
     int plot_h = 540;
     cv::Mat output_im(cv::Size(width, height),CV_8UC1);
     cv::Mat plot(plot_h, width, CV_8UC1, cv::Scalar(255));
     cv::namedWindow("Frame", cv::WINDOW_NORMAL);
-    const float horiz_scale = (SCREEN_WIDTH/width);
-    const float vert_scale = (SCREEN_HEIGHT/height);
-    const float window_scale= (uint32_t)(window_scailing*width);
+    const double horiz_scale = (SCREEN_WIDTH/width);
+    const double vert_scale = (SCREEN_HEIGHT/height);
+    const double window_scailing = horiz_scale>vert_scale ? vert_scale : horiz_scale;
+    const uint32_t scaled_width = (uint32_t)(window_scailing*width);
     const uint32_t scaled_height = (uint32_t)(window_scailing*height);
     printf("%i, %i, %i, %i\n", scaled_width, scaled_height, width, height);
     cv::Mat resized_image(cv::Size(scaled_width, scaled_height),CV_8UC1);
-    std::vector<float> dark_profile = load_calibration("dark_calibration.csv");
-    std::vector<float> light_profile = load_calibration("light_calibration.csv");
+    std::vector<double> dark_profile = load_calibration("dark_calibration.csv");
+    std::vector<double> light_profile = load_calibration("light_calibration.csv");
     //Subtract out dark value from MAX value
     for (int kk=0; kk<width; kk++) {
         light_profile[kk] -= dark_profile[kk];
@@ -125,17 +126,17 @@ int main(int argc, char** argv) {
         
         for (int ii=0; ii<width; ii++) {
             //Avg sum of col values
-            // float signal = column[ii];
+            // double signal = column[ii];
             column_data[ii]/=height;
             //Subtract out dark value form avg value
-            column_data[ii] -= dark_profile[ii];
+            // column_data[ii] -= dark_profile[ii];
             
             
-            //Find avg / MAX fraction
-            column_data[ii] /= light_profile[ii];
-            column_data[ii] *= 100;
-            //offset
-            column_data[ii]+= 30;
+            // //Find avg / MAX fraction
+            // column_data[ii] /= light_profile[ii];
+            // column_data[ii] *= 100;
+            // //offset
+            // column_data[ii]+= 30;
         }
 
 
@@ -168,13 +169,15 @@ int main(int argc, char** argv) {
         
         for(int x=1;x<width;x++) {
 
-            int y1 = plot_h-(column_data[x-1]*plot_h)/255; //Divide by ~255
-            int y2 = plot_h-(column_data[x]*plot_h)/255;
+            int y1 = (plot_h)-((column_data[x-1]-dark_profile[x-1])*(plot_h - 100))/light_profile[x-1]; //Divide by ~255
+            int y2 = (plot_h)-((column_data[x]-dark_profile[x])*(plot_h - 100))/light_profile[x];
+
+            
 
             cv::line(plot,
-                    cv::Point((x-1),y1),
-                    cv::Point((x),y2),    
-                    cv::Scalar(0,0,0),1);
+                    cv::Point((x-1),y1 - 30),
+                    cv::Point((x),y2 - 30),    
+                    cv::Scalar(0,0,0),1);      
         }
         // cv::Mat img(100, 100, CV_32FC1, data);
         // cv::imwrite("out.tiff", output_im);
