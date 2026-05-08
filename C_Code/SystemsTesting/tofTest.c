@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include "tof.h" // time of flight sensor library
 
-#define ZERO_NUM_SAMPLES 50
+#define ZERO_NUM_SAMPLES 25
 
 static int init (void) {
 	int i;
@@ -75,7 +75,7 @@ int zeroCalibration() {
         sum += reading;
         usleep(250000); // 250ms between samples
     }
-    int measured = sum / samples;
+    int measured = sum / ZERO_NUM_SAMPLES;
     printf("Calibration: measured=%dmm\n", measured);
     return measured;
 }
@@ -85,5 +85,6 @@ int main(int argc, char *argv[]) {
 	(void)argv;
 	init();
 	int zero = zeroCalibration();
+	printf("Calibrated\n");
 	return run_tof_test(zero);
 }
