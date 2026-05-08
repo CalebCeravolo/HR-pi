@@ -14,8 +14,8 @@ all_low: functions.c pins.h SystemsTesting/all_low.c
 	gcc SystemsTesting/all_low.c functions.c -lwiringPi -o ../Executables/all_low
 colorRead: functions.c pins.h SystemsTesting/colorRead.c
 	gcc SystemsTesting/colorRead.c functions.c -lwiringPi -o ../Executables/colorRead
-rotateCBy: functions.c pins.h SystemsTesting/Centrifuge/rotateCBy.c SystemsTesting/Centrifuge/findVelocity.c
-	gcc SystemsTesting/Centrifuge/rotateCBy.c SystemsTesting/Centrifuge/findVelocity.c functions.c -lwiringPi -o ../Executables/rotateCBy
+rotateCBy: functions.c pins.h SystemsTesting/Centrifuge/rotateCBy.c
+	gcc SystemsTesting/Centrifuge/rotateCBy.c functions.c -lwiringPi -o ../Executables/rotateCBy
 rotateCTo: functions.c pins.h SystemsTesting/Centrifuge/rotateCTo.c
 	gcc SystemsTesting/Centrifuge/rotateCTo.c functions.c -lwiringPi -o ../Executables/rotateCTo
 findVelocity: functions.c pins.h SystemsTesting/Centrifuge/findVelocity.c

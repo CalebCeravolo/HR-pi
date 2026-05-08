@@ -1,115 +1,88 @@
 #include "../../functions.h"
 #include "../../pins.h"
-#include <pthread.h>
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <sys/time.h>
-#include <time.h>
 #include <unistd.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
-#include <stdlib.h>
-// #include <math.h>
-#include <signal.h>
-#define LEFTEN CENTRIFUGE_PIN // we only move to the left (and only use the left pin)
-#define tpr 2048
+
+/* Encoder channel 2: incremental centrifuge position */
 #define ENC ENC_CENTRIFUGE_INC
 
-int sigint = 0;
-void intHandler(int dummy) { sigint = 1; }
+/* Ticks per full*/
+#define TPR 2048
 
-struct PWMinput {
-  int pin;
-  int *period;
-};
-long int get_time() {
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return tv.tv_sec * 1E6 + tv.tv_usec;
-}
-void *softPWM(void *input) {
-  long int current_t = get_time();
-  // int period = *((int *)input); // 1-100
-  struct PWMinput *args = (struct PWMinput *)input;
-  printf("Period: %i pin: %i\n", *(args->period), args->pin);
-  // printf("working");
-  while (1) {
-    digitalWrite(args->pin, 1);
-    usleep(*(args->period) * 100);
-    digitalWrite(args->pin, 0);
-    usleep((100 - *(args->period)) * 100);
-  }
+/* FPGA PWM motor index */
+#define FPGA_PWM_MOTOR 5
+
+#define TICK_TOLERANCE 300
+
+static volatile int sigint = 0;
+
+static void intHandler(int dummy) {
+  (void)dummy;
+  sigint = 1;
+  fpga_pwm_uptime(FPGA_PWM_MOTOR, 0);
 }
 
-void rotateBy(int degrees) {
-  int period = 0;
-  struct PWMinput arguments;
-  arguments.pin = LEFTEN;
-  arguments.period = &period;
-  pthread_t pwmProc;
+static void pwm_off(void) { fpga_pwm_uptime(FPGA_PWM_MOTOR, 0); }
 
-  // 1. Get current position
-  int start_cf = (fpga_safetran(ENC));
+/**
+ * Rotate the one-direction centrifuge motor until encoder channel 2 has changed by
+ * approximately `degrees` (same direction convention as the legacy soft-PWM tool:
+ * positive degrees → count decreases toward start - delta).
+ */
+static void rotate_by_degrees(int degrees, uint32_t pwm_period, uint32_t pwm_uptime) {
+  uint32_t start = fpga_safetran(ENC);
+  int64_t delta = (int64_t)((double)degrees * (double)TPR / 360.0 + 0.5);
+  int64_t goal = (int64_t)start - delta;
 
-  // 2. Calculate target position (current + how many teeth we want to move by)
-  int target_cf = (int)(start_cf - ((degrees)*tpr)/360.0);
+  printf("start_ticks=%u goal_ticks=%lld delta=%lld\n", (unsigned)start, (long long)goal,
+         (long long)delta);
 
-  printf("Current: %i Target: %i\n", start_cf, target_cf);
-  // 3. Move the centrifuge
-  pinMode(LEFTEN, OUTPUT);
-  pthread_create(&pwmProc, NULL, softPWM, &arguments);
+  fpga_pwm_period(FPGA_PWM_MOTOR, pwm_period);
+  fpga_pwm_uptime(FPGA_PWM_MOTOR, pwm_uptime);
 
-extern double findVelocity(int sample_time_us);
-
-  // Spin-up logic using findVelocity
-  period = 10;
   while (!sigint) {
-      double velocity = findVelocity(10000); // 10ms sample time
-      
-      if (velocity > 500.0 || velocity < -500.0) { // If moving at a certain speed
-          break;
-      }
-      
-      int current_pos = (int)fpga_safetran(ENC);
-      if (current_pos <= target_cf + 310) {
-          break;
-      }
-      
-      if (period < 100) {
-          period += 5; // Incrementally increase
-      }
-  }
-  
-  period = 10; // Set to low value
-  // period = vals[0]; //(to make it manual)
-  // 4. Wait until the target position is reached
-
-  int fpga_out = (int)fpga_safetran(ENC);
-  // int distance_remaining = abs(target_cf - fpga_out);
-  while (fpga_out <= target_cf + 300) {
-    // usleep(10E3);
-    if (sigint) {
-      digitalWrite(LEFTEN, 0);
+    uint32_t cur = fpga_safetran(ENC);
+    if ((int64_t)cur <= goal + TICK_TOLERANCE) {
       break;
     }
-    fpga_out = (int)fpga_safetran(ENC);
-    // printf("%d", fpga_out);
-    // distance_remaining = abs(target_cf - fpga_out);
+    usleep(1000);
   }
-  pthread_cancel(pwmProc);
-  pthread_join(pwmProc, NULL);
-  digitalWrite(LEFTEN, 0);
-  printf("Final: %i\n", fpga_out);
+
+  pwm_off();
+  uint32_t end = fpga_safetran(ENC);
+  printf("end_ticks=%u\n", (unsigned)end);
 }
 
 int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    fprintf(stderr, "usage: %s degrees [pwm_uptime [pwm_period]]\n", argv[0]);
+    fprintf(stderr, "  defaults: uptime=%u period=%u (FPGA hard PWM)\n", 1200U, 2000U);
+    return 1;
+  }
+
   signal(SIGINT, intHandler);
   wiringPiSetupPinType(WPI_PIN_WPI);
+
   int vals[argc - 1];
   intparse(argc - 1, argv + 1, vals);
 
   int degs = vals[0];
+  if (degs <= 0) {
+    fprintf(stderr, "degrees must be positive (one-direction motor)\n");
+    return 1;
+  }
+  uint32_t uptime = (argc >= 3) ? (uint32_t)vals[1] : 1200U;
+  uint32_t period = (argc >= 4) ? (uint32_t)vals[2] : 2000U;
 
-  rotateBy(degs);
+  if (period == 0 || uptime > period) {
+    fprintf(stderr, "invalid PWM: need period>0 and uptime<=period\n");
+    return 1;
+  }
+
+  rotate_by_degrees(degs, period, uptime);
   return 0;
 }
