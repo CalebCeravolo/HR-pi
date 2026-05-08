@@ -15,47 +15,48 @@ module top_level #(parameter
             input CS, 
             input logic [NUM_ENCODERS-1:0] ENCinA,
             input logic [NUM_ENCODERS-1:0] ENCinB,
-            input Centrifuge_PWM,
-            input Centrifuge_I,
             input logic [NUM_HALL-1:0] HallSensor,
-            output logic [NUM_GPIO-1:0] GPIO
-            // ,input spectroClock,
-            // input [9:0] spectroChannel0_DATA,
-            // input [9:0] spectroChannel1_DATA,
-            // input [9:0] spectroChannel2_DATA,
-            // input [9:0] spectroChannel3_DATA,
-            // input spectroChannel0_FIFO_EMPTY,
-            // input spectroChannel1_FIFO_EMPTY,
-            // input spectroChannel2_FIFO_EMPTY,
-            // input spectroChannel3_FIFO_EMPTY,
-            // output spectroChannel0_RST,
-            // output spectroChannel1_RST,
-            // output spectroChannel2_RST,
-            // output spectroChannel3_RST,
-            // output logic spectroChannel0_FIFO_RD,
-            // output logic spectroChannel1_FIFO_RD,
-            // output logic spectroChannel2_FIFO_RD,
-            // output logic spectroChannel3_FIFO_RD,
-            // output logic spectroChannel0_ENA,
-            // output logic spectroChannel1_ENA,
-            // output logic spectroChannel2_ENA,
-            // output logic spectroChannel3_ENA,
-            // // output logic spectroSlave,
-            // output logic spectroClock_ENA
+            output logic [NUM_GPIO-1:0] GPIO, 
+            input spectroClock,
+            input [9:0] spectroChannel0_DATA,
+            input [9:0] spectroChannel1_DATA,
+            input [9:0] spectroChannel2_DATA,
+            input [9:0] spectroChannel3_DATA,
+            input spectroChannel0_FIFO_EMPTY,
+            input spectroChannel1_FIFO_EMPTY,
+            input spectroChannel2_FIFO_EMPTY,
+            input spectroChannel3_FIFO_EMPTY,
+            output spectroChannel0_RST,
+            output spectroChannel1_RST,
+            output spectroChannel2_RST,
+            output spectroChannel3_RST,
+            output logic spectroChannel0_FIFO_RD,
+            output logic spectroChannel1_FIFO_RD,
+            output logic spectroChannel2_FIFO_RD,
+            output logic spectroChannel3_FIFO_RD,
+            output logic spectroChannel0_ENA,
+            output logic spectroChannel1_ENA,
+            output logic spectroChannel2_ENA,
+            output logic spectroChannel3_ENA,
+            // output logic spectroSlave,
+            output logic spectroClock_ENA,
+            //input and output for ultrasonic sensor
+            input  logic ultrasonic_echo,
+            output logic ultrasonic_trigger
     );
     logic reset;
     assign reset=0;
-    // assign {spectroChannel0_ENA, spectroChannel1_ENA,spectroChannel2_ENA,spectroChannel3_ENA, spectroClock_ENA} = 5'b11111;
+    assign {spectroChannel0_ENA, spectroChannel1_ENA,spectroChannel2_ENA,spectroChannel3_ENA, spectroClock_ENA} = 5'b11111;
     logic [20:0] period;
-    // localparam NUM_BINS = 640;
-    // localparam BIN_WIDTH = 1280/NUM_BINS;
-    // reg [19+BIN_WIDTH:0] pixelBins [NUM_BINS-1:0];
-    // // Spectrometer control
-    // spectro #(.NUM_BINS(NUM_BINS)) spc (.spectroChannel0_DATA, .spectroChannel0_ENA, .spectroChannel0_FIFO_EMPTY, .spectroChannel0_FIFO_RD,
-    //             .spectroChannel1_DATA, .spectroChannel1_ENA, .spectroChannel1_FIFO_EMPTY, .spectroChannel1_FIFO_RD,
-    //             .spectroChannel2_DATA, .spectroChannel2_ENA, .spectroChannel2_FIFO_EMPTY, .spectroChannel2_FIFO_RD,
-    //             .spectroChannel3_DATA, .spectroChannel3_ENA, .spectroChannel3_FIFO_EMPTY, .spectroChannel3_FIFO_RD,
-    //             .clk(spectroClock), .pixelBins);
+    localparam NUM_BINS = 640;
+    localparam BIN_WIDTH = 1280/NUM_BINS;
+    reg [19+BIN_WIDTH:0] pixelBins [NUM_BINS-1:0];
+    // Spectrometer control
+    spectro #(.NUM_BINS(NUM_BINS)) spc (.spectroChannel0_DATA, .spectroChannel0_ENA, .spectroChannel0_FIFO_EMPTY, .spectroChannel0_FIFO_RD,
+                .spectroChannel1_DATA, .spectroChannel1_ENA, .spectroChannel1_FIFO_EMPTY, .spectroChannel1_FIFO_RD,
+                .spectroChannel2_DATA, .spectroChannel2_ENA, .spectroChannel2_FIFO_EMPTY, .spectroChannel2_FIFO_RD,
+                .spectroChannel3_DATA, .spectroChannel3_ENA, .spectroChannel3_FIFO_EMPTY, .spectroChannel3_FIFO_RD,
+                .clk(spectroClock), .pixelBins);
     // Button Inputs
     logic button1_ps, button2_ps;
     logic deb1, deb2;
@@ -113,6 +114,7 @@ module top_level #(parameter
             Reset Enc:
             3
 
+
             Read Hall:
             4
 
@@ -143,22 +145,16 @@ module top_level #(parameter
         case (data_addr_reg)
             0: SPI_data_out = SPI_data_in; // Period of debug led
             1: SPI_data_out = 32'b11111111111111110000000000000000; // Debug
-            // 2: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
-            // 3: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
-            // 4: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
-            // 5: SPI_data_out = {{enc_dir[3]},{enc_count[3]}};  // Encoder 2 data
-            2: SPI_data_out = enc_count[0];  // Encoder 0 data
-            3: SPI_data_out = enc_count[1];  // Encoder 1 data
-            4: SPI_data_out = enc_count[2];  // Encoder 2 data
-            // 5: SPI_data_out = enc_count[3];  // Encoder 2 data
-            5: SPI_data_out = HallSensor;
-            6: SPI_data_out = centrifuge_pwm_uptime;
+            2: SPI_data_out = pixelBins[binAddr];
+            3: SPI_data_out = {{enc_dir[0]},{enc_count[0]}};  // Encoder 0 data
+            4: SPI_data_out = {{enc_dir[1]},{enc_count[1]}};  // Encoder 1 data
+            5: SPI_data_out = {{enc_dir[2]},{enc_count[2]}};  // Encoder 2 data
+            6: SPI_data_out = HallSensor;
+            7: SPI_data_out = {14'b0, ultrasonic_ready, ultrasonic_valid, ultrasonic_distance};
             default: SPI_data_out = SPI_data_in;
         endcase
     end
     logic set_pwm_period, set_pwm_uptime, send_data, reset_enc, read_hall;
-    wire [9:0] centrifuge_pwm_uptime;
-    pwm_in centrifuge_encoder (.signal(Centrifuge_PWM), .micro_clk(pwm1usCLK), .uptime(centrifuge_pwm_uptime));
     // Data decoding
     assign command = SPI_data_in[31:26];
 
@@ -204,7 +200,7 @@ module top_level #(parameter
 
     logic inA [NUM_ENCODERS-1:0], inB [NUM_ENCODERS-1:0], inZ [NUM_ENCODERS-1:0], trigZ [NUM_ENCODERS-1:0];
     logic enc_dir [NUM_ENCODERS-1:0];
-    localparam COUNT_BITS = 32;
+    localparam COUNT_BITS = 16;
     logic [COUNT_BITS-1:0] enc_count [NUM_ENCODERS-1:0];
     genvar i;
     generate
@@ -212,7 +208,7 @@ module top_level #(parameter
             level_trigger en_res (.in(trigZ[i]), .out(inZ[i]), .clk(GCLK), .reset);
             assign inA[i] = ENCinA[i];
             assign inB[i] = ENCinB[i];
-            encoder #(.COUNT_BITS(COUNT_BITS)) motorC (.inA(inA[i]), .inB(inB[i]), .inZ(inZ[i]), .clk(GCLK), .count(enc_count[i]), .direction(enc_dir[i]));
+            encoder motorC (.inA(inA[i]), .inB(inB[i]), .inZ(inZ[i]), .clk(GCLK), .count(enc_count[i]), .direction(enc_dir[i]));
         end
     endgenerate
 
@@ -235,6 +231,25 @@ module top_level #(parameter
     // Test LED
     assign RGB_1[0] = ENCinA[2];
     // pwm led_sig (.clk(GCLK), .sig(RGB_1[0]), .period(period));
+
+    //untrasonic_sensor
+    logic [15:0] ultrasonic_distance;
+    logic ultrasonic_valid;
+    logic ultrasonic_ready;
+    logic ultrasonic_start;
+
+    assign ultrasonic_start = load_it && send_data && (data_addr == 8'd7) && ultrasonic_ready;
+
+    ultrasonic_sensor us0 (
+        .clk(pwm1usCLK),
+        .rst (reset),
+        .trigger(ultrasonic_start),
+        .echo(ultrasonic_echo),
+        .distance(ultrasonic_distance),
+        .trigger_out(ultrasonic_trigger),
+        .valid(ultrasonic_valid),
+        .ready(ultrasonic_ready)
+    );
 endmodule
 
 
