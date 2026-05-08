@@ -1,4 +1,4 @@
-all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterHeightSensor 1wTempSensor findVelocity
+all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterHeightSensor 1wTempSensor findVelocity PWM_Map
 
 getD: functions.c pins.h FPGAtesting/Get_data.c
 	gcc FPGAtesting/Get_data.c functions.c -lwiringPi -o ../Executables/getD
@@ -34,3 +34,5 @@ tempSensorRead: functions.c pins.h SystemsTesting/tempSensorRead.c
 	gcc SystemsTesting/tempSensorRead.c functions.c pins.h -lwiringPi -o ../Executables/tempSensorRead
 1wTempSensor: functions.c pins.h SystemsTesting/1wTempSensor.c
 	gcc SystemsTesting/1wTempSensor.c functions.c pins.h -lwiringPi -o ../Executables/1wTempSensor
+PWM_Map: functions.c pins.h SystemsTesting/Augur/PWM_Map.c
+	gcc SystemsTesting/Augur/PWM_Map.c functions.c pins.h -lwiringPi -o ../Executables/PWM_Map

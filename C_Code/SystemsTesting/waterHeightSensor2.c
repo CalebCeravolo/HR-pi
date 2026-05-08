@@ -48,7 +48,7 @@ static const struct { float pct; float mm; } CAL[] = {
 
 #define MAX_STABLE_THRESHOLD 2.0f
 #define MIN_ADC_MAX_COUNTS 1000
-#define MAX_STABLE_CONFIRM_CYCLES 5
+#define MAX_STABLE_CONFIRM_CYCLES 10
 // ADC counts/cycle below which the reading is considered settled.
 // Raise this if it declares "stable" too early; lower it if it takes too long.
 #define STABLE_DELTA_THRESHOLD  7.0f
@@ -192,7 +192,7 @@ void run_live_monitor(int fd, int channel, int num_samples, int interval_ms, flo
         else if (stable_count < STABLE_CONFIRM_CYCLES) stable_count++;
 
         float pct = avg_raw / cal_max_adc;
-        if (pct < 0) pct = 0f; // Clamp values
+        if (pct < 0) pct = 0.0f; // Clamp values
         if (pct > 1.0f) pct = 1.0f;
         
         // Use your piecewise function to get mm
@@ -203,8 +203,8 @@ void run_live_monitor(int fd, int channel, int num_samples, int interval_ms, flo
         printf("\033[2KRaw ADC:  %6.1f  (delta %+.1f)\n", avg_raw, signed_delta);
         printf("\033[2KVoltage:  %.4f V\n", voltage);
         if (stable_count < STABLE_CONFIRM_CYCLES) {
-            printf("\033[2KLevel:    stabilizing...\n");
-            printf("\033[2KDepth:    stabilizing...\n");
+            printf("\033[2KLevel:    stabilizing... %6.1f %%\n", pct * 100.0f);
+            printf("\033[2KDepth:    stabilizing... %6.1f %%\n", depth_mm);
         } else {
             printf("\033[2KLevel:   %6.1f %%\n", pct * 100.0f);
             printf("\033[2KDepth:   %6.1f mm\n", depth_mm);

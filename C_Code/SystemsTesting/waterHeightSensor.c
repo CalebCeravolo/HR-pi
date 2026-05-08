@@ -33,8 +33,8 @@
 // ── Temperature compensation ──────────────────────────────────────────────────
 // slope = (ADC_at_T2 - ADC_at_T1) / (T2 - T1)  [ADC counts per °C]
 // Set TEMP_REF_C to the temperature at which the CAL[] table was collected.
-#define TEMP_REF_C    20.0f   // reference temperature used during depth calibration
-#define TEMP_SLOPE     0.0f   // ADC counts per °C  <-- SET THIS FROM YOUR DATA
+#define TEMP_REF_C    20.5f   // reference temperature used during depth calibration
+#define TEMP_SLOPE     -2.3166f   // ADC counts per °C  <-- SET THIS FROM YOUR DATA
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Calibration lookup table ──────────────────────────────────────────────────
@@ -42,21 +42,21 @@
 // Readings were taken after the initial insertion spike settled but before
 // electrolysis drift began. Add more rows or extend the range as needed.
 static const struct { float adc; float mm; } CAL[] = {
-    {  442.5f,  0.0f },
-    {  746.25f, 5.0f },
-    {  947.0f, 10.0f },
-    { 1093.75f, 15.0f },
-    { 1211.25f, 20.0f },
-    { 1285.0f,  25.0f },
-    { 1316.0f,  30.0f },
-    { 1370.0f,  35.0f },
+    { 141.4f,  0.0f },
+    { 697.0f, 5.0f },
+    { 1008.4f, 10.0f },
+    { 1161.2f, 15.0f },
+    { 1281.2f, 20.0f },
+    { 1353.6f,  25.0f },
+    { 1404.2f,  30.0f },
+    { 1444.0f,  35.0f },
 };
 #define CAL_POINTS (int)(sizeof(CAL) / sizeof(CAL[0]))
 #define CAL_MAX_MM  35.0f
 
 // ADC counts/cycle below which the reading is considered settled.
 // Raise this if it declares "stable" too early; lower it if it takes too long.
-#define STABLE_DELTA_THRESHOLD  7.0f
+#define STABLE_DELTA_THRESHOLD  5.0f
 // How many consecutive stable cycles before the reading is trusted.
 #define STABLE_CONFIRM_CYCLES   3
 // ─────────────────────────────────────────────────────────────────────────────
@@ -213,8 +213,8 @@ int main(int argc, char *argv[]) {
         else
             printf("\033[2KTemp:     %.2f C\n", temp_c);
         if (stable_count < STABLE_CONFIRM_CYCLES) {
-            printf("\033[2KLevel:    stabilizing...\n");
-            printf("\033[2KDepth:    stabilizing...\n");
+            printf("\033[2KLevel:    stabilizing..., %6.1f %%\n", pct);
+            printf("\033[2KDepth:    stabilizing..., %6.1f mm\n", depth_mm);
         } else {
             printf("\033[2KLevel:   %6.1f %%\n", pct);
             printf("\033[2KDepth:   %6.1f mm\n", depth_mm);
