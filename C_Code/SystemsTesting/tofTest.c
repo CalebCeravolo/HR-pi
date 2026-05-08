@@ -22,9 +22,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#define OFFSET -18
-
 #include "tof.h" // time of flight sensor library
+
+#define ZERO_NUM_SAMPLES 50
 
 static int init (void) {
 	int i;
@@ -49,24 +49,24 @@ static int init (void) {
 	return i;
 }
 
-static int run_tof_test(void) {
+static int run_tof_test(int zero) {
 	int iDistance;
-	for (int i=0; i<1200; i++) // read values 20 times a second for 1 minute
+	while (1) // read values 20 times a second for 1 minute
 	{
-		iDistance = tofReadDistance() + OFFSET;
+		iDistance = tofReadDistance() - zero;
 		if (iDistance < 4096) {
 			printf("\033[1A\033[2K\r");
 			printf("Distance = %dmm\n", iDistance);
 		}
-		usleep(50000);
+		usleep(200000);
 	}
 
 	return 0;
 }
 
-int calibrateOffset(int knownDistanceMm, int samples) {
+int zeroCalibration() {
     long sum = 0;
-    for (int i = 0; i < samples; i++) {
+    for (int i = 0; i < ZERO_NUM_SAMPLES; i++) {
         int reading = tofReadDistance();
         if (reading < 0) {
             fprintf(stderr, "Read error during calibration\n");
@@ -76,16 +76,14 @@ int calibrateOffset(int knownDistanceMm, int samples) {
         usleep(250000); // 250ms between samples
     }
     int measured = sum / samples;
-    int offset = knownDistanceMm - measured;
-    printf("Calibration: measured=%dmm, known=%dmm, offset=%dmm\n",
-           measured, knownDistanceMm, offset);
-    return offset;
+    printf("Calibration: measured=%dmm\n", measured);
+    return measured;
 }
 
 int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 	init();
-	//return calibrateOffset(138, 30);
-	return run_tof_test();
+	int zero = zeroCalibration();
+	return run_tof_test(zero);
 }
