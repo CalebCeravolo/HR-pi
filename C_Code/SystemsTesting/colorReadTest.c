@@ -6,7 +6,7 @@
 #define MULTI_BYTE_BIT 0x20
 int main(int argc, char *argv[]){
     int vals[argc-1];
-    intparse(argc, argv, vals);
+    //intparse(argc, argv, vals);
     // printf("%x",(uint8_t)vals[0]);
     int fd = wiringPiI2CSetup(DEVICE_ID);
     if (fd == -1) {
