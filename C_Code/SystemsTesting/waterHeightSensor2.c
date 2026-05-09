@@ -46,9 +46,6 @@ static const struct { float pct; float mm; } CAL[] = {
 #define CAL_POINTS (int)(sizeof(CAL) / sizeof(CAL[0]))
 #define CAL_MAX_MM  35.0f
 
-#define MAX_STABLE_THRESHOLD 2.0f
-#define MIN_ADC_MAX_COUNTS 1000
-#define MAX_STABLE_CONFIRM_CYCLES 10
 // ADC counts/cycle below which the reading is considered settled.
 // Raise this if it declares "stable" too early; lower it if it takes too long.
 #define STABLE_DELTA_THRESHOLD  7.0f
@@ -105,56 +102,6 @@ static float pct_to_mm(float pct) {
         }
     }
     return CAL[CAL_POINTS - 1].mm;
-}
-
-
-// Fills the container and monitors the slope. 
-// Returns the ADC value once the level has stabilized at the top.
-float calibrate_max_adc(int fd, int channel, int num_samples) {
-    float prev_avg = -1.0f;
-    int stable_count = 0;
-    float current_avg = 0.0f;
-
-    printf("Starting Auto-Calibration... Filling container.\n");
-
-    while (stable_count < MAX_STABLE_CONFIRM_CYCLES) {
-        long sum = 0;
-        int valid = 0;
-
-        // Oversampling for noise reduction
-        for (int i = 0; i < num_samples; i++) {
-            int16_t raw = ads1015_read(fd, channel);
-            if (raw != -32768) {
-                sum += raw;
-                valid++;
-            }
-            usleep(1000);
-        }
-
-        if (valid > 0) {
-            current_avg = (float)sum / valid;
-            
-            if (prev_avg >= 0.0f) {
-                float delta = current_avg - prev_avg;
-                // Absolute delta to catch "flat" signal
-                float abs_delta = (delta < 0) ? -delta : delta;
-
-                if (abs_delta <= MAX_STABLE_THRESHOLD && current_avg > MIN_ADC_MAX_COUNTS) {
-                    stable_count++;
-                    printf("\033[2KStability detected: %d/%d\r", stable_count, MAX_STABLE_CONFIRM_CYCLES);
-                } else {
-                    stable_count = 0;
-                    printf("\033[2KFilling... Current ADC: %.1f\r", current_avg);
-                }
-            }
-            prev_avg = current_avg;
-        }
-        fflush(stdout);
-        usleep(50000); // 50ms check interval for slope
-    }
-
-    printf("\nCalibration Complete! Max ADC set to: %.1f\n", current_avg);
-    return current_avg;
 }
 
 // Monitors in pct fill based on max ADC count
@@ -233,7 +180,10 @@ int main(int argc, char *argv[]) {
            channel, num_samples, interval_ms);
     printf("\n\n\n\n");  // reserve lines for in-place update
 
-    float cal_max_adc = calibrate_max_adc(fd, channel, num_samples);
+    FILE *f = fopen("ADC_Max.bin", "rb");
+    float cal_max_adc;
+    fread(&val, sizeof(float), 1, f);
+    fclose(f);
     run_live_monitor(fd, channel, num_samples, interval_ms, cal_max_adc);
 
     return 0;

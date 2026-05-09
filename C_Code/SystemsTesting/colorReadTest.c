@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
     // 00       1            1              00         10 
     // 100%  reserved  dark_if_saturated  reserved  16x_gain
     // 0x8F: control register one
-    wiringPiI2CWriteReg8(fd, 0x8F, 0b00110011); // gain control register
+    wiringPiI2CWriteReg8(fd, 0x8F, 0b00110010); // gain control register
 
     // makes sure data is ready before reading
     uint8_t status;
@@ -63,9 +63,9 @@ int main(int argc, char *argv[]){
 
     // Calibration: point sensor at a white surface, record raw values, fill in below.
     // Scale factors normalize all channels to match WHITE_R.
-    #define WHITE_R 33366.0f
-    #define WHITE_G 24910.0f  // replace with your green reading on white
-    #define WHITE_B 22926.0f  // replace with your blue reading on white
+    #define WHITE_R 8521.0f
+    #define WHITE_G 6187.0f  // replace with your green reading on white
+    #define WHITE_B 5560.0f  // replace with your blue reading on white
 
     int cal_r = raw_r;
     int cal_g = (int)(raw_g * (WHITE_R / WHITE_G));

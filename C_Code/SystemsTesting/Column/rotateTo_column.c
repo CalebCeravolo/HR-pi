@@ -22,7 +22,7 @@ void enc_dec(int32_t *amount, float *degrees) {
     *degrees = (*amount * 360.0) / CPR;
 }
 
-int rotateTo(float target, int left, int right) {
+int rotateTo(float target_degrees, int left, int right) {
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
   
@@ -31,7 +31,7 @@ int rotateTo(float target, int left, int right) {
   enc_dec(&amount, &current_degrees);
 
   // For an incremental encoder, find the shortest path to the target angle
-  float diff = fmodf(target - current_degrees, 360.0f);
+  float diff = fmodf(target_degrees - current_degrees, 360.0f);
   if (diff > 180.0f) {
     diff -= 360.0f;
   } else if (diff < -180.0f) {
