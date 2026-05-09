@@ -55,7 +55,22 @@ int main(int argc, char *argv[]){
     uint8_t redt = wiringPiI2CReadReg8(fd, 0x97);
     uint8_t greent = wiringPiI2CReadReg8(fd, 0x99);
     uint8_t bluet = wiringPiI2CReadReg8(fd, 0x9B);
-    printf("Red: %d\nGreen:%d\nBlue:%d\n", redb|(redt<<8), greenb|(greent<<8), blueb|(bluet<<8));
-    // printf("Red: %d\nGreen:%d\nBlue:%d\n", redt, greent, bluet);
+
+    int raw_r = redb   | (redt   << 8);
+    int raw_g = greenb | (greent << 8);
+    int raw_b = blueb  | (bluet  << 8);
+    printf("Raw - Red: %d  Green: %d  Blue: %d\n", raw_r, raw_g, raw_b);
+
+    // Calibration: point sensor at a white surface, record raw values, fill in below.
+    // Scale factors normalize all channels to match WHITE_R.
+    #define WHITE_R 33366.0f
+    #define WHITE_G 24910.0f  // replace with your green reading on white
+    #define WHITE_B 22926.0f  // replace with your blue reading on white
+
+    int cal_r = raw_r;
+    int cal_g = (int)(raw_g * (WHITE_R / WHITE_G));
+    int cal_b = (int)(raw_b * (WHITE_R / WHITE_B));
+    printf("Cal - Red: %d  Green: %d  Blue: %d\n", cal_r, cal_g, cal_b);
+
     return 0;
 }
