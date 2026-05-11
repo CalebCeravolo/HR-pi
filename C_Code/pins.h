@@ -32,8 +32,8 @@
 #define SPIN_COLUMN_PIN1 H1A_3
 #define SPIN_COLUMN_PIN2 H1A_4
 // Raise Lower Column
-#define H42A_1 8  // Raise
-#define H42A_2 9  // Lower
+#define H42A_1 29  // Raise
+#define H42A_2 27  // Lower
 
 #define COLUMN_RL_PIN1 H42A_1
 #define COLUMN_RL_PIN2 H42A_2
