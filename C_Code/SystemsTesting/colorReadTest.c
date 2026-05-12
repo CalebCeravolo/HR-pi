@@ -48,6 +48,8 @@ int main(int argc, char *argv[]){
         status = wiringPiI2CReadReg8(fd, 0x93);
     } while (!(status & 0x01));  // keeps waiting until AVALID = 1, then runs code below.
     
+    int clearb = wiringPiI2CReadReg8(fd, 0x94);
+    uint8_t cleart = wiringPiI2CReadReg8(fd, 0x95);
     int redb = wiringPiI2CReadReg8(fd, 0x96);
     int greenb = wiringPiI2CReadReg8(fd, 0x98);
     int blueb = wiringPiI2CReadReg8(fd, 0x9A);
@@ -59,18 +61,41 @@ int main(int argc, char *argv[]){
     int raw_r = redb   | (redt   << 8);
     int raw_g = greenb | (greent << 8);
     int raw_b = blueb  | (bluet  << 8);
-    printf("Raw - Red: %d  Green: %d  Blue: %d\n", raw_r, raw_g, raw_b);
+    int raw_c = clearb | (cleart << 8);
+    printf("Raw - Red: %d  Green: %d  Blue: %d  Clear: %d\n", raw_r, raw_g, raw_b, raw_c);
 
-    // Calibration: point sensor at a white surface, record raw values, fill in below.
-    // Scale factors normalize all channels to match WHITE_R.
+    // Saturation check — any channel at 65535 means the ADC is clipped; readings unreliable.
+    // Fix: lower gain (0x8F) or shorten integration time (0x81).
+    if (raw_r == 65535 || raw_g == 65535 || raw_b == 65535 || raw_c == 65535) {
+        printf("Warning: saturation on one or more channels — lower gain or integration time.\n");
+        return -1;
+    }
+
+    if (raw_c == 0) {
+        printf("Clear channel is zero, cannot normalize.\n");
+        return -1;
+    }
+
+    // Dark calibration offsets — cover sensor completely, record raw values, set DARK_* below.
+    // Subtract before any other math; most impactful on blue which has the weakest signal.
+    // Recalibrate if gain or integration time changes.
+    #define DARK_R 0.0f  // replace with covered-sensor red reading
+    #define DARK_G 0.0f  // replace with covered-sensor green reading
+    #define DARK_B 0.0f  // replace with covered-sensor blue reading
+    #define DARK_C 0.0f  // replace with covered-sensor clear reading
+
+    // White calibration scale factors — point sensor at white surface, record raw values.
+    // Recalibrate if gain or integration time changes.
     #define WHITE_R 8521.0f
-    #define WHITE_G 6187.0f  // replace with your green reading on white
-    #define WHITE_B 5560.0f  // replace with your blue reading on white
+    #define WHITE_G 6187.0f
+    #define WHITE_B 5560.0f
+    #define WHITE_C 7900.0f
 
-    int cal_r = raw_r;
-    int cal_g = (int)(raw_g * (WHITE_R / WHITE_G));
-    int cal_b = (int)(raw_b * (WHITE_R / WHITE_B));
-    printf("Cal - Red: %d  Green: %d  Blue: %d\n", cal_r, cal_g, cal_b);
+    // Pipeline: subtract dark offset → normalize by clear → apply white scale factors
+    float r = (((float)raw_r - DARK_R) / (raw_c - DARK_C)) * (WHITE_C / WHITE_R);
+    float g = (((float)raw_g - DARK_G) / (raw_c - DARK_C)) * (WHITE_C / WHITE_G);
+    float b = (((float)raw_b - DARK_B) / (raw_c - DARK_C)) * (WHITE_C / WHITE_B);
+    printf("Cal  - Red: %.3f  Green: %.3f  Blue: %.3f\n", r, g, b);
 
     return 0;
 }
