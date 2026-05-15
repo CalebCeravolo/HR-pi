@@ -61,6 +61,7 @@
 #define ENC_RAISE_LOWER 3
 #define ENC_COLUMN_ROTATE 4
 
+/* FPGA read channel 7: 32-bit word; bits 0–2 are three Hall inputs (1 = idle, 0 = detected). */
 #define HALL_CHANNEL 7
-
+#define COLUMN_TOP_HALL_BIT 0
 
