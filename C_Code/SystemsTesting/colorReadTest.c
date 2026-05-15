@@ -95,7 +95,20 @@ int main(int argc, char *argv[]){
     float r = (((float)raw_r - DARK_R) / (raw_c - DARK_C)) * (WHITE_C / WHITE_R);
     float g = (((float)raw_g - DARK_G) / (raw_c - DARK_C)) * (WHITE_C / WHITE_G);
     float b = (((float)raw_b - DARK_B) / (raw_c - DARK_C)) * (WHITE_C / WHITE_B);
+
+    // Clamp to [0, 255] — values can exceed 1.0 for colors brighter than the white reference
+    int rgb_r = (int)(r * 255.0f);
+    int rgb_g = (int)(g * 255.0f);
+    int rgb_b = (int)(b * 255.0f);
+    if (rgb_r > 255) rgb_r = 255;
+    if (rgb_g > 255) rgb_g = 255;
+    if (rgb_b > 255) rgb_b = 255;
+    if (rgb_r < 0)   rgb_r = 0;
+    if (rgb_g < 0)   rgb_g = 0;
+    if (rgb_b < 0)   rgb_b = 0;
+
     printf("Cal  - Red: %.3f  Green: %.3f  Blue: %.3f\n", r, g, b);
+    printf("RGB  - Red: %d  Green: %d  Blue: %d\n", rgb_r, rgb_g, rgb_b);
 
     return 0;
 }
