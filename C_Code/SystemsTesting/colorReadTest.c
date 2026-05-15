@@ -79,10 +79,10 @@ int main(int argc, char *argv[]){
     // Dark calibration offsets — cover sensor completely, record raw values, set DARK_* below.
     // Subtract before any other math; most impactful on blue which has the weakest signal.
     // Recalibrate if gain or integration time changes.
-    #define DARK_R 0.0f  // replace with covered-sensor red reading
-    #define DARK_G 0.0f  // replace with covered-sensor green reading
-    #define DARK_B 0.0f  // replace with covered-sensor blue reading
-    #define DARK_C 0.0f  // replace with covered-sensor clear reading
+    #define DARK_R 13.0f  // replace with covered-sensor red reading
+    #define DARK_G 4.0f  // replace with covered-sensor green reading
+    #define DARK_B 4.0f  // replace with covered-sensor blue reading
+    #define DARK_C 17.0f  // replace with covered-sensor clear reading
 
     // White calibration scale factors — point sensor at white surface, record raw values.
     // Recalibrate if gain or integration time changes.
