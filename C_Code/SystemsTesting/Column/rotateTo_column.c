@@ -9,8 +9,12 @@
 #include <stdint.h>
 #include <unistd.h>
 // #include <signal.h>
-#define CPR (663.0 / 6) // Counts per revolution
+#define CPR 663.0 / 6 // Counts per revolution
 #define DATA_ADDR ENC_COLUMN_ROTATE
+
+// -100 is deposit position
+// 0 is home
+
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
 
@@ -22,26 +26,15 @@ void enc_dec(int32_t *amount, float *degrees) {
     *degrees = (*amount * 360.0) / CPR;
 }
 
-int rotateTo(float target_degrees, int left, int right) {
+int rotateTo(float target, int left, int right) {
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
-  
+  // int dir;
   int32_t amount;
-  float current_degrees;
-  enc_dec(&amount, &current_degrees);
-
-  // For an incremental encoder, find the shortest path to the target angle
-  float diff = fmodf(target_degrees - current_degrees, 360.0f);
-  if (diff > 180.0f) {
-    diff -= 360.0f;
-  } else if (diff < -180.0f) {
-    diff += 360.0f;
-  }
-  
-  float goal_degrees = current_degrees + diff;
-  float distance_remaining = fabsf(current_degrees - goal_degrees);
-
-  if (current_degrees > goal_degrees) {
+  float degrees;
+  enc_dec(&amount, &degrees);
+  float distance_remaining = fabsf((degrees) - (target));
+  if (degrees > target) {
     digitalWrite(left, 0);
     digitalWrite(right, 1);
   } else {
@@ -49,20 +42,19 @@ int rotateTo(float target_degrees, int left, int right) {
     digitalWrite(right, 0);
   }
 
-  while (distance_remaining > 5.0f) {
+  while ((distance_remaining) > 0.5) {
     if (sigint) {
       digitalWrite(left, 0);
       digitalWrite(right, 0);
       break;
     }
     usleep(10000);
-    enc_dec(&amount, &current_degrees);
-    distance_remaining = fabsf(current_degrees - goal_degrees);
+    enc_dec(&amount, &degrees);
+    distance_remaining = fabsf((degrees) - (target));
   }
-  
   digitalWrite(left, 0);
   digitalWrite(right, 0);
-  printf("Target Goal: %f\nActual: %f\n", goal_degrees, current_degrees);
+  printf("Target: %f\nActual: %f\n", target, degrees);
   return 0;
 }
 

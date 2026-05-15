@@ -10,10 +10,10 @@
 static int sigint = 0;
 static void intHandler(int dummy) { sigint = 1; }
 
-// #define HALL_CHANNEL ENC_RAISE_LOWER
-#define HALL_BIT 0 // Adjust this to the correct bit index if necessary
-#define RAISED 1   // Target bit state when the pump is fully raised
-#define LOWERED 0  // Target bit state when the pump is fully lowered
+/* HALL_CHANNEL (pins.h): FPGA ch. 7; bits 0–2 are Hall (1 = idle, 0 = detected). */
+#define HALL_BIT 0 /* 0–2: which sensor to watch */
+#define RAISED 0   /* Hall active → bit 0 */
+#define LOWERED 1  /* idle → bit 1 */
 
 int get_fpga_bit(int channel, int bit) {
   uint32_t data = fpga_safetran(channel);

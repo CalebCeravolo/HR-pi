@@ -37,22 +37,19 @@ static void ResetENC(uint8_t encoder_channel) {
   fpga_reset_encoder(encoder_channel);
 }
 
-static int column_top_hall_enabled(void) { return (COLUMN_TOP_HALL_PIN >= 0); }
-
-static void column_top_hall_setup(void) {
-  if (!column_top_hall_enabled()) {
-    return;
-  }
-  pinMode(COLUMN_TOP_HALL_PIN, INPUT);
-  pullUpDnControl(COLUMN_TOP_HALL_PIN, PUD_UP);
+static int column_top_hall_enabled(void) {
+  return (COLUMN_TOP_HALL_BIT >= 0 && COLUMN_TOP_HALL_BIT <= 2);
 }
 
-/** True when the top Hall limit indicates the column is at mechanical top. */
+static void column_top_hall_setup(void) { /* Hall is on FPGA channel HALL_CHANNEL; no GPIO setup. */ }
+
+/** True when the top Hall sensor reports magnet present (bit reads 0; idle is 1). */
 static int column_at_top_hall(void) {
   if (!column_top_hall_enabled()) {
     return 0;
   }
-  return digitalRead(COLUMN_TOP_HALL_PIN) == COLUMN_TOP_HALL_AT_TOP;
+  uint32_t word = fpga_safetran((uint8_t)HALL_CHANNEL);
+  return ((word >> COLUMN_TOP_HALL_BIT) & 1u) == 0u;
 }
 
 static void read_position(int32_t *ticks, float *cm) {
