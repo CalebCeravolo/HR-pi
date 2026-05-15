@@ -38,11 +38,6 @@
 #define COLUMN_RL_PIN1 H42A_1
 #define COLUMN_RL_PIN2 H42A_2
 
-// Hall effect at column top of travel (wiringPi pin). INPUT + pull-up; wire per your module.
-// Set to -1 to disable the limit in software. AT_TOP is the pin level when the column is at top (0 = LOW).
-#define COLUMN_TOP_HALL_PIN somevalue
-#define COLUMN_TOP_HALL_AT_TOP somevalue
-
 // #define H18A_2_1 27 // Centrifuge
 // #define H18A_2_2 26
 
@@ -66,6 +61,6 @@
 #define ENC_RAISE_LOWER 3
 #define ENC_COLUMN_ROTATE 4
 
-#define HALL_CHANNEL 6
+#define HALL_CHANNEL 7
 
 
