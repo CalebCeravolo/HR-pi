@@ -9,7 +9,8 @@
 #include "../../functions.h"
 #include "../../pins.h"
 
-#define DATA_ADDR ENC_RAISE_LOWER
+/* FPGA encoder channel 2 (column raise/lower position) */
+#define DATA_ADDR ENC_CENTRIFUGE_INC
 
 /*
  * Set TICKS_OVER_REFERENCE to that count and REFERENCE_DISTANCE_CM to the distance you moved.
@@ -92,7 +93,7 @@ static int raiseLowerTo(float target_cm, int raise_pin, int lower_pin) {
   float distance_remaining = fabsf(cm - target_cm);
 
   if (cm < target_cm && column_at_top_hall()) {
-    ResetENC((uint8_t)ENC_RAISE_LOWER);
+    ResetENC((uint8_t)DATA_ADDR);
     read_position(&ticks, &cm);
     fprintf(stderr,
             "ERROR: Column top Hall limit active; cannot raise toward %.3f cm "
@@ -137,7 +138,7 @@ static int raiseLowerTo(float target_cm, int raise_pin, int lower_pin) {
     if (cm < target_cm && column_at_top_hall()) {
       digitalWrite(raise_pin, 0);
       digitalWrite(lower_pin, 0);
-      ResetENC((uint8_t)ENC_RAISE_LOWER);
+      ResetENC((uint8_t)DATA_ADDR);
       read_position(&ticks, &cm);
       fprintf(stderr,
               "Stopped: column top Hall limit reached before target "
