@@ -25,7 +25,7 @@ void rotateTo(int target_cf) {
 
   int distance_remaining = abs(target_cf - current);
 
-  // Wait until the target position is reached
+  // Wait until the target position is reached, 100 units before start slowing down
   while (distance_remaining > 100) {
     if (sigint) {
       digitalWrite(LEFTEN, 0);
