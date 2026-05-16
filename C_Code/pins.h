@@ -35,8 +35,8 @@
 #define H42A_1 29  // lower
 #define H42A_2 27  // raise
 
-#define COLUMN_RL_PIN1 H42A_1
-#define COLUMN_RL_PIN2 H42A_2
+#define COLUMN_RL_PIN1 H42A_1 //lower
+#define COLUMN_RL_PIN2 H42A_2 //raise
 
 // #define H18A_2_1 27 // Centrifuge
 // #define H18A_2_2 26

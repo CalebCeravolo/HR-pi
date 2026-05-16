@@ -26,7 +26,7 @@ static void intHandler(int dummy) { sigint = 1; }
 
 /** Same SPI command as Executables/resetEnc (fpga_reset_encoder). */
 static void ResetENC(uint8_t encoder_channel) {
-  fpga_reset_encoder(encoder_channel);
+  fpga_reset_encoder(encoder_channel);f
 }
 
 static int column_top_hall_enabled(void) {
@@ -168,6 +168,6 @@ int main(int argc, char *argv[]) {
   wiringPiSetupPinType(WPI_PIN_WPI);
   int vals[argc - 1];
   intparse(argc - 1, argv + 1, vals);
-  int rc = raiseLowerTo((int32_t)vals[0], H42A_1, H42A_2);
+  int rc = raiseLowerTo((int32_t)vals[0], COLUMN_RL_PIN2, COLUMN_RL_PIN1);
   return (rc < 0) ? 1 : 0;
 }
