@@ -16,6 +16,23 @@
 #include <numeric>
 #include <cmath>
 using namespace std;
+
+
+vector<double> find_peaks(int start, int end, vector<double> column_data){
+    double peak_value = 0.0;
+    int i_val = 0;
+    vector<double> data;
+    double scale = (660-440)/SCREEN_WIDTH;
+    for(int i = start; i <= end; i ++){
+        if(column_data[i] < peak_value){
+            peak_value = column_data[i];
+            i_val = i;
+        }
+    }
+    data.push_back(i_val * scale);
+    data.push_back(peak_value);
+    return data;
+}
 vector<double> load_calibration(const string& filename) {
     vector<double> data;
     ifstream file(filename);
@@ -70,6 +87,33 @@ void intparse (int argc, char** args, int * output){
     }
 }
 
+void save_calibration(const std::vector<double>& data, const std::string& filename) {
+    std::ofstream file(filename);
+    for (size_t i = 0; i < data.size(); i++) {
+        file << data[i];
+        if (i != data.size() - 1) file << ",";
+    }
+    file << "\n";
+}
+
+void on_quit(vector<double> averages) {
+    cout << "first\n";
+    vector<double> red_peak = find_peaks(540, 625, averages);
+    cout << "Second\n";
+    vector<double> orange_peak = find_peaks(590, 625, averages);
+    vector<double> yellow_peak = find_peaks(565, 590, averages);
+    vector<double> green_peak = find_peaks(500, 565, averages);
+    vector<double> cyan_peak = find_peaks(485, 500, averages);
+    vector<double> blue_peak = find_peaks(450, 485, averages);
+    vector<vector<double>> peaks = {red_peak, orange_peak, yellow_peak, green_peak, cyan_peak, blue_peak};
+    cout <<red_peak << "colors" <<'\n';
+    // vector<vector<double>> peaks;
+    // peaks.push_back(vector<double>)
+    
+
+    save_calibration(peaks, "peaks_colors.csv");
+}
+
 int main(int argc, char** argv) {
     int vals[argc-1];
     intparse(argc-1, argv+1, vals);
@@ -104,13 +148,14 @@ int main(int argc, char** argv) {
     cv::Mat resized_image(cv::Size(scaled_width, scaled_height),CV_8UC1);
     vector<double> dark_profile = load_calibration("dark_calibration.csv");
     vector<double> light_profile = load_calibration("light_calibration.csv");
-    //Subtract out dark value from MAX value
+    //Subtract out dark value from MAon_quit(averages);X value
     // for (int kk=0; kk<width; kk++) {
     //     light_profile[kk] -= dark_profile[kk];
     // }
     int margin_left = 60;
     int counter = 0;
     int offset = 30;
+    vector<double> averages(width);
     while(true) {
         
         cap >> frame;
@@ -178,8 +223,9 @@ int main(int argc, char** argv) {
         deque<double> y1_buffer, y2_buffer;
         for(int x=1;x<width;x++) {
 
-            // double y1 = (plot_h)-((column_data[x-1]-dark_profile[x-1])*(plot_h - 2* offset))/(light_profile[x-1]-dark_profile[x-1]); 
-            // double y2 = (plot_h)-((column_data[x]-dark_profile[x])*(plot_h - 2*offset))/(light_profile[x]-dark_profile[x]);
+            //regular plotting
+            double y1 = (plot_h)-((column_data[x-1]-dark_profile[x-1])*(plot_h - 2* offset))/(light_profile[x-1]-dark_profile[x-1]); 
+            double y2 = (plot_h)-((column_data[x]-dark_profile[x])*(plot_h - 2*offset))/(light_profile[x]-dark_profile[x]);
 
             // if (counter % 10000 == 0){
             //     cout <<y1<< ": y1"<<'\n';
@@ -189,31 +235,33 @@ int main(int argc, char** argv) {
             //     cout << (column_data[x-1]-dark_profile[x-1]) << ": ratio" <<'\n';
 
             // }
-            double y1 = (light_profile[x-1] - dark_profile[x-1])/(column_data[x-1]-dark_profile[x-1]); //Finding percentage of max light
-            double y2 = (light_profile[x-1] - dark_profile[x-1])/(column_data[x-1]-dark_profile[x-1]); //Divide by ~255
-            if ((isinf(y2)) || (y2 <= 0)) {
-                y1 = 100;
-            }
-            if ((isinf(y2)) || (y2 <= 0)) {
-                y2 = 100;
-            }
-            if (counter % 10000 == 0){
-                //cout <<y1<< ": y1"<<'\n';
-                //cout <<column_data[x-1] << "columndata" <<'\n';
-                // cout <<dark_profile[x-1] << "dark" <<'\n';
-                cout <<(light_profile[x-1]-dark_profile[x-1]) << " light" <<'\n';
-                cout << (column_data[x-1]-dark_profile[x-1]) << ": current light" <<'\n';
-                cout << y1 << ": ratio" <<'\n';
 
-            }
+            //log plotting
+            // double y1 = (light_profile[x-1] - dark_profile[x-1])/(column_data[x-1]-dark_profile[x-1]); //Finding percentage of max light
+            // double y2 = (light_profile[x-1] - dark_profile[x-1])/(column_data[x-1]-dark_profile[x-1]); //Divide by ~255
+            // if ((isinf(y2)) || (y2 <= 0)) {
+            //     y1 = 100;
+            // }
+            // if ((isinf(y2)) || (y2 <= 0)) {
+            //     y2 = 100;
+            // }
+            // if (counter % 10000 == 0){
+            //     //cout <<y1<< ": y1"<<'\n';
+            //     //cout <<column_data[x-1] << "columndata" <<'\n';
+            //     // cout <<dark_profile[x-1] << "dark" <<'\n';
+            //     cout <<(light_profile[x-1]-dark_profile[x-1]) << " light" <<'\n';
+            //     cout << (column_data[x-1]-dark_profile[x-1]) << ": current light" <<'\n';
+            //     cout << y1 << ": ratio" <<'\n';
+
+            
             //add buffers
+
+            //shared plotting
             y1_buffer.push_back(y1);
             y2_buffer.push_back(y2);
             if (y1_buffer.size() > window) y1_buffer.pop_front();
             if (y2_buffer.size() > window) y2_buffer.pop_front();
-
-
-            //compute averages
+            //compute averages (shared)
             double y1_average = accumulate(y1_buffer.begin(), y1_buffer.end(), 0.0) / y1_buffer.size();
             double y2_average = accumulate(y2_buffer.begin(), y2_buffer.end(), 0.0) / y2_buffer.size();
             
@@ -222,21 +270,25 @@ int main(int argc, char** argv) {
 
             // }
 
-            double absorb1 = log10(y1_average);
-            double absorb2 = log10(y2_average);
-
+            //log plotting
+            // double absorb1 = log10(y1_average);
+            // double absorb2 = log10(y2_average);
+            // y1_average = plot_h - absorb1*(plot_h - 2*offset)/2;
+            // y2_average = plot_h - absorb1*(plot_h - 2*offset)/2;
             // if (counter % 10000 == 0){
             //      cout <<absorb1<< ": abs1"<<'\n';
 
             // }
 
-            y1_average = plot_h - absorb1*(plot_h - 2*offset)/2;
-            y2_average = plot_h - absorb1*(plot_h - 2*offset)/2;
+            
 
-
+            //shared plotting
             y1_average -= offset;
             y2_average -= offset;
             counter++;
+
+            averages[x] = (y1_average + averages[x]) / counter;
+
             if (counter % 10000 == 0){
                 cout <<y1_average<< ": y1avg post offset"<<'\n';
 
@@ -265,5 +317,18 @@ int main(int argc, char** argv) {
             plot.setTo(255);
             if(cv::waitKey(1) == 'q')
                 break;
+                
         }
+        on_quit(averages);
+        // double red_peak = find_peaks(625, 540, averages);
+        // double orange_peak = find_peaks(590, 625, averages);
+        // double yellow_peak = find_peaks(565, 590, averages);
+        // double green_peak = find_peaks(500, 565, averages);
+        // double cyan_peak = find_peaks(485, 500, averages);
+        // double blue_peak = find_peaks(450, 485, averages);
+        // vector<double> peaks = {red_peak, orange_peak, yellow_peak, green_peak, cyan_peak, blue_peak};
+
+        // save_calibration(peaks, "peaks_colors.csv");
+        //std::atexit(on_quit(averages));
+        //return 0;
     }

@@ -5,7 +5,7 @@
 
 #include <thread>
 #include <chrono>
-
+using namespace std;
 //To Compile:
 //g++ calibrations.cpp -o calib `pkg-config --cflags --libs opencv4`
 //To get calibration values:
@@ -47,27 +47,30 @@ std::vector<double> calibrate(cv::VideoCapture& cap, int frames) {
     cv::Mat frame;
     std::vector<double> avg;
 
-    for (int i = 0; i < frames; i++) {
+    for (int i = 0; i < frames+10; i++) {
         cap >> frame;
         if (frame.empty()) continue;
 
         cv::cvtColor(frame, frame, cv::COLOR_YUV2GRAY_YUYV);
 
         std::vector<double> curr = compute_column_average(frame);
-
-        if (avg.empty()) {
-            avg = curr;
-        } else {
-            for (size_t j = 0; j < curr.size(); j++) {
-                avg[j] += curr[j];
+        if(i >= 10) {
+            if (avg.empty()) {
+                avg = curr;
+            } else {
+                for (size_t j = 0; j < curr.size(); j++) {
+                    avg[j] += curr[j];
+                }
             }
+            cout << curr[0] << ": curr" << '\n';
         }
+        
     }
 
     for (size_t j = 0; j < avg.size(); j++) {
         avg[j] /= frames;
     }
-
+    
     return avg;
 }
 
@@ -104,10 +107,10 @@ int main(int argc, char** argv) {
 
     //Dark cali
 
-    std::cout << "Cover the lens for dark calibration...\n";
+    std::cout<< "Cover the lens for dark calibration...\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
 
-    std::vector<double> dark = calibrate(cap, 100);
+    std::vector<double> dark = calibrate(cap, 50);
 
     // saves calibration data to different file name depending on camera input
     save_calibration(dark, "dark_calibration.csv");
@@ -117,9 +120,9 @@ int main(int argc, char** argv) {
     //Light cali
 
     std::cout << "Expose the lens to light...\n";
-    std::this_thread::sleep_for(std::chrono::seconds(5)); // give time to cover lens
+    std::this_thread::sleep_for(std::chrono::seconds(7)); // give time to cover lens
 
-    std::vector<double> light = calibrate(cap, 100);
+    std::vector<double> light = calibrate(cap, 50);
 
     save_calibration(light, "light_calibration.csv");
 
