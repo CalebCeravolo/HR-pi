@@ -53,7 +53,7 @@ static int run_tof_test(int zero) {
 	int iDistance;
 	while (1) // read values 20 times a second for 1 minute
 	{
-		iDistance = tofReadDistance() - zero;
+		iDistance = zero - tofReadDistance();
 		if (iDistance < 4096) {
 			printf("\033[1A\033[2K\r");
 			printf("Distance = %dmm\n", iDistance);
@@ -66,16 +66,19 @@ static int run_tof_test(int zero) {
 
 int zeroCalibration() {
     long sum = 0;
+	int samples = 0;
     for (int i = 0; i < ZERO_NUM_SAMPLES; i++) {
         int reading = tofReadDistance();
-        if (reading < 0) {
+        if (reading < 0 || reading > 1000) {
             fprintf(stderr, "Read error during calibration\n");
-            return 0;
-        }
-        sum += reading;
-        usleep(250000); // 250ms between samples
+        } else {
+			printf("Calibrating: %d \n", reading);
+        	sum += reading;
+			samples++;
+		}
+        usleep(200000); // 200ms between samples
     }
-    int measured = sum / ZERO_NUM_SAMPLES;
+    int measured = sum / samples;
     printf("Calibration: measured=%dmm\n", measured);
     return measured;
 }
@@ -84,6 +87,7 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 	init();
+	usleep(500000);
 	int zero = zeroCalibration();
 	printf("Calibrated\n");
 	return run_tof_test(zero);

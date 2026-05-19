@@ -9,8 +9,12 @@
 #include <stdint.h>
 #include <unistd.h>
 // #include <signal.h>
-#define CPR (663.0 / 6) // Counts per revolution
+#define CPR 663.0 / 6 // Counts per revolution
 #define DATA_ADDR ENC_COLUMN_ROTATE
+
+// -100 is deposit position
+// 0 is home
+
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
 
@@ -38,7 +42,7 @@ int rotateTo(float target, int left, int right) {
     digitalWrite(right, 0);
   }
 
-  while ((distance_remaining) > 5) {
+  while ((distance_remaining) > 0.5) {
     if (sigint) {
       digitalWrite(left, 0);
       digitalWrite(right, 0);

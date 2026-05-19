@@ -1,95 +1,63 @@
 #include "../../functions.h"
 #include "../../pins.h"
-#include <pthread.h>
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <sys/time.h>
-#include <time.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
-#include <stdlib.h>
-// #include <math.h>
-// #include <signal.h>
-#define LEFTEN CENTRIFUGE_PIN // we only move to the left (and only use the left pin)
-#define tpr 1018.0
+
+#define LEFTEN                                                                 \
+  CENTRIFUGE_PIN // we only move to the left (and only use the left pin)
 
 int sigint = 0;
 void intHandler(int dummy) { sigint = 1; }
 
-struct PWMinput {
-  int pin;
-  volatile int *period;
-};
-// long int get_time() {
-//   struct timeval tv;
-//   gettimeofday(&tv, NULL);
-//   return tv.tv_sec * 1E6 + tv.tv_usec;
-// }
-void *softPWM(void *input) {
-//   long int current_t = get_time();
-  // int period = *((int *)input); // 1-100
-  struct PWMinput *args = (struct PWMinput *)input;
-//   printf("Period: %i pin: %i\n", *(args->period), args->pin);
-  // printf("working");
-  while (1) {
-    digitalWrite(args->pin, 1);
-    usleep(*(args->period) * 100);
-    digitalWrite(args->pin, 0);
-    usleep((100 - *(args->period)) * 100);
-  }
-}
-
-void rotateBy(int degrees) {
-  int period = 0;
-  struct PWMinput arguments;
-  arguments.pin = LEFTEN;
-  arguments.period = &period;
-  pthread_t pwmProc;
+void rotateTo(int target_cf) {
   int current = fpga_safetran(ENC_CENTRIFUGE_ABS);
-  // 2. Calculate target position (current + how many teeth we want to move by)
-  int target_cf = ((degrees)*tpr)/360;
-  
+
   printf("Current: %i, Target: %i\n", current, target_cf);
-  // 3. Move the centrifuge
+
+  // Turn on the centrifuge motor
   pinMode(LEFTEN, OUTPUT);
-  period = 20;
-  usleep(5000);
-  period = 5;
-  // period = vals[0];
-  //(to make it manual)
-  volatile int fpga_out;
-  fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
-  int distance_remaining = abs(target_cf - fpga_out);
-  pthread_create(&pwmProc, NULL, softPWM, &arguments);
-  // sleep(5);
-  // 4. Wait until the target position is reached
-  while (distance_remaining > 10) {
-    // usleep(100E3);
+  digitalWrite(LEFTEN, 1);
+
+  int distance_remaining = abs(target_cf - current);
+
+  // Wait until the target position is reached, 100 units before start slowing down
+  while (distance_remaining > 100) {
     if (sigint) {
       digitalWrite(LEFTEN, 0);
       break;
     }
     usleep(1E3);
-    fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
-    distance_remaining = abs(target_cf - fpga_out);
-    
+    current = fpga_safetran(ENC_CENTRIFUGE_ABS);
+    distance_remaining = abs(target_cf - current);
   }
-  pthread_cancel(pwmProc);
-  pthread_join(pwmProc, NULL);
+
+  // Turn off the centrifuge motor
   digitalWrite(LEFTEN, 0);
-//   usleep(100E3);
-  fpga_out = fpga_safetran(ENC_CENTRIFUGE_ABS);
-  printf("Final: %i\n", fpga_out);
+
+  current = fpga_safetran(ENC_CENTRIFUGE_ABS);
+  printf("Final: %i\n", current);
 }
 
 int main(int argc, char *argv[]) {
+  signal(SIGINT, intHandler);
   wiringPiSetupPinType(WPI_PIN_WPI);
+
+  if (argc < 2) {
+    printf("Usage: %s <target_encoder_position>\n", argv[0]);
+    return 1;
+  }
+
   int vals[argc - 1];
   intparse(argc - 1, argv + 1, vals);
 
-  int degs = vals[0];
+  int target_pos = vals[0];
 
-  rotateBy(degs);
+  rotateTo(target_pos);
+
   return 0;
 }

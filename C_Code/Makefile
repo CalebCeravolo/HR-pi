@@ -1,4 +1,4 @@
-all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterHeightSensor 1wTempSensor findVelocity PWM_Map
+all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterLevelCalibrate waterLevelRead 1wTempSensor findVelocity PWM_Map
 
 getD: functions.c pins.h FPGAtesting/Get_data.c
 	gcc FPGAtesting/Get_data.c functions.c -lwiringPi -o ../Executables/getD
@@ -28,11 +28,13 @@ tofTest: functions.c pins.h SystemsTesting/tof.c SystemsTesting/tofTest.c
 	gcc SystemsTesting/tofTest.c SystemsTesting/tof.c functions.c -lwiringPi -o ../Executables/tofTest
 raise_lower_pump: functions.c pins.h SystemsTesting/Pump/raiseLower_Pump.c
 	gcc SystemsTesting/Pump/raiseLower_Pump.c functions.c -lwiringPi -o ../Executables/raise_lower_pump
-waterHeightSensor: functions.c pins.h SystemsTesting/waterHeightSensor.c
-	gcc SystemsTesting/waterHeightSensor.c functions.c pins.h -lwiringPi -o ../Executables/waterHeightSensor
 tempSensorRead: functions.c pins.h SystemsTesting/tempSensorRead.c
 	gcc SystemsTesting/tempSensorRead.c functions.c pins.h -lwiringPi -o ../Executables/tempSensorRead
 1wTempSensor: functions.c pins.h SystemsTesting/1wTempSensor.c
 	gcc SystemsTesting/1wTempSensor.c functions.c pins.h -lwiringPi -o ../Executables/1wTempSensor
 PWM_Map: functions.c pins.h SystemsTesting/Augur/PWM_Map.c
 	gcc SystemsTesting/Augur/PWM_Map.c functions.c pins.h -lwiringPi -o ../Executables/PWM_Map
+waterLevelCalibrate: SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTesting/WaterLevel/waterLevelADS1015.c
+	gcc SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelCalibrate
+waterLevelRead: SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c
+	gcc SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelRead

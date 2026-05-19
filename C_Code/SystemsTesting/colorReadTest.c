@@ -6,7 +6,7 @@
 #define MULTI_BYTE_BIT 0x20
 int main(int argc, char *argv[]){
     int vals[argc-1];
-    intparse(argc, argv, vals);
+    //intparse(argc, argv, vals);
     // printf("%x",(uint8_t)vals[0]);
     int fd = wiringPiI2CSetup(DEVICE_ID);
     if (fd == -1) {
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
     // 00       1            1              00         10 
     // 100%  reserved  dark_if_saturated  reserved  16x_gain
     // 0x8F: control register one
-    wiringPiI2CWriteReg8(fd, 0x8F, 0b00110011); // gain control register
+    wiringPiI2CWriteReg8(fd, 0x8F, 0b00110010); // gain control register
 
     // makes sure data is ready before reading
     uint8_t status;
@@ -48,6 +48,8 @@ int main(int argc, char *argv[]){
         status = wiringPiI2CReadReg8(fd, 0x93);
     } while (!(status & 0x01));  // keeps waiting until AVALID = 1, then runs code below.
     
+    int clearb = wiringPiI2CReadReg8(fd, 0x94);
+    uint8_t cleart = wiringPiI2CReadReg8(fd, 0x95);
     int redb = wiringPiI2CReadReg8(fd, 0x96);
     int greenb = wiringPiI2CReadReg8(fd, 0x98);
     int blueb = wiringPiI2CReadReg8(fd, 0x9A);
@@ -55,7 +57,58 @@ int main(int argc, char *argv[]){
     uint8_t redt = wiringPiI2CReadReg8(fd, 0x97);
     uint8_t greent = wiringPiI2CReadReg8(fd, 0x99);
     uint8_t bluet = wiringPiI2CReadReg8(fd, 0x9B);
-    printf("Red: %d\nGreen:%d\nBlue:%d\n", redb|(redt<<8), greenb|(greent<<8), blueb|(bluet<<8));
-    // printf("Red: %d\nGreen:%d\nBlue:%d\n", redt, greent, bluet);
+
+    int raw_r = redb   | (redt   << 8);
+    int raw_g = greenb | (greent << 8);
+    int raw_b = blueb  | (bluet  << 8);
+    int raw_c = clearb | (cleart << 8);
+    printf("Raw - Red: %d  Green: %d  Blue: %d  Clear: %d\n", raw_r, raw_g, raw_b, raw_c);
+
+    // Saturation check — any channel at 65535 means the ADC is clipped; readings unreliable.
+    // Fix: lower gain (0x8F) or shorten integration time (0x81).
+    if (raw_r == 65535 || raw_g == 65535 || raw_b == 65535 || raw_c == 65535) {
+        printf("Warning: saturation on one or more channels — lower gain or integration time.\n");
+        return -1;
+    }
+
+    if (raw_c == 0) {
+        printf("Clear channel is zero, cannot normalize.\n");
+        return -1;
+    }
+
+    // Dark calibration offsets — cover sensor completely, record raw values, set DARK_* below.
+    // Subtract before any other math; most impactful on blue which has the weakest signal.
+    // Recalibrate if gain or integration time changes.
+    #define DARK_R 13.0f  // replace with covered-sensor red reading
+    #define DARK_G 4.0f  // replace with covered-sensor green reading
+    #define DARK_B 4.0f  // replace with covered-sensor blue reading
+    #define DARK_C 17.0f  // replace with covered-sensor clear reading
+
+    // White calibration scale factors — point sensor at white surface, record raw values.
+    // Recalibrate if gain or integration time changes.
+    #define WHITE_R 8521.0f
+    #define WHITE_G 6187.0f
+    #define WHITE_B 5560.0f
+    #define WHITE_C 7900.0f
+
+    // Pipeline: subtract dark offset → normalize by clear → apply white scale factors
+    float r = (((float)raw_r - DARK_R) / (raw_c - DARK_C)) * (WHITE_C / WHITE_R);
+    float g = (((float)raw_g - DARK_G) / (raw_c - DARK_C)) * (WHITE_C / WHITE_G);
+    float b = (((float)raw_b - DARK_B) / (raw_c - DARK_C)) * (WHITE_C / WHITE_B);
+
+    // Clamp to [0, 255] — values can exceed 1.0 for colors brighter than the white reference
+    int rgb_r = (int)(r * 255.0f);
+    int rgb_g = (int)(g * 255.0f);
+    int rgb_b = (int)(b * 255.0f);
+    if (rgb_r > 255) rgb_r = 255;
+    if (rgb_g > 255) rgb_g = 255;
+    if (rgb_b > 255) rgb_b = 255;
+    if (rgb_r < 0)   rgb_r = 0;
+    if (rgb_g < 0)   rgb_g = 0;
+    if (rgb_b < 0)   rgb_b = 0;
+
+    printf("Cal  - Red: %.3f  Green: %.3f  Blue: %.3f\n", r, g, b);
+    printf("RGB  - Red: %d  Green: %d  Blue: %d\n", rgb_r, rgb_g, rgb_b);
+
     return 0;
 }

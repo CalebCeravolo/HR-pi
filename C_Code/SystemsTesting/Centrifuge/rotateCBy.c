@@ -60,7 +60,7 @@ static void rotate_by_degrees(int degrees, uint32_t pwm_period, uint32_t pwm_upt
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     fprintf(stderr, "usage: %s degrees [pwm_uptime [pwm_period]]\n", argv[0]);
-    fprintf(stderr, "  defaults: uptime=%u period=%u (FPGA hard PWM)\n", 1200U, 2000U);
+    fprintf(stderr, "defaults: uptime=%u period=%u (FPGA hard PWM)\n", 1200U, 2000U);
     return 1;
   }
 
