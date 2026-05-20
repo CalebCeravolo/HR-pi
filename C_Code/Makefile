@@ -1,4 +1,4 @@
-all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterLevelCalibrate waterLevelRead 1wTempSensor findVelocity PWM_Map
+all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterLevelCalibrate waterLevelRead 1wTempSensor findVelocity PWM_Map dirtSample
 
 getD: functions.c pins.h FPGAtesting/Get_data.c
 	gcc FPGAtesting/Get_data.c functions.c -lwiringPi -o ../Executables/getD
@@ -38,3 +38,5 @@ waterLevelCalibrate: SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTest
 	gcc SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelCalibrate
 waterLevelRead: SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c
 	gcc SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelRead
+dirtSample: functions.c pins.h SystemsTesting/dirtSample.c
+	gcc SystemsTesting/dirtSample.c functions.c -lwiringPi -o ../Executables/dirtSample

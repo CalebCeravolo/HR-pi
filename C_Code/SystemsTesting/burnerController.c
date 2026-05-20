@@ -6,9 +6,6 @@
 //      # heat to 65 celcius, maintain at 60
 //      
 
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

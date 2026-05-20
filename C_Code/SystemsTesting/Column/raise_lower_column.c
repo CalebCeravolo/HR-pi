@@ -12,7 +12,7 @@
 #define DATA_ADDR ENC_RAISE_LOWER
 
 /* Absolute target in encoder ticks. Tune for your column. */
-#define TICK_TOLERANCE 50 /* stop when within this many ticks of target */
+#define TICK_TOLERANCE 5 /* stop when within this many ticks of target */
 /* Motion monitoring: if encoder speed stays below this while still far from the
  * target, the column is treated as stuck. Tune after measuring normal cruise speed. */
 #define CONTROL_SAMPLE_US 10000
@@ -26,7 +26,7 @@ static void intHandler(int dummy) { sigint = 1; }
 
 /** Same SPI command as Executables/resetEnc (fpga_reset_encoder). */
 static void ResetENC(uint8_t encoder_channel) {
-  fpga_reset_encoder(encoder_channel);f
+  fpga_reset_encoder(encoder_channel);
 }
 
 static int column_top_hall_enabled(void) {
