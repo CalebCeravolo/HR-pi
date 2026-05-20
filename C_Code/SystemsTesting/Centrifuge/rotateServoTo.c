@@ -13,7 +13,7 @@
 // 358 encoder position = position 2
 // 625 encoder position = position 3
 
-#define SERVO_CHANNEL CENTRIFUGE_SERVO_PIN      // FPGA PWM channel for the centrifuge servo
+#define SERVO_CHANNEL CENTRIFUGE_SERVO_CHANNEL      // FPGA PWM channel for the centrifuge servo
 #define SERVO_PERIOD 10000                      // full duty (on)
 #define SERVO_OFF 0                             // off
 // #define CPR 1018                                // Counts Per Revolution of the absolute encoder

@@ -25,7 +25,7 @@
 
 #define FLUIDSPUMP_IN_PIN H1A_2
 #define FLUIDSPUMP_OUT_PIN H1A_1
-// Spin
+// Column Spin
 #define H1A_3 1  //
 #define H1A_4 16
 
@@ -65,7 +65,7 @@
 #define ENC_COLUMN_ROTATE 
 
 // PWM Channels
-#define CENTRIFUGE_SERVO_PIN 0 
+#define CENTRIFUGE_SERVO_CHANNEL 0 
 
 /* FPGA read channel 7: 32-bit word; bits 0–2 are three Hall inputs (1 = idle, 0 = detected). */
 #define HALL_CHANNEL 7
