@@ -57,10 +57,14 @@ int main(int argc, char *argv[]) {
     // vals[0]            = position selector (0 -> POS_A, 1 -> POS_B)
     // vals[1] (optional) = period in microseconds (set on first call)
 
+    // Normal method, UNCOMMENT LATER
+    /*
     uint32_t uptime = (vals[0] == 0) ? DIRT_SERVO_CLOSED : DIRT_SERVO_OPEN;
 
     uint32_t result2 = fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, uptime);
     print_bin(32, result2);
+    */
+
 
     // Testing, REMOVE LATER
     sleep(5);

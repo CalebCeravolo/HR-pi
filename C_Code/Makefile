@@ -40,5 +40,5 @@ waterLevelCalibrate: SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTest
 	gcc SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelCalibrate
 waterLevelRead: SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c
 	gcc SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelRead
-dirtSample: functions.c pins.h SystemsTesting/dirtSample.c SystemsTesting/Column/raise_lower_column.c SystemsTesting/Column/rotateTo_column.c
-	gcc SystemsTesting/dirtSample.c functions.c SystemsTesting/Column/raise_lower_column.c SystemsTesting/Column/rotateTo_column.c -lwiringPi -o ../Executables/dirtSample
+dirtSample: functions.c pins.h SystemsTesting/dirtSample.c 
+	gcc SystemsTesting/dirtSample.c functions.c  -lwiringPi -o ../Executables/dirtSample
