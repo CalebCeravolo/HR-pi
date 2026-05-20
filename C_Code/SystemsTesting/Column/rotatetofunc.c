@@ -13,8 +13,7 @@
 #include <unistd.h>
 // #include <signal.h>
 #define CPR 663.0 / 6 // Counts per revolution
-#define DATA_ADDRS 0 // PLACEHOLDER, CHANGE TO ENCODER ADDRESS
-// #define DATA_ADDR ENC_COLUMN_ROTATE This breaks things fsr
+#define DATA_ADDRS ENC_COLUMN_ROTATE 
 
 // -100 is deposit position
 // 0 is home
