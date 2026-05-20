@@ -19,13 +19,13 @@ int main(int argc, char *argv[]) {
 
     uint32_t uptime = (vals[0] == 0) ? POS_A_US : POS_B_US;
 
-    // For testing, really shouldn't be used in practice
     if (argc > 2) {
+        // For testing, really shouldn't be used in practice.
         uint32_t result1 = fpga_pwm_period(DIRT_SAMPLE_CHANNEL, vals[1]);
         print_bin(32, result1);
+    } else {
+        // Tell the FPGA to set the PWM uptime to the selected position
+        uint32_t result2 = fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, uptime);
+        print_bin(32, result2);
     }
-
-    // Tell the FPGA to set the PWM uptime
-    uint32_t result2 = fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, uptime);
-    print_bin(32, result2);
 }
