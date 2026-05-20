@@ -2,13 +2,14 @@
 #include <wiringPiSPI.h>
 #include <stdint.h>
 #include "../functions.h"
-
+#include "Column/raise_lower_column.c" 
+#include "Column/rotateTo_column.c" 
 // FPGA PWM channel for the dirt-sample servo. Set by startup.sh (`fpwm 2 1500`).
 #define DIRT_SAMPLE_CHANNEL 2
 
 // Two encoded positions, in microseconds of PWM uptime (servo pulse width).
-#define POS_A_US 2500
-#define POS_B_US 2300
+#define CLOSED 2500
+#define OPEN 2300
 
 int main(int argc, char *argv[]) {
     int vals[argc-1];
@@ -17,19 +18,34 @@ int main(int argc, char *argv[]) {
     // vals[0]            = position selector (0 -> POS_A, 1 -> POS_B)
     // vals[1] (optional) = period in microseconds (set on first call)
 
-    uint32_t uptime = (vals[0] == 0) ? POS_A_US : POS_B_US;
+    uint32_t uptime = (vals[0] == 0) ? CLOSED : OPEN;
 
     uint32_t result2 = fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, uptime);
     print_bin(32, result2);
 }
 
 void collect_and_deposit_dirt(){
-    // Move big beam down
+    // Move column down
+    // raiseLowerTo(idk)
+
     // Start augur
+    // Needs work
+
     // ToF sensor to measure when augur is done
+    // Long file, need to look into this
+
     // Stop augur
-    // Move big beam up
+    // Needs work
+
+    // Move column
+    // raiseLowerTo(idk)
+
     // Move column to deposit position
+    // rotateTo(idk)
+
     // Open sample collector
+    fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, OPEN);
+    sleep(2);
     // Close sample collector
+    fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, CLOSED);
 }
