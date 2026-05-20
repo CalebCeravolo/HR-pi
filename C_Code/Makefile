@@ -1,4 +1,4 @@
-all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateTo_column raise_lower_column raise_lower_pump tofTest waterLevelCalibrate waterLevelRead 1wTempSensor findVelocity PWM_Map dirtSample
+all: getD centriAbs fpwm resetEnc toggle all_low colorRead rotateCBy rotateServoTo rotateTo_column raise_lower_column raise_lower_pump tofTest waterLevelCalibrate waterLevelRead 1wTempSensor findVelocity PWM_Map dirtSample
 
 getD: functions.c pins.h FPGAtesting/Get_data.c
 	gcc FPGAtesting/Get_data.c functions.c -lwiringPi -o ../Executables/getD
@@ -18,6 +18,8 @@ rotateCBy: functions.c pins.h SystemsTesting/Centrifuge/rotateCBy.c
 	gcc SystemsTesting/Centrifuge/rotateCBy.c functions.c -lwiringPi -o ../Executables/rotateCBy
 rotateCTo: functions.c pins.h SystemsTesting/Centrifuge/rotateCTo.c
 	gcc SystemsTesting/Centrifuge/rotateCTo.c functions.c -lwiringPi -o ../Executables/rotateCTo
+rotateServoTo: functions.c pins.h SystemsTesting/Centrifuge/rotateServoTo.c
+	gcc SystemsTesting/Centrifuge/rotateServoTo.c functions.c -lwiringPi -o ../Executables/rotateServoTo
 findVelocity: functions.c pins.h SystemsTesting/Centrifuge/findVelocity.c
 	gcc SystemsTesting/Centrifuge/findVelocity.c functions.c -lwiringPi -o ../Executables/findVelocity
 rotateTo_column: functions.c pins.h SystemsTesting/Column/rotateTo_column.c
@@ -38,5 +40,7 @@ waterLevelCalibrate: SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTest
 	gcc SystemsTesting/WaterLevel/waterLevelCalibrate.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelCalibrate
 waterLevelRead: SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c
 	gcc SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelRead
-dirtSample: functions.c pins.h SystemsTesting/dirtSample.c
-	gcc SystemsTesting/dirtSample.c functions.c -lwiringPi -o ../Executables/dirtSample
+dirtSample: functions.c pins.h SystemsTesting/dirtSample.c SystemsTesting/Column/raise_lower_column.c SystemsTesting/Column/rotateTo_column.c
+	gcc SystemsTesting/dirtSample.c functions.c SystemsTesting/Column/raise_lower_column.c SystemsTesting/Column/rotateTo_column.c -lwiringPi -o ../Executables/dirtSample
+rotateServoTo: functions.c pins.h SystemsTesting/Centrifuge/rotateServoTo.c
+	gcc SystemsTesting/Centrifuge/rotateServoTo.c functions.c -lwiringPi -o ../Executables/rotateServoTo

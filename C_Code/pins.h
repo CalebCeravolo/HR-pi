@@ -62,7 +62,10 @@
 #define ENC_CENTRIFUGE_INC 2
 #define ENC_CENTRIFUGE_ABS 6
 #define ENC_RAISE_LOWER 3
-#define ENC_COLUMN_ROTATE 4
+#define ENC_COLUMN_ROTATE 
+
+// PWM Channels
+#define CENTRIFUGE_SERVO_PIN 0 
 
 /* FPGA read channel 7: 32-bit word; bits 0–2 are three Hall inputs (1 = idle, 0 = detected). */
 #define HALL_CHANNEL 7
