@@ -19,13 +19,17 @@ int main(int argc, char *argv[]) {
 
     uint32_t uptime = (vals[0] == 0) ? POS_A_US : POS_B_US;
 
-    if (argc > 2) {
-        // For testing, really shouldn't be used in practice.
-        uint32_t result1 = fpga_pwm_period(DIRT_SAMPLE_CHANNEL, vals[1]);
-        print_bin(32, result1);
-    } else {
-        // Tell the FPGA to set the PWM uptime to the selected position
-        uint32_t result2 = fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, uptime);
-        print_bin(32, result2);
-    }
+    uint32_t result2 = fpga_pwm_uptime(DIRT_SAMPLE_CHANNEL, uptime);
+    print_bin(32, result2);
+}
+
+void collect_and_deposit_dirt(){
+    // Move big beam down
+    // Start augur
+    // ToF sensor to measure when augur is done
+    // Stop augur
+    // Move big beam up
+    // Move column to deposit position
+    // Open sample collector
+    // Close sample collector
 }
