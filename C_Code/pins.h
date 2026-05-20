@@ -47,6 +47,9 @@
 #define LOWER_PUMP_PIN H18A_3_1
 #define RAISE_PUMP_PIN H18A_3_2
 
+// TODO: choose the wPi pin wired to the burner SSR/relay control input before building
+#define BURNER_PIN 0   // placeholder — update to actual wPi pin
+
 #define SDA 8
 #define SCL 9
 #define MOSI 12
