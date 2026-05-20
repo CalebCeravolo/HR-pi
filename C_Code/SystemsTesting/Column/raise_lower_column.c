@@ -16,7 +16,7 @@
 /* Motion monitoring: if encoder speed stays below this while still far from the
  * target, the column is treated as stuck. Tune after measuring normal cruise speed. */
 #define CONTROL_SAMPLE_US 10000
-#define MIN_SPEED_TICKS_S 5.0f
+#define MIN_SPEED_TICKS_S 1000
 #define STALL_CONFIRM_SAMPLES 3
 #define STALL_GRACE_US 300000 /* ignore stall until the motor has had time to ramp */
 #define STALL_MIN_GAP_TICKS 12 /* do not apply stall logic when this close to target */
@@ -29,19 +29,14 @@ static void ResetENC(uint8_t encoder_channel) {
   fpga_reset_encoder(encoder_channel);
 }
 
-static int column_top_hall_enabled(void) {
-  return (COLUMN_TOP_HALL_BIT >= 0 && COLUMN_TOP_HALL_BIT <= 2);
+int get_fpga_bit(int channel, int bit) {
+  uint32_t data = fpga_safetran(channel);
+  return (data >> bit) & 1;
 }
-
-static void column_top_hall_setup(void) { /* Hall is on FPGA channel HALL_CHANNEL; no GPIO setup. */ }
 
 /** True when the top Hall sensor reports magnet present (bit reads 0; idle is 1). */
 static int column_at_top_hall(void) {
-  if (!column_top_hall_enabled()) {
-    return 0;
-  }
-  uint32_t word = fpga_safetran((uint8_t)HALL_CHANNEL);
-  return ((word >> COLUMN_TOP_HALL_BIT) & 1u) == 0u;
+  return (get_fpga_bit(HALL_CHANNEL, COLUMN_TOP_HALL_BIT) == 0);
 }
 
 static int32_t read_position_ticks(void) { return fpga_safetran(DATA_ADDR); }
@@ -81,7 +76,6 @@ static int32_t ticks_remaining(int32_t ticks, int32_t target_ticks) {
 static int raiseLowerTo(int32_t target_ticks, int raise_pin, int lower_pin) {
   pinMode(raise_pin, OUTPUT);
   pinMode(lower_pin, OUTPUT);
-  column_top_hall_setup();
 
   int32_t ticks = read_position_ticks();
   int32_t distance_remaining = ticks_remaining(ticks, target_ticks);
@@ -146,8 +140,8 @@ static int raiseLowerTo(int32_t target_ticks, int raise_pin, int lower_pin) {
       stall_count++;
       if (stall_count >= STALL_CONFIRM_SAMPLES) {
         fprintf(stderr,
-                "ERROR: Column motion stopped: encoder speed %.4f ticks/s is below "
-                "%.4f ticks/s (stall / end of travel).\n",
+                "ERROR: Column motion stopped: encoder speed %.4f ticks/s is "
+                "below %d ticks/s (stall / end of travel).\n",
                 speed_ticks_s, MIN_SPEED_TICKS_S);
         digitalWrite(raise_pin, 0);
         digitalWrite(lower_pin, 0);

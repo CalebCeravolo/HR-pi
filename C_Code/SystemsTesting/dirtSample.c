@@ -67,7 +67,8 @@ int main(int argc, char *argv[]) {
 
 
     // Testing, REMOVE LATER
-    sleep(5);
+    printf("Starting dirt sample collection and deposition...\n");
     collect_and_deposit_dirt();
+    printf("Done.\n");
 }
 
