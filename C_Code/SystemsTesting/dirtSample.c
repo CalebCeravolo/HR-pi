@@ -3,14 +3,22 @@
 #include <stdint.h>
 #include <unistd.h>
 #include "../functions.h"
-// #include "Column/raise_lower_column.c" 
-// #include "Column/rotateTo_column.c" 
 // FPGA PWM channel for the dirt-sample servo. Set by startup.sh (`fpwm 2 1500`).
 #define DIRT_SAMPLE_CHANNEL 2
 
 // Two encoded positions for dirt sample servo, in microseconds of PWM uptime (servo pulse width).
 #define DIRT_SERVO_CLOSED 2500
 #define DIRT_SERVO_OPEN 2300
+
+// Column rotational positions for picking up dirt and depositing it.
+// PLACEHOLDER VALUES, CHANGE!!
+#define PICKUP_POSITION 0
+#define DEPOSIT_POSITION 1
+
+// Column vertical positions for picking up dirt and depositing it.
+// PLACEHOLDER VALUES, CHANGE!!
+#define COLUMN_LOWER 0
+#define COLUMN_RAISE 1
 
 void collect_and_deposit_dirt(){
     // Move column to pickup position

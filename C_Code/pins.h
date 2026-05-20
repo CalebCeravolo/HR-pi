@@ -68,6 +68,10 @@
 #define CENTRIFUGE_SERVO_CHANNEL 0 
 
 /* FPGA read channel 7: 32-bit word; bits 0–2 are three Hall inputs (1 = idle, 0 = detected). */
-#define HALL_CHANNEL 7
+#define HALL_CHANNEL 5
 #define COLUMN_TOP_HALL_BIT 0
+
+// Fluids hall effect
+#define FLUIDS_HALL_TOP 1
+#define FLUIDS_HALL_BOTTOM 2
 

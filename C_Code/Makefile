@@ -28,8 +28,8 @@ raise_lower_column: functions.c pins.h SystemsTesting/Column/raise_lower_column.
 	gcc SystemsTesting/Column/raise_lower_column.c functions.c -lwiringPi -o ../Executables/raise_lower_column
 tofTest: functions.c pins.h SystemsTesting/tof.c SystemsTesting/tofTest.c
 	gcc SystemsTesting/tofTest.c SystemsTesting/tof.c functions.c -lwiringPi -o ../Executables/tofTest
-raise_lower_pump: functions.c pins.h SystemsTesting/Pump/raiseLower_Pump.c
-	gcc SystemsTesting/Pump/raiseLower_Pump.c functions.c -lwiringPi -o ../Executables/raise_lower_pump
+raiseLower_pump: functions.c pins.h SystemsTesting/Pump/raiseLower_Pump.c
+	gcc SystemsTesting/Pump/raiseLower_Pump.c functions.c -lwiringPi -o ../Executables/raiseLower_pump
 tempSensorRead: functions.c pins.h SystemsTesting/tempSensorRead.c
 	gcc SystemsTesting/tempSensorRead.c functions.c pins.h -lwiringPi -o ../Executables/tempSensorRead
 1wTempSensor: functions.c pins.h SystemsTesting/1wTempSensor.c
@@ -42,5 +42,3 @@ waterLevelRead: SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterL
 	gcc SystemsTesting/WaterLevel/waterLevelRead.c SystemsTesting/WaterLevel/waterLevelADS1015.c -lwiringPi -o ../Executables/waterLevelRead
 dirtSample: functions.c pins.h SystemsTesting/dirtSample.c SystemsTesting/Column/raise_lower_column.c SystemsTesting/Column/rotateTo_column.c
 	gcc SystemsTesting/dirtSample.c functions.c SystemsTesting/Column/raise_lower_column.c SystemsTesting/Column/rotateTo_column.c -lwiringPi -o ../Executables/dirtSample
-rotateServoTo: functions.c pins.h SystemsTesting/Centrifuge/rotateServoTo.c
-	gcc SystemsTesting/Centrifuge/rotateServoTo.c functions.c -lwiringPi -o ../Executables/rotateServoTo
